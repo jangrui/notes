@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Linux
 
 ![Linux](./_media/linux.png "linux.png")
@@ -14,7 +13,3 @@ CentOS7/Dockerfile [CentOS7/Dockerfile](https://github.com/CentOS/sig-cloud-inst
 ```shell
 docker pull centos
 ```
-=======
-# docs
-https://docs.jangrui.com
->>>>>>> 2c92c81295c2dbc0ade92c1a2a26a8670656f182
