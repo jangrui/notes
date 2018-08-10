@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+  <meta charset="UTF-8">
+  <title>Jangrui's Docs</title>
+  <meta name="keywords" content="jangrui的docs,jangrui的文档,jangrui的笔记">
+  <meta name="description" content="jangrui在运维路上的爬坑记录。">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="description" content="Description">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <link rel="stylesheet" href="//unpkg.com/docsify/lib/themes/vue.css">
+</head>
+<body>
+  <div id="app"></div>
+  <script>
+    window.$docsify = {
+      name: '首页',
+      // repo: 'jangrui/bridge',
+      maxLevel: 4,        //标题层渲染
+      loadNavbar: true,   //导航栏
+      loadSidebar: true,  //侧边栏
+      // autoHeader: true,   //自动为每个页面增加标题
+      auto2top: true,     //自动跳转到页面顶部
+      coverpage: true,    //启用封面页
+      mergeNavbar: true,  //小屏设备下合并导航栏到侧边栏
+      formatUpdated: '更新时间：{YYYY}/{MM}/{DD} {HH}:{mm}',
+      pagination: {
+        previousText: '上一章节',
+        nextText: '下一章节',
+      },
+      search: {
+        maxAge: 86400000, // 过期时间，单位毫秒，默认一天
+        paths: [], // or 'auto'
+        placeholder: '找东西，戳我试试',
+        noData: '咳咳，迷路了!',
+        // 搜索标题的最大程级, 1 - 6
+        depth: 6
+      },
+      plugins: [
+        // 底板
+        function (hook) {
+          var footer = [
+            '<hr/>',
+            '<footer>',
+            '<span><a href="https://docs.jangrui.com/#/">Jangrui\'s Docs</a> &copy;2018.</span>',
+            '<span>Proudly published with <a href="https://github.com/jangrui/docs.jangrui.com" target="_blank">Github : Docs</a>.</span>',
+            '</footer>'
+          ].join('')
+
+          hook.afterEach(function (html) {
+            return html + footer
+          })
+        },
+
+        // 编辑按钮
+        function(hook, vm) {
+          hook.beforeEach(function (html) {
+            var url = 'https://github.com/jangrui/docs/blob/gh-pages/' + vm.route.file
+            var editHtml = '[📝 编辑文档](' + url + ')\n'
+
+            return editHtml
+              + html
+              + '\n----\n'
+              + ' - {docsify-updated} '
+              // + editHtml
+          })
+        },
+
+      ]
+    }
+  </script>
+
+  <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
+  <script src="//unpkg.com/docsify/lib/plugins/search.js"></script>
+  <script src="//unpkg.com/docsify/lib/plugins/emoji.js"></script>
+  <script src="//unpkg.com/docsify/lib/plugins/external-script.js"></script>
+  <script src="//unpkg.com/docsify/lib/plugins/zoom-image.js"></script>
+  <script src="//unpkg.com/docsify-copy-code"></script>
+  <script src="//unpkg.com/docsify-pagination/dist/docsify-pagination.min.js"></script>
+  <script src="//unpkg.com/docsify-copy-code"></script>
+</body>
+</html>
