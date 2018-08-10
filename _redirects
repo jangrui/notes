@@ -1,0 +1,2 @@
+＃将默认Netlify子域重定向到主域
+https://jangrui-docs.netlify.com/* https://docs.jangrui.com/:splat 301！
