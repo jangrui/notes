@@ -27,10 +27,6 @@
       mergeNavbar: true,  //小屏设备下合并导航栏到侧边栏
       notFoundPage: '_404.md',
       // formatUpdated: '更新时间：{YYYY}/{MM}/{DD} {HH}:{mm}',
-      formatUpdated: function(time) {
-      // ...
-        return time;
-      },
       pagination: {
         previousText: '上一章节',
         nextText: '下一章节',
@@ -53,7 +49,7 @@
             return editHtml
               + html
               // + '\n----\n'
-              + ' - {docsify-updated} '
+              // + ' - {docsify-updated} '
               // + editHtml
           })
         },
