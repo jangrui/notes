@@ -15,7 +15,9 @@
   <script>
     window.$docsify = {
       name: '首页',
-       repo: 'jangrui/docs.jangrui.com',
+      nameLink: '/',
+      logo: '/_media/logo-100.png',
+      repo: 'jangrui/docs.jangrui.com',
       maxLevel: 4,        //标题层渲染
       loadNavbar: true,   //导航栏
       loadSidebar: true,  //侧边栏
@@ -23,7 +25,12 @@
       auto2top: true,     //自动跳转到页面顶部
       coverpage: true,    //启用封面页
       mergeNavbar: true,  //小屏设备下合并导航栏到侧边栏
+      notFoundPage: '_404.md',
       // formatUpdated: '更新时间：{YYYY}/{MM}/{DD} {HH}:{mm}',
+      formatUpdated: function(time) {
+      // ...
+        return time;
+      },
       pagination: {
         previousText: '上一章节',
         nextText: '下一章节',
@@ -37,6 +44,19 @@
         depth: 6
       },
       plugins: [
+        // 编辑按钮
+        function(hook, vm) {
+          hook.beforeEach(function (html) {
+            var url = 'https://github.com/jangrui/docs/blob/master/' + vm.route.file
+            var editHtml = '[📝 编辑文档](' + url + ')\n'
+
+            return editHtml
+              + html
+              // + '\n----\n'
+              + ' - {docsify-updated} '
+              // + editHtml
+          })
+        },
         // 底板
         function (hook) {
           var footer = [
@@ -51,21 +71,6 @@
             return html + footer
           })
         },
-
-        // 编辑按钮
-        function(hook, vm) {
-          hook.beforeEach(function (html) {
-            var url = 'https://github.com/jangrui/docs/blob/gh-pages/' + vm.route.file
-            var editHtml = '[📝 编辑文档](' + url + ')\n'
-
-            return editHtml
-              + html
-              + '\n----\n'
-              + ' - {docsify-updated} '
-              // + editHtml
-          })
-        },
-
       ]
     }
   </script>
