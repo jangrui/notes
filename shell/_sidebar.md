@@ -1,4 +1,5 @@
 * [**首页**](/)
 * [**COMMAND**](/command/)
 * [**SHELL**](/shell/)
+* [**bench.sh**](/shell/bench.sh)
 * [**DOCKER**](/docker/)
