@@ -19,14 +19,20 @@
       logo: '/_media/logo-100.png',
       repo: 'jangrui/docs.jangrui.com',
       maxLevel: 4,        //标题层渲染
-      loadNavbar: true,   //导航栏
-      loadSidebar: true,  //侧边栏
+      // loadNavbar: true,   //导航栏
+      loadNavbar: '_navbar.md',
+      // loadSidebar: true,  //侧边栏
+      loadSidebar: '_sidebar.md',  //侧边栏
       // autoHeader: true,   //自动为每个页面增加标题
       auto2top: true,     //自动跳转到页面顶部
-      coverpage: true,    //启用封面页
+      // coverpage: true,    //启用封面页
+      coverpage: {
+        '/': '_coverpage.md',
+        // '/command/': '_coverpage.md',
+      },
       mergeNavbar: true,  //小屏设备下合并导航栏到侧边栏
       notFoundPage: '_404.md',
-      // formatUpdated: '更新时间：{YYYY}/{MM}/{DD} {HH}:{mm}',
+      formatUpdated: '更新时间：{YYYY}/{MM}/{DD} {HH}:{mm}',
       pagination: {
         previousText: '上一章节',
         nextText: '下一章节',
@@ -48,8 +54,8 @@
 
             return editHtml
               + html
-              // + '\n----\n'
-              // + ' - {docsify-updated} '
+              + '\n----\n'
+              + ' - {docsify-updated} '
               // + editHtml
           })
         },
@@ -79,5 +85,19 @@
   <script src="//unpkg.com/docsify-copy-code"></script>
   <script src="//unpkg.com/docsify-pagination/dist/docsify-pagination.min.js"></script>
   <script src="//unpkg.com/docsify-copy-code"></script>
+  <!-- 代码高亮 -->
+  <script src="//unpkg.com/prismjs/components/prism-bash.min.js"></script>
+  <script src="//unpkg.com/prismjs/components/prism-php.min.js"></script>
+  <script src="//unpkg.com/prismjs/components/prism-sql.js"></script>
+  <script src="//unpkg.com/prismjs/components/prism-git.min.js"></script>
+  <script src="//unpkg.com/prismjs/components/prism-markdown.min.js"></script>
+  <script src="//unpkg.com/prismjs/components/prism-makefile.min.js"></script>
+  <script src="//unpkg.com/prismjs/components/prism-java.min.js"></script>
+  <script src="//unpkg.com/prismjs/components/prism-nginx.min.js"></script>
+  <script src="//unpkg.com/prismjs/components/prism-powershell.min.js"></script>
+  <script src="//unpkg.com/prismjs/components/prism-django.min.js"></script>
+  <script src="//unpkg.com/prismjs/components/prism-python.min.js"></script>
+  <script src="//unpkg.com/prismjs/components/prism-css.min.js"></script>
+
 </body>
 </html>

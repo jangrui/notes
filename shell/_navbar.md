@@ -1,4 +1,6 @@
-* [首页](/)
-* [COMMAND](/command/)
-* [SHELL](/shell/)
-* [DOCKER](/docker/)
+- **Menu**
+	- [Home](/)
+	- [Command](command/)
+	- [Shell](/shell/)
+	- [Docker](/docker/)
+	- [Git](/git/)

@@ -1,26 +1,30 @@
-# 一键测试脚本 bench.sh
+# VPS 一键测试脚本 bench.sh
 
-BY:[秋水逸冰:bench.sh](https://teddysun.com/444.html)
+BY : [秋水逸冰](https://teddysun.com/444.html)
 
-```shell
+## 用法:
+
+```bash
 wget -qO- bench.sh | bash
 ```
 
-```shell
+```bash
 curl -Lso- bench.sh | bash
 ```
 
-```shell
+```bash
 wget -qO- 86.re/bench.sh | bash
 ```
 
-```shell
+```bash
 curl -so- 86.re/bench.sh | bash
 ```
 
-[github](https://raw.githubusercontent.com/teddysun/across/master/bench.sh)
+[bench.sh 的 github 仓库](https://raw.githubusercontent.com/teddysun/across/master/bench.sh)
 
-```shell
+## 脚本内容:
+
+```bash
 #!/usr/bin/env bash
 #
 # Description: Auto test download & I/O speed script
@@ -171,5 +175,4 @@ if [[ "$ipv6" != "" ]]; then
     printf "%-32s%-24s%-14s\n" "Node Name" "IPv6 address" "Download Speed"
     speed_v6 && next
 fi
-
 ```

@@ -1,5 +1,4 @@
-# SHELL 脚本
+# SHELL
 
-学习并记录一些常用的shell脚本。
+- [VPS 一键测试脚本 bench.sh](/shell/bench.sh)
 
-- [bench.sh](/shell/bench.sh.md)
