@@ -2,16 +2,8 @@
 
 好记性不如烂笔头，学习Linux命令笔记。
 
-## 语法
+- [常用命令](/command/常用命令)
 
-> 命令 [参数] [选项] [对象]
-
-```shell
-chattr [-RV][-v<版本编号>][+/-/=<属性>][文件或目录...]
-```
-
-## 实例
-
-```shell
-chattr +i /etc/resolv.conf
-```
+- 防火墙
+	- [iptables](/command/iptables)
+	- [firewall-cmd](/command/firewall-cmd)
