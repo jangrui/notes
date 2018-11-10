@@ -603,3 +603,7 @@ chmod 750 /usr/bin/firewall-cmd
 
 - [Excelib](http://www.excelib.com/article/293/show/)
 - [RedHat](https://access.redhat.com/documentation/zh-cn/red_hat_enterprise_linux/7/html/security_guide/sec-using_firewalls#sec-Choosing_a_Network_Zone)
+
+```pdf
+https://access.redhat.com/documentation/zh-cn/red_hat_enterprise_linux/7/pdf/security_guide/Red_Hat_Enterprise_Linux-7-Security_Guide-zh-CN.pdf
+```
