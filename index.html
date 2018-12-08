@@ -18,17 +18,23 @@
       nameLink: '/',
       logo: '/_media/logo-100.png',
       repo: 'jangrui/docs.jangrui.com',
-      maxLevel: 4,        //标题层渲染
+      // maxLevel: 4,        //标题层渲染
       // loadNavbar: true,   //导航栏
       loadNavbar: '_navbar.md',
-      // loadSidebar: true,  //侧边栏
-      loadSidebar: '_sidebar.md',  //侧边栏
+      alias: {
+        '/.*/_navbar.md': '/_navbar.md'
+      },
+      loadSidebar: true,  //侧边栏
+      alias: {
+        '/.*/_sidebar.md': '/_sidebar.md'
+      },
+      // loadSidebar: '_sidebar.md',  //侧边栏
       // autoHeader: true,   //自动为每个页面增加标题
       auto2top: true,     //自动跳转到页面顶部
       // coverpage: true,    //启用封面页
       coverpage: {
         '/': '_coverpage.md',
-        // '/command/': '_coverpage.md',
+        '/rhce/': '_coverpage.md',
       },
       mergeNavbar: true,  //小屏设备下合并导航栏到侧边栏
       notFoundPage: '_404.md',

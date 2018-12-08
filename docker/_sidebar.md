@@ -1,8 +1,0 @@
-* [Home](/)
-* [Command](command/)
-* [Shell](shell/)
-	- [VPS 一键测试脚本 bench.sh](/shell/bench.sh)
-* [Docker](docker/)
-	- [docker 的安装](/docker/安装)
-* [Git](git/)
-	- [给 gitlab 添加 SMTP](/git/给gitlab添加SMTP)

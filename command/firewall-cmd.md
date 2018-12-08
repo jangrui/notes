@@ -297,6 +297,7 @@ firewall-cmd [--permanent] [--zone=zone] --query-rich-rule='rule'
 
 ```bash
 firewall-cmd --add-rich-rule='rule family="ipv4" source address="192.168.10.10" drop'
+firewall-cmd --permanent --add-rich-rule 'rule family=ipv4 source address=172.25.0.0/24 forward-port port=5423 protocol=tcp to-port=80'
 ```
 
 ### service
