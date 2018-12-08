@@ -8,6 +8,8 @@
 	- [VPS 一键测试脚本 bench.sh](shell/bench.sh)
 * [Docker](docker/)
 	- [docker 的安装](docker/安装)
+	- [docker 的常用指令](docker/docker的常用指令)
+	- [Docker 下实现 PXC 集群负载均衡](docker/Docker下实现PXC集群负载均衡)
 * [Git](git/)
 	- [给 gitlab 添加 SMTP](git/给gitlab添加SMTP)
 * [RHCE](rhce/)
