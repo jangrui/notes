@@ -14,4 +14,4 @@
 	- [给 gitlab 添加 SMTP](git/给gitlab添加SMTP)
 * [RHCE](rhce/)
 	- [RHCSA](rhce/rhcsa)
-	- [RHCSA](rhce/rhce)
+	- [RHCE](rhce/rhce)
