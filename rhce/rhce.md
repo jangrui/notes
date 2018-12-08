@@ -84,7 +84,7 @@ firewall-cmd --reload
 firewall-cmd --list-all
 ```
 
-## 7. samba
+## 8. samba
 
 ```bash
 firewall-cmd --permanent --add-service=samba
@@ -123,7 +123,7 @@ echo redhat |smbpasswd -a rob
 echo redhat |smbpasswd -a brian
 ```
 
-## 8. samba client
+## 9. samba client
 
 ```bash
 yum install -y cifs-utils samba samba-client
