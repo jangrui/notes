@@ -1,5 +1,6 @@
-# docker 的安装
+# docker 国内加速
 
+## 安装
 内核需3.10以上
 
 ## ubuntu
@@ -65,3 +66,17 @@ service docker start
   "registry-mirrors": ["http://hub-mirror.c.163.com"]
 }
 ```
+
+### 加速地址:
+
+> 163:
+> http://hub-mirror.c.163.com
+>
+> aliyun:
+> https://u4kqosl2.mirror.aliyuncs.com
+>
+> docker中国:
+> https://registry.docker-cn.com
+>
+> daocloud.io:
+> http://f1361db2.m.daocloud.io

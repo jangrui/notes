@@ -6,9 +6,10 @@
 [root@server0 Desktop]# grep SELINUX= /etc/selinux/config 
 # SELINUX= can take one of these three values:
 SELINUX=permissive
-[root@server0 Desktop]# sed -i "s/SELINUX=permissive/SELINUX=enforcing/g" `grep "SELINUX=permissive" -rl /etc/selinux/config`
+[root@server0 Desktop]# sed -i "s/permissive/enforcing/g" `grep "SELINUX=permissive" -rl /etc/selinux/config`
 [root@server0 Desktop]# grep SELINUX= /etc/selinux/config # SELINUX= can take one of these three values:
 SELINUX=enforcing
+[root@server0 Desktop]# setenforce 1
 [root@server0 Desktop]# 
 ```
 
@@ -16,6 +17,7 @@ SELINUX=enforcing
 
 ```bash
 firewall-cmd --permanent --add-rich-rule 'rule family=ipv4 source address=172.17.10.0/24 service name=ssh reject'
+firewall-cmd --permanent --add-service=ssh
 firewall-cmd --reload
 firewall-cmd --list-all
 ```
@@ -29,6 +31,14 @@ systemctl restart network
 ```
 
 ## 4. 配置链路聚合
+
+```bash
+nmcli connection add con-name team0 ifname team0 type team config '{"runner":{"name":"activebackup"}}'
+nmcli connection add con-name team0-port1 ifname eth1 type team-slave master team0
+nmcli connection add con-name team0-port2 ifname eth2 type team-slave master team0
+nmcli connection modify team0 ipv4.addresses 192.168.0.101/24 ipv4.method manual
+nmcli connection up team0
+```
 
 ```bash
 [root@server0 ~]# nmcli device status 
@@ -73,6 +83,9 @@ postconf -e "local_transport = error:local"
 postconf -e "mydestinaton = "
 postconf -e "myorigin = example.com"
 postconf -e "relayhost = classroom.example.com"
+postconf -e "mynetworks = 127.0.0.0/8 [::1]/128"
+systemctl restart postfix.service 
+systemctl enable postfix.service 
 ```
 
 ## 7. 端口转发

@@ -38,9 +38,10 @@ echo root_password |passwd --stdin root
 [root@server0 Desktop]# grep SELINUX= /etc/selinux/config 
 # SELINUX= can take one of these three values:
 SELINUX=permissive
-[root@server0 Desktop]# sed -i "s/SELINUX=permissive/SELINUX=enforcing/g" `grep "SELINUX=permissive" -rl /etc/selinux/config`
+[root@server0 Desktop]# sed -i "s/permissive/enforcing/g" `grep "SELINUX=permissive" -rl /etc/selinux/config`
 [root@server0 Desktop]# grep SELINUX= /etc/selinux/config # SELINUX= can take one of these three values:
 SELINUX=enforcing
+[root@server0 Desktop]# setenforce 1
 [root@server0 Desktop]# 
 ```
 
@@ -158,23 +159,19 @@ tmpfs                tmpfs     914M     0  914M   0% /sys/fs/cgroup
 [root@server0 Desktop]# 
 ```	
 
+> xfs 格式同步文件系统: xfs_growfs /dev/vg1/lvm1
+> ext3/4 格式同步文件系统: resize2fs /dev/vg1/lvm1
+
 ## 5. 创建用户和用户组
 
 ```bash
-[root@server0 Desktop]# groupadd -g 40000 adminuser
-[root@server0 Desktop]# useradd -G adminuser natasha
-[root@server0 Desktop]# useradd -G adminuser harry
-[root@server0 Desktop]# useradd -s /sbin/nologin sarah
-[root@server0 Desktop]# echo glegunge | passwd --stdin natasha
-Changing password for user natasha.
-passwd: all authentication tokens updated successfully.
-[root@server0 Desktop]# echo glegunge | passwd --stdin harry
-Changing password for user harry.
-passwd: all authentication tokens updated successfully.
-[root@server0 Desktop]# echo glegunge | passwd --stdin sarah
-Changing password for user sarah.
-passwd: all authentication tokens updated successfully.
-[root@server0 Desktop]# 
+groupadd -g 40000 adminuser
+useradd -G adminuser natasha
+useradd -G adminuser harry
+useradd -s /sbin/nologin sarah
+echo glegunge | passwd --stdin natasha
+echo glegunge | passwd --stdin harry
+echo glegunge | passwd --stdin sarah
 ```
 
 ## 6. 文件权限设置
@@ -201,13 +198,13 @@ crontab -l -u natasha
 ## 8. 文件特殊权限设置
 
 ```bash
-[root@server0 Desktop]# mkdir /home/admins
-[root@server0 Desktop]# chown :adminuser /home/admins
-[root@server0 Desktop]# chmod g=rwx,o=- /home/admins
-[root@server0 Desktop]# chmod g+s /home/admins
-[root@server0 Desktop]# ll -d /home/admins
+mkdir /home/admins
+chown :adminuser /home/admins
+chmod g=rwx,o=- /home/admins
+chmod g+s /home/admins
+ll -d /home/admins
+
 drwxrws---. 2 root adminuser 6 Dec  9 02:12 /home/admins
-[root@server0 Desktop]# 
 ```
 
 ## 9. 升级内核
@@ -310,16 +307,10 @@ WARNING: Re-reading the partition table failed with error 16: Device or resource
 The kernel still uses the old table. The new table will be used at
 the next reboot or after you run partprobe(8) or kpartx(8)
 Syncing disks.
-[root@server0 ~]# partprobe 
-[root@server0 ~]# mkswap /dev/sdb
-sdb   sdb1  sdb2  sdb5  sdb6  
-[root@server0 ~]# mkswap /dev/sdb
-sdb   sdb1  sdb2  sdb5  sdb6  
+[root@server0 ~]# partprobe  
 [root@server0 ~]# mkswap /dev/sdb6
 Setting up swapspace version 1, size = 524284 KiB
 no label, UUID=6227a60f-f31e-47ac-a9bd-842f39d50780
-[root@server0 ~]# blkid /dev/sdb6 >> /etc/fstab
-/dev/sdb6: UUID="6227a60f-f31e-47ac-a9bd-842f39d50780" TYPE="swap"
 [root@server0 ~]# echo "UUID=6227a60f-f31e-47ac-a9bd-842f39d50780 swap swap defaults 0 0" >> /etc/fstab
 [root@server0 ~]# swapon -a
 [root@server0 ~]# free -h
@@ -399,10 +390,8 @@ naming   =version 2              bsize=4096   ascii-ci=0 ftype=0
 log      =internal log           bsize=4096   blocks=853, version=2
          =                       sectsz=512   sunit=0 blks, lazy-count=1
 realtime =none                   extsz=4096   blocks=0, rtextents=0
-[root@server0 ~]# mkdir /exam/lvm2 -p
-[root@server0 ~]# blkid /dev/exam/lvm2
-/dev/exam/lvm2: UUID="64d6dfbc-8761-45cd-ab80-e43a65dbf06e" TYPE="xfs" 
-[root@server0 ~]# echo "UUID=64d6dfbc-8761-45cd-ab80-e43a65dbf06e /exam/lvm2 xfs defaults 0 0" >> /etc/fstab 
+[root@server0 ~]# mkdir /exam/lvm2 -p 
+[root@server0 ~]# echo "/dev/exam/lvm2 /exam/lvm2 xfs defaults 0 0" >> /etc/fstab 
 [root@server0 ~]# mount -a
 [root@server0 ~]# df -Th
 Filesystem                                   Type      Size  Used Avail Use% Mounted on
