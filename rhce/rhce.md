@@ -231,7 +231,7 @@ RPCNFSDARGS="-V 4.2"
 
 vim /etc/fstab
 server0.example.com:/protected /mnt/nfssecure nfs defaults,sec=krb5p 0 0
-server0.example.com:/publice /mnt/nfsmount nfs defaults 0 0
+server0.example.com:/publice /mnt/nfsmount nfs defaults,v4.2 0 0
 
 systemctlc start nfs-secure nfs-secure-server nfs-server
 systemctlc enable nfs-secure nfs-secure-server nfs-server
