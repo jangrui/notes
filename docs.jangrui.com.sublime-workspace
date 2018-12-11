@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"per",
+				"permanent"
+			],
+			[
 				"find",
 				"findfiles"
 			],
@@ -27,15 +31,6 @@
 	},
 	"buffers":
 	[
-		{
-			"file": "rhce/rhcsa.md",
-			"settings":
-			{
-				"buffer_size": 12669,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		}
 	],
 	"build_system": "",
 	"build_system_choices":
@@ -73,9 +68,32 @@
 	},
 	"expanded_folders":
 	[
+		"/Volumes/Jangrui/docs.jangrui.com",
+		"/Volumes/Jangrui/docs.jangrui.com/rhce"
 	],
 	"file_history":
 	[
+		"/Users/jangrui/Documents/www/rhcsa 练习题.md",
+		"/Volumes/Jangrui/docs.jangrui.com/rhce/README.md",
+		"/Volumes/Jangrui/docs.jangrui.com/rhce/rhcsa练习题.md",
+		"/Volumes/Jangrui/docs.jangrui.com/rhce/rhce.md",
+		"/Volumes/Jangrui/docs.jangrui.com/rhce/rhcsa.md",
+		"/Volumes/Jangrui/docs.jangrui.com/_sidebar.md",
+		"/Volumes/Jangrui/docs.jangrui.com/docker/README.md",
+		"/Volumes/Jangrui/docs.jangrui.com/docker/docker国内加速.md",
+		"/Volumes/Jangrui/docs.jangrui.com/command/df.md",
+		"/Volumes/Jangrui/docs.jangrui.com/command/README.md",
+		"/Volumes/Jangrui/docs.jangrui.com/command/resize2fs.md",
+		"/Volumes/Jangrui/docs.jangrui.com/command/e2fsck.md",
+		"/Volumes/Jangrui/docs.jangrui.com/command/fsck.md",
+		"/Volumes/Jangrui/docs.jangrui.com/command/du.md",
+		"/Volumes/Jangrui/docs.jangrui.com/command/dumpe2fs.md",
+		"/Volumes/Jangrui/docs.jangrui.com/docker/Docker下实现PXC集群负载均衡.md",
+		"/Volumes/Jangrui/docs.jangrui.com/docker/Docker下利用Keepalived实现双机热备.md",
+		"/Volumes/Jangrui/docs.jangrui.com/docker/docker创建pxc集群.md",
+		"/Volumes/Jangrui/docs.jangrui.com/docker/docker的常用指令.md",
+		"/Users/jangrui/Documents/www/rhce.md",
+		"/Volumes/Jangrui/docs.jangrui.com/command/firewall-cmd.md",
 		"/Volumes/Jangrui/docs.jangrui.com/index.html",
 		"/Volumes/Jangrui/docs.jangrui.com/rhce/_coverpage.md",
 		"/Volumes/Jangrui/docs.jangrui.com/docker/_sidebar.md",
@@ -83,7 +101,6 @@
 		"/Volumes/Jangrui/docs.jangrui.com/git/_sidebar.md",
 		"/Volumes/Jangrui/docs.jangrui.com/shell/_sidebar.md",
 		"/Volumes/Jangrui/docs.jangrui.com/rhce/_sidebar.md",
-		"/Volumes/Jangrui/docs.jangrui.com/_sidebar.md",
 		"/Volumes/Jangrui/docs.jangrui.com/shell/_navbar.md",
 		"/Volumes/Jangrui/docs.jangrui.com/rhce/_navbar.md",
 		"/Volumes/Jangrui/docs.jangrui.com/command/_navbar.md",
@@ -94,16 +111,13 @@
 		"/Volumes/Jangrui/docs.jangrui.com/shell/bench.sh.md",
 		"/Volumes/Jangrui/docs.jangrui.com/git/给gitlab添加SMTP.md",
 		"/Volumes/Jangrui/docs.jangrui.com/docker/docker-install.md",
-		"/Volumes/Jangrui/docs.jangrui.com/rhce/rhce.md",
 		"/Volumes/Jangrui/docs.jangrui.com/git/gitlab-add-smtp.md",
 		"/Volumes/Jangrui/docs.jangrui.com/_navbar.md",
 		"/Volumes/Jangrui/docs.jangrui.com/docs.jangrui.com.sublime-workspace",
 		"/Volumes/Jangrui/docs.jangrui.com/docs.jangrui.com.sublime-project",
 		"/Volumes/Jangrui/docs.jangrui.com/untitled.sublime-workspace",
-		"/Volumes/Jangrui/docs.jangrui.com/rhce/README.md",
 		"/Users/jangrui/Library/Application Support/Sublime Text 3/Packages/User/Package Control.sublime-settings",
 		"/Users/jangrui/Library/Application Support/Sublime Text 3/Packages/Package Control/Package Control.sublime-settings",
-		"/Volumes/Jangrui/docs.jangrui.com/rhce/rhcsa.md",
 		"/Volumes/Jangrui/docs.jangrui.com/RHCE/_navbar.md",
 		"/Users/jangrui/Downloads/资料/PXC集群/h2/keepalived.conf",
 		"/Users/jangrui/Downloads/资料/PXC集群/宿主机/keepalived.conf",
@@ -151,7 +165,6 @@
 		"/private/var/folders/xh/1q_yz8893y1d7ln0t5bsq2440000gn/T/fz3temp-2/reply.php",
 		"/Users/jangrui/Desktop/wechat.php",
 		"/Volumes/Jangrui/docs.jangrui.com/README.md",
-		"/Volumes/Jangrui/docs.jangrui.com/command/firewall-cmd.md",
 		"/Volumes/Jangrui/Miniprogram/app.jangrui.com/project.config.json",
 		"/Users/jangrui/Desktop/NewFile.txt",
 		"/Users/jangrui/Downloads/PowerPhotos_1.5.3_SN.txt",
@@ -187,23 +200,7 @@
 		"/Applications/VMware Fusion.app/Contents/Library/isoimages/tools-darwinPre15.plist",
 		"/Applications/VMware Fusion.app/Contents/_CodeSignature/CodeResources",
 		"/Applications/VMware Fusion.app/Contents/Info.plist",
-		"/Applications/VMware Fusion.app/Contents/Frameworks/libbasichttp.dylib",
-		"/Applications/VMware Fusion.app/Contents/Resources/Dutch.lproj/duiNonModalAlert.strings",
-		"/Applications/VMware Fusion.app/Contents/Resources/Base.lproj/plSettingsViewVUsbCamera.nib",
-		"/Applications/VMware Fusion.app/Contents/Resources/Base.lproj/duiNonModalAlert.nib",
-		"/Applications/VMware Fusion.app/Contents/Library/VMware OVF Tool/open_source_licenses.txt",
-		"/Applications/VMware Fusion.app/Contents/Library/ntfsls",
-		"/Applications/VMware Fusion.app/Contents/Library/thnuclnt/thnusetup.sh",
-		"/Applications/VMware Fusion.app/Contents/Library/thnuclnt/thnucups",
-		"/Applications/VMware Fusion.app/Contents/Library/thnuclnt/thnuclnt.types",
-		"/Applications/VMware Fusion.app/Contents/Library/thnuclnt/thnuclnt.convs",
-		"/Applications/VMware Fusion.app/Contents/Library/thnuclnt/thnuclnt.conf",
-		"/Applications/VMware Fusion.app/Contents/Library/thnuclnt/thnuclnt",
-		"/Applications/VMware Fusion.app/Contents/Library/vmnet-dhcpd",
-		"/Volumes/Jangrui/web/Tint-jangrui/Tint-jangrui/assets/css/single.css",
-		"/Volumes/Jangrui/web/Tint-jangrui/Tint-jangrui-2.5.0/assets/css/single-085b34ea6a.css",
-		"/Users/jangrui/Documents/www/201608061817",
-		"/Users/jangrui/Documents/www/密码破解工具是普通计算机用户恢复遗忘密码、黑客窃取信息、渗透测试工程师测试应用安全常用的工具。密码破"
+		"/Applications/VMware Fusion.app/Contents/Frameworks/libbasichttp.dylib"
 	],
 	"find":
 	{
@@ -221,6 +218,8 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"-[ ] ",
+			"[]",
 			"unpkg.com",
 			"remember_open_files"
 		],
@@ -240,38 +239,8 @@
 	"groups":
 	[
 		{
-			"selected": 0,
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"file": "rhce/rhcsa.md",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 12669,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1017,
-								1017
-							]
-						],
-						"settings":
-						{
-							"origin_encoding": "ASCII",
-							"syntax": "Packages/Markdown/Markdown.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 412.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				}
 			]
 		}
 	],

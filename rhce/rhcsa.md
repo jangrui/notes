@@ -1,5 +1,13 @@
 # RHCSA
 
+## RHCSA 模拟试题
+
+```pdf
+/rhce/RHCSA-7-模拟试题.pdf
+```
+
+## 答案
+
 ## 0. 破解 root 密码
 
 进入单用户模式修改密码
@@ -12,6 +20,7 @@ echo redhat | passwd --stdin root
 touch /.autorelabel
 sync
 exit
+
 reboot
 ```
 
@@ -19,7 +28,6 @@ reboot
 
 ```bash
 hostnamectl set-hostname server0.example.com
-hostnamectl server0.example.com
 nmcli connection add autoconnect yes con-name eth0 ifname eth0 type ethernet ip4 172.25.0.11/24 gw4 172.25.254.254
 nmcli connection add modify eht0 ipv4.dns 172.25.254.254
 nmcli connection up eth0
@@ -199,9 +207,8 @@ crontab -l -u natasha
 
 ```bash
 mkdir /home/admins
-chown :adminuser /home/admins
-chmod g=rwx,o=- /home/admins
-chmod g+s /home/admins
+chgrp adminuser /home/admins
+chmod g=rwx,o=-,g+s /home/admins
 ll -d /home/admins
 
 drwxrws---. 2 root adminuser 6 Dec  9 02:12 /home/admins
@@ -209,13 +216,13 @@ drwxrws---. 2 root adminuser 6 Dec  9 02:12 /home/admins
 
 ## 9. 升级内核
 
-rpm 格式:
+rpm 安装:
 
 ```bash
 rpm -ivh http://content.example.com/rhel7.0/x86_64/errata/Packages/kernel-3.10.0-123.1.2.el7.x86_64.rpm
 ```
 
-如果题中是 yum 源:
+> 如果题中是 yum 源方式:
 
 ```bash
 yum-config-manager --add-repo=http://content.example.com/rhel7.0/x86_64/errata/Packages/
@@ -230,7 +237,7 @@ yum install -y authconfig-gtk sssd openldap openldap-client
 authconfig-gtk
 ```
 
-复制粘贴
+复制粘贴相关配置.
 
 ## 11. autofs 自动挂载
 
@@ -332,7 +339,7 @@ ll /root/findfiles
 ## 17. 过滤文件
 
 ```bash
-cat /usr/share/dict/words |grep seismic |grep -v '^$' >> /root/wordlist
+cat /usr/share/dict/words |grep seismic |grep -v '^$' > /root/wordlist
 cat /root/wordlist
 ```
 

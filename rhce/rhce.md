@@ -1,5 +1,33 @@
 # RHCE
 
+## RHCE 模拟试题
+
+```pdf
+/rhce/RHCE-7-模拟试题.pdf
+```
+
+## 模拟试题环境
+
+[百度云链接](https://pan.baidu.com/s/1M3Jm5JGdCmWFeMBz1dkSYg) | 密码 : i790
+
+> - 添加设置 vmnet11 网段 , 地址为 172.25.0.0 , 子网掩码为 255.255.255.0 .
+>
+> - 解压后找到 classroom-rh124.vmx server-rh124.vmx desktop-rh124.vmx (共3个虚拟机), 双机可添加到虚拟机中 .
+>
+> - 若提示已移动或已复制 点击已复制 .
+>
+> - 设置每个虚拟机的网络为 vmnet11 .
+> 
+> - classroom-rh124 虚拟机带有 rhcsa 和 rhce 考场环境快照 , 可根据需要切换 .
+> 
+> - classroom-rh124 启动后无需任何操作 , 也不需要登录进入系统 .
+>
+> - server-rh124 恢复快照到初始化化状态 , 开启虚拟机后 , 用 lab examrhcsa setup 布置 rhcsa 考试环境 , lab examrhce setup 布置 rhce 考试环境 .
+> 
+> - desktop-rh124 用 lab examrhce setup 布置 rhce 考试环境 .  
+
+## 解题
+
 ## 1. 修改 selinux
 
 ```bash
@@ -25,7 +53,7 @@ firewall-cmd --list-all
 ## 3. 配置 IPV6 地址
 
 ```bash
-nmcli connection modify eth0 ipv6.addresses fddb:fe2a:ab1e::c0a8:1/64 ipv6.method manual
+nmcli connection modify eth0 ipv6.method manual ipv6.addresses fddb:fe2a:ab1e::c0a8:1/64 
 nmcli connection up eth0
 systemctl restart network
 ```
@@ -39,6 +67,8 @@ nmcli connection add con-name team0-port2 ifname eth2 type team-slave master tea
 nmcli connection modify team0 ipv4.addresses 192.168.0.101/24 ipv4.method manual
 nmcli connection up team0
 ```
+
+详解:
 
 ```bash
 [root@server0 ~]# nmcli device status 
@@ -70,7 +100,7 @@ Connection successfully activated (D-Bus active path: /org/freedesktop/NetworkMa
 ## 5. 自定义用户环境
 
 ```bash
-echo 'alias qstat="/bin/ps -Ao pid,tt,user,fname,rsz"' >> /etc/bashrc
+echo "alias qstat='/bin/ps -Ao pid,tt,user,fname,rsz'" >> /etc/bashrc
 source /etc/bashrc
 qstat
 ```
@@ -85,7 +115,9 @@ postconf -e "myorigin = example.com"
 postconf -e "relayhost = classroom.example.com"
 postconf -e "mynetworks = 127.0.0.0/8 [::1]/128"
 systemctl restart postfix.service 
-systemctl enable postfix.service 
+systemctl enable postfix.service
+firewall-cmd --permanent --add-service=smtp
+firewall-cmd --reload
 ```
 
 ## 7. 端口转发
@@ -94,7 +126,6 @@ systemctl enable postfix.service
 firewall-cmd --permanent --add-rich-rule 'rule family=ipv4 source address=172.25.0.0/24 forward-port port=5423 protocol=tcp to-port=80'
 firewall-cmd --permanent --add-rich-rule 'rule family=ipv4 source address=172.25.0.0/24 forward-port port=5423 protocol=udp to-port=80'
 firewall-cmd --reload
-firewall-cmd --list-all
 ```
 
 ## 8. samba
@@ -102,36 +133,28 @@ firewall-cmd --list-all
 ```bash
 firewall-cmd --permanent --add-service=samba
 firewall-cmd --permanent --add-service=samba-client
-
-yum install -y samba samba-client
-
+firewall-cmd --reload
+yum install -y samba samba-*
 systemctl restart smb nmb
 systemctl enable smb nmb
-
 mkdir /common
-
 semanage fcontext -a -t 'samba_share_t' '/common(/.*)?'
-
-chcon -R -t 'samba_share_t' /common
-
 restorecon -RvF /common/
-
 chmod -Rf o+w /common
-
 vim /etc/samba/smb.conf
+
 workgroup = STAFF
 
 [common]
-	comment = this is common !
 	path = /common
+	hosts allow = 172.25.0.
 	browseable = yes
 	writeable = no
 	write list = brian
-	hosts allow = 172.25.0.
 
 systemctl restart smb nmb 
-
-useradd rob brian
+useradd -s /sbin/nologin rob
+useradd -s /sbin/nologin brian
 echo redhat |smbpasswd -a rob
 echo redhat |smbpasswd -a brian
 ```
@@ -139,7 +162,10 @@ echo redhat |smbpasswd -a brian
 ## 9. samba client
 
 ```bash
-yum install -y cifs-utils samba samba-client
+firewall-cmd --add-service=samba --permanent
+firewall-cmd --add-service=samba-client --permanent
+firewall-cmd --reload
+yum install -y cifs-utils samba samba-*
 
 systemctl restart smb nmb
 systemctl enable smb nmb
@@ -170,59 +196,61 @@ cifscreds add server0.example.com
 ```bash
 mkdir /public
 mkdir /protected
+wget -O /etc/krb5.keytab http://classroom.example.com/pub/keytabs/server0.keytab
+mkdir /protected/project
+chown -Rf ldapusre0 /protected/project
+
+yum install -y nfs-*
+# 指定版本
+vim /etc/sysconfig/nfs
+RPCNFSDARGS="-V 4.2"
 
 vim /etc/exports
 /protected	*.example.com(rw,sec=krb5p)
 /public		*.example.com(ro)
 
-wget -O /etc/krb5.keytab http://classroom.example.com/pub/keytabs/server0.keytab
-
-yum install -y nfs-utils nfs-server nfs-secure nfs-secure-server
-
 systemctl restart nfs-server nfs-secure nfs-secure-server
 systemctl enable nfs-server nfs-secure nfs-secure-server
 
 firewall-cmd --permanent --add-service=nfs
+firewall-cmd --permanent --add-service=mountd
+firewall-cmd --permanent --add-service=rpc-bind
 firewall-cmd --reload 
-
-mkdir /protected/project
-chown -Rf ldapusre0 /protected/project
-ls -ad /protected/project
 ```
 
 ## 11. desktop nfs
 
 ```bash
-yum install -y nfs-utils
-
-systemctlc start nfs-secure nfs-secure-server nfs-server
-systemctlc enable nfs-secure nfs-secure-server nfs-server
-
 mkdir /mnt/nfsmount
 mkdir /mnt/nfssecure
-
 wget -O /etc/krb5.keytab http://classroom.example.com/pub/keytabs/desktop0.keytab
+yum install -y nfs-*
+# 指定版本
+vim /etc/sysconfig/nfs
+RPCNFSDARGS="-V 4.2"
 
 vim /etc/fstab
 server0.example.com:/protected /mnt/nfssecure nfs defaults,sec=krb5p 0 0
 server0.example.com:/publice /mnt/nfsmount nfs defaults 0 0
 
 systemctlc start nfs-secure nfs-secure-server nfs-server
-
+systemctlc enable nfs-secure nfs-secure-server nfs-server
 mount -a
-
 df -Th
 
-ssh ldapuser0@server0.example.com
+# 测试
+ssh ldapuser0@localhost
 passwd=kerberos
 touch /protected/project/123
 exit
-ls /mnt/nfssecure/project
 ```
 
 ## 12. web
 
 ```bash
+firewall-cmd --permanent --add-service=http
+firewall-cmd --add-rich-rule 'rule family=ipv4 source address=172.17.10.0/24 service name=http reject' --permanent 
+firewall-cmd --reload
 yum install -y httpd
 systemctl start httpd
 systemctl enable httpd
@@ -248,19 +276,19 @@ vim /etc/httpd/conf.d/vhost-server0.conf
 httpd -t
 
 systemctl restart httpd
-
-firewall-cmd --permanent --add-service=http
-firewall-cmd --reload
 ```
 
 ## 13. web https
 
 ```bash
 yum install -y mod_ssl
+firewall-cmd --permanent --add-service=https
+firewall-cmd --add-rich-rule 'rule family=ipv4 source address=172.17.10.0/24 service name=https reject' --permanent 
+firewall-cmd --reload
 
-wget -O /etc/pki/tls/certs/server0.crt http://classroom.example.com/pub/tls/private/server0.crt
+wget -O /etc/pki/tls/certs/server0.crt http://classroom.example.com/pub/tls/certs/server0.crt
 wget -O /etc/pki/tls/private/server0.key http://classroom.example.com/pub/tls/private/server0.key
-wget -O /etc/pki/tls/example-ca.crt http://classroom.example.com/pub/example-ca.crt
+wget -O /etc/pki/tls/certs/example-ca.crt http://classroom.example.com/pub/example-ca.crt
 
 vim /etc/httpd/conf.d/ssl.conf
 Listen 443 https
@@ -283,14 +311,17 @@ ServerName "server0.example.com"
 ​		</RequireAll>
 ​	</Directory>
 </VirtualHost>
-
-firewall-cmd --permanent --add-service=https
-firewall-cmd --reload
 ```
 
 ## 14. web
 
 ```bash
+mkdir /var/www/virtual
+wget -O /var/www/virtual/index.html http://classroom.example.com/materails/www.html
+ll -d /var/www/virtual
+id floyd
+useradd -G root floyd
+chmod g=rwx,g+s /var/www/virtual
 vim /etc/httpd/conf.d/vhost-www0.conf
 <VirtualHost *:80>
 ​	DocumentRoot "/var/www/virtual"
@@ -303,26 +334,13 @@ vim /etc/httpd/conf.d/vhost-www0.conf
 </VirtualHost>
 
 httpd -t
-
-mkdir /var/www/virtual
-
-wget -O /var/www/virtual/index.html http://classroom.example.com/materails/www.html
-
 systemctl restart httpd
-
-id floyd
-
-useradd floyd
-
-chown -Rf floyd /var/www/virtual
-setfacl -m u:floyd:rwx /var/www/virtual
 ```
 
 ## 15. web
 
 ```bash
 mkdir /var/www/virtual/private
-
 wget -O /var/www/virtual/private/index.html http://classroom.example.com/materials/www.html
 
 vim /etc/httpd/conf.d/vhost-www0.conf
@@ -343,11 +361,13 @@ vim /etc/httpd/conf.d/vhost-www0.conf
 </VirtualHost>
 ```
 
-## 16. web
+## 16. web wsgi
 
 ```bash
 yum install -y mod_wsgi
-
+semanage port -a -t http_port_t -p tcp 8908
+firewall-cmd --permanent --add-rich-rule rule family=ipv4 source address=172.25.0.0/24 port port=8908 protocol=tcp accept
+firewall-cmd --reload
 mkdir /var/www/webapp
 
 wget -O /var/www/webapp/webinfo.wsgi http://classroom.example.com/materials/webinfo.wsgi
@@ -358,10 +378,6 @@ listen 8908
 wsgiscriptalias / /var/www/webapp/webinfo.wsgi
 servername webapp0.example.com
 </VirtualHost>
-
-semanage port -a -t http_port_t -p tcp 8908
-
-firewall-cmd --permanent --add-rich-rule rule family=ipv4 source address=172.25.0.0/24 port port=8908 protocol=tcp accept
 
 systemctl restart httpd
 systemctl enable httpd
@@ -407,10 +423,11 @@ fi
 ## 19. iscsi server0
 
 ```bash
-yum install -y targetcli
-
+yum install -y targetcli*
 systemctl restart target
 systemctl enable target
+firewall-cmd --add-rich-rule 'rule family=ipv4 source address=172.25.0.10/24 port port=3260 protocol=tcp accept' --permanent
+firewall-cmd --reload
 
 fdisk -l
 
@@ -425,30 +442,27 @@ vgcreate vg1 /dev/sdb1
 lvcreate -n iscsi_store -L 3G vg1
 
 targetcli
-ls
-cd /backstore/block
 
-create disk1 /dev/vg1/iscsi_store
-
+/backstore/block create disk1 /dev/vg1/iscsi_store
 /iscsi create iqn.2014-11.com.example:server0
-/iscsi create iqn.2014-11.com.example:server0/tpg1/
 /iscsi create iqn.2014-11.com.example:server0/tpg1/acls create iqn.2014-11.com.example:desktop0
 /iscsi create iqn.2014-11.com.example:server0/tpg1/luns create /backstores/block/disk1
 /iscsi/iqn.2014-11.com.example:server0/tpg1/luns/portals create 172.25.0.11 ip_port=3260
 saveconfig
 exit
+systemctl restart target
 ```
 
 ## 20. iscsi client
 
 ```bash
-yum install -y iscsi-initiator-utils.i686
-
-systemctl restart iscsi
-systemctl enable iscsi
+yum install -y iscsi-*
 
 vim /etc/iscsi/initiatorname.iscsi
 InitiatorName=iqn.2014-11.com.example:desktop0
+
+systemctl restart iscsi
+systemctl enable iscsi
 
 iscsiadm -m discovery -t st -p 172.25.0.11
 
@@ -477,21 +491,14 @@ df -Th
 ## 21. mariadb
 
 ```bash
-server0
-yum install -y mariadb mariadb-server
-desktop0:
-yum install -y mariadb
+yum install -y mariadb mariadb-*
 
 systemctl restart mariadb
 systemctl enable mariadb
 
-mysql_secure-installation
+firewall-cmd --add-service=mysql
 
-password Y
-anonymous users Y
-root login remotely Y
-test database and access to it Y
-privilege tables now Y
+mysql_secure-installation
 
 wget http://content.example.com/courses/rhce/rhel7.0/materials/mariadb/mariadb.dump
 
@@ -534,6 +541,4 @@ select id from product where name='RT-AC68U'
 desc catagroy;
 
 select id from category where name='servers'
-
-select * from product where id_category=2;
 ```
