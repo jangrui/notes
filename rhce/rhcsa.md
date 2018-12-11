@@ -24,6 +24,28 @@ exit
 reboot
 ```
 
+重启后虚拟机可能默认命令行界面,如需要切换到图形界面, root 登录,执行命令:
+
+```bash
+# 暂时图形化界面,重启后还是命令行界面
+systemctl isolate graphical.target
+```
+
+如果每次切换麻烦,可改变默认界面:
+
+```bash
+systemctl get-default
+
+# 设置默认图形化界面启动
+systemctl set-default graphical.target
+
+# 设置默认命令行界面启动
+systemctl set-default multi-user.target
+
+# 安装图形化界面
+yum -y groupinstall "Server with GUI"
+```
+
 修改网络设置
 
 ```bash
