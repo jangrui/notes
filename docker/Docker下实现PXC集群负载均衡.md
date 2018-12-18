@@ -29,7 +29,7 @@ docker volume rm v1 # 删除 v1 卷
 ### 1.4 创建 pxc 容器
 
 ```bash
-docker run -d -p 3306:3306 -e MYSQL_ROOT_PASSWORD=abc123456 -e CLUSTER_NAME=PXC -e XTRABACKUP_PASSWORD=abc123456 -v v1:/var/lib/mysql --privileged --name=node1 --net=net1 --ip 172.18.0.2 pxc
+docker run -d -p 3306:3306 -e MYSQL_ROOT_PASSWORD=abc123456 -e CLUSTER_NAME=PXC -e XTRABACKUP_PASSWORD=abc123456 -v v1:/var/lib/mysql --privileged --name=node1 --net=net1 pxc
 ```
 
 ### 1.5 创建 pxc 容器集群
@@ -37,10 +37,50 @@ docker run -d -p 3306:3306 -e MYSQL_ROOT_PASSWORD=abc123456 -e CLUSTER_NAME=PXC 
 以 node1 为基础
 
 ```bash
-docker run -d -p 3307:3306 -e MYSQL_ROOT_PASSWORD=abc123456 -e CLUSTER_NAME=PXC -e XTRABACKUP_PASSWORD=abc123456 -e CLUSTER_JOIN=node1 -v v2:/var/lib/mysql --privileged --name=node2 --net=net1 --ip 172.18.0.3 pxc
-docker run -d -p 3308:3306 -e MYSQL_ROOT_PASSWORD=abc123456 -e CLUSTER_NAME=PXC -e XTRABACKUP_PASSWORD=abc123456 -e CLUSTER_JOIN=node1 -v v3:/var/lib/mysql --privileged --name=node3 --net=net1 --ip 172.18.0.4 pxc
-docker run -d -p 3309:3306 -e MYSQL_ROOT_PASSWORD=abc123456 -e CLUSTER_NAME=PXC -e XTRABACKUP_PASSWORD=abc123456 -e CLUSTER_JOIN=node1 -v v4:/var/lib/mysql --privileged --name=node4 --net=net1 --ip 172.18.0.5 pxc
-docker run -d -p 3310:3306 -e MYSQL_ROOT_PASSWORD=abc123456 -e CLUSTER_NAME=PXC -e XTRABACKUP_PASSWORD=abc123456 -e CLUSTER_JOIN=node1 -v v5:/var/lib/mysql --privileged --name=node5 --net=net1 --ip 172.18.0.6 pxc
+# 节点2
+docker run -d -p 3307:3306 \
+        -e MYSQL_ROOT_PASSWORD=abc123456 \
+        -e CLUSTER_NAME=PXC \
+        -e XTRABACKUP_PASSWORD=abc123456 \
+        -e CLUSTER_JOIN=node1 \
+        -v v2:/var/lib/mysql \
+        --privileged \
+        --name=node2 \
+        --net=net1 \
+        pxc
+# 节点3
+docker run -d -p 3308:3306 \
+        -e MYSQL_ROOT_PASSWORD=abc123456 \
+        -e CLUSTER_NAME=PXC \
+        -e XTRABACKUP_PASSWORD=abc123456 \
+        -e CLUSTER_JOIN=node1 \
+        -v v3:/var/lib/mysql \
+        --privileged \
+        --name=node3 \
+        --net=net1 \
+        pxc
+# 节点4
+docker run -d -p 3309:3306 \
+        -e MYSQL_ROOT_PASSWORD=abc123456 \
+        -e CLUSTER_NAME=PXC \
+        -e XTRABACKUP_PASSWORD=abc123456 \
+        -e CLUSTER_JOIN=node1 \
+        -v v4:/var/lib/mysql \
+        --privileged \
+        --name=node4 \
+        --net=net1 \
+        pxc
+# 节点5
+docker run -d -p 3310:3306 \
+        -e MYSQL_ROOT_PASSWORD=abc123456 \
+        -e CLUSTER_NAME=PXC \
+        -e XTRABACKUP_PASSWORD=abc123456 \
+        -e CLUSTER_JOIN=node1 \
+        -v v5:/var/lib/mysql \
+        --privileged \
+        --name=node5 \
+        --net=net1 \
+        pxc
 ```
 
 > - CLUSTER_JOIN=node1 : 加入 node1节点.
@@ -123,7 +163,14 @@ listen  proxy-mysql
 ### 2.3 创建 haproxy 容器
 
 ```bash
-docker run -it -d -p 4001:8888 -p 4002:3306 -v /home/soft/haproxy:/usr/local/etc/haproxy --name haproxy1 --privileged --net=net1 --ip 172.18.0.7 haproxy
+docker run -it -d \
+        -p 4001:8888 \
+        -p 4002:3306 \
+        -v /home/soft/haproxy:/usr/local/etc/haproxy \
+        --name haproxy1 \
+        --privileged \
+        --net=net1 \
+        haproxy
 ```
 
 进入 haproxy1 容器,指定haproxy 启动配置指令
@@ -146,3 +193,48 @@ create user 'haproxy'@'%' identified by '';
 ### 2.4 haproxy 监控:
 
 [http://ip:4001/dbs](https://ip:4001/dbs)
+
+## pxc 集群重启
+
+重启docker服务和pxc集群容器后，发现pxc集群出现闪退
+
+解决方法：
+
+> safe_to_bootstrap参数被PXC用来记载谁是最后退出PXC集群的节点。
+>
+> 比如node1是最后关闭的节点，那么PXC就会在把safe_to_bootstrap设置成1，代表node1节点最后退出，它的数据是最新的。
+>
+> 下次启动必须先启动node1，然后其他节点与node1同步。
+> 
+> 如果在PXC节点都正常运行的状态下关闭宿主机Docker服务或者电源，那么PXC来不及判断谁是最后退出的节点，所有PXC节点一瞬间就都关上了，哪个节点的safe_to_boostrap参数就都是0。
+>
+> 解决这个故障也很好办，那就是挑node1，把该参数改成1，然后正常启动node1，再启动其他节点就行了。
+
+查看node1挂载目录：
+
+```bash
+docker inspect v1 
+[
+    {
+        "Driver": "local",
+        "Labels": {},
+        "Mountpoint": "/var/lib/docker/volumes/v1/_data",
+        "Name": "v1",
+        "Options": {},
+        "Scope": "local"
+    }
+]
+
+vim /var/lib/docker/volumes/v1/_data/grastate.dat
+···
+safe_to_bootstrap: 1
+```
+
+修改 grastate.dat 文件里的 safe_to_bootstrap: 0 改为 safe_to_bootstrap: 1
+
+重新启动pxc集群所有节点，注意node1节点顺序
+
+
+```bash
+docker start node1 node2 node3 node4 node5
+```

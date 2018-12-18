@@ -23,7 +23,7 @@ vrrp_instance  VI_1 {
     advert_int  1
     authentication {
         auth_type  PASS
-        auth_pass  123456
+        auth_pass  abc123456
     }
     virtual_ipaddress {
         172.18.0.201
@@ -60,6 +60,7 @@ keepalived 配置参数:
 vrrp_instance VI_1 {
     state MASTER
     interface ens33
+    # 绑定网卡
     virtual_router_id 51
     priority 100
     advert_int 1
@@ -108,21 +109,20 @@ systemctl restart keepalived
 systemctl enable keepalived	
 ```
 
+## 检测
 
-> 通过docker start node1 或者任何一个节点是启动不了的，原因是集群之前的同步机制造成的，启动任何一个节点，该节点都会去其它节点同步数据，其它节点仍处于宕机状态，所以该节点启动失败，这也是pxc集群的强一致性的表现，解决方式是，删除所有节点
-
-```bash
-docker rm node1 node2 node3 node4 node 5
-```
-
-和数据卷中的grastate.dat文件
+停止某个haproxy节点
 
 ```bash
-rm -rf /var/lib/docker/volumes/v1/_data/grastate.dat
-rm -rf /var/lib/docker/volumes/v2/_data/grastate.dat
-rm -rf /var/lib/docker/volumes/v3/_data/grastate.dat
-rm -rf /var/lib/docker/volumes/v4/_data/grastate.dat
-rm -rf /var/lib/docker/volumes/v5/_data/grastate.dat
+docker pause haproxy1
 ```
 
-重新执行集群创建的命令即可，因为数据都在数据卷中，所有放心，集群重新启动都数据仍然都在.
+重启haproxy1节点
+
+```bash
+docker unpause haproxy1
+```
+
+> stop 指令停止容器，重新启动容器需要进入容器加载haproxy配置文件和启动keepalived服务。
+
+通过测试证实集群可正常运行，实现集群负载均衡高可用方案。
