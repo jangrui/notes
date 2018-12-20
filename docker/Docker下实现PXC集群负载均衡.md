@@ -26,10 +26,19 @@ docker inspect v1 # 查看 v1 卷
 docker volume rm v1 # 删除 v1 卷
 ```
 
-### 1.4 创建 pxc 容器
+### 1.4 创建 pxc 容器节点
 
 ```bash
-docker run -d -p 3306:3306 -e MYSQL_ROOT_PASSWORD=abc123456 -e CLUSTER_NAME=PXC -e XTRABACKUP_PASSWORD=abc123456 -v v1:/var/lib/mysql --privileged --name=node1 --net=net1 pxc
+docker run -d \
+    -p 3306:3306 \
+    -e MYSQL_ROOT_PASSWORD=abc123456 \
+    -e CLUSTER_NAME=PXC \
+    -e XTRABACKUP_PASSWORD=abc123456 \
+    -v v1:/var/lib/mysql \
+    --privileged \
+    --name=node1 \
+    --net=net1 \
+    pxc
 ```
 
 ### 1.5 创建 pxc 容器集群
