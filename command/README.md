@@ -16,3 +16,7 @@
 	- [fsck 文件系统检查修复](command/fsck)
 	- [df 显示目前在 Linux 系统上的文件系统的磁盘使用情况统计](command/df)
 	- [du 显示目录或文件的大小](command/du)
+
+- [文字处理]
+	- [bc 计算器](command/bc)
+	- [xargs](command/xargs)

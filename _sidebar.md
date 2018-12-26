@@ -13,6 +13,9 @@
 		- [fsck 用于文件系统检查修复](command/fsck)
 		- [df 命令用于显示目前在 Linux 系统上的文件系统的磁盘使用情况统计](command/df)
 		- [du 命令用于显示目录或文件的大小](command/du)
+	- 文本处理
+		- [bc 计算器](command/bc)
+		- [xargs](command/xargs)
 
 * [Shell](shell/)
 	- [VPS 一键测试脚本 bench.sh](shell/bench.sh)
@@ -33,4 +36,7 @@
 
 * [RHCE](rhce/)
 	- [RHCSA](rhce/rhcsa)
-	- [RHCE](rhce/rhce)
+	- [RHCE](rhce/rhce
+
+* [WordPress](wordpress/)
+	- [REST-API](wordpress/REST-API)
