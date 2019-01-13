@@ -23,7 +23,11 @@
 
 * [RHCE](rhce/)
 	- [RHCSA](rhce/rhcsa)
-	- [RHCE](rhce/rhce
+	- [RHCE](rhce/rhce)
 
 * [WordPress](wordpress/)
 	- [REST-API](wordpress/REST-API)
+
+* [Nginx](nginx/)
+	- [Nginx模块](/nginx/Nginx模块)
+	<!-- - [Nginx中间件架构](/nginx/Nginx中间件架构) -->

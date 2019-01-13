@@ -4,6 +4,18 @@
 		"selected_items":
 		[
 			[
+				"addr",
+				"address"
+			],
+			[
+				"v",
+				"virtual"
+			],
+			[
+				"fie",
+				"firewall-cmd"
+			],
+			[
 				"per",
 				"permanent"
 			],
@@ -73,11 +85,14 @@
 	],
 	"file_history":
 	[
-		"/Users/jangrui/Documents/www/rhcsa 练习题.md",
-		"/Volumes/Jangrui/docs.jangrui.com/rhce/README.md",
-		"/Volumes/Jangrui/docs.jangrui.com/rhce/rhcsa练习题.md",
+		"/Volumes/UEFI/EFI/CLOVER/config.plist",
 		"/Volumes/Jangrui/docs.jangrui.com/rhce/rhce.md",
 		"/Volumes/Jangrui/docs.jangrui.com/rhce/rhcsa.md",
+		"/Volumes/Jangrui/docs.jangrui.com/rhce/RHCSA-7-模拟试题.pdf",
+		"/Volumes/Jangrui/docs.jangrui.com/command/firewall-cmd.md",
+		"/Volumes/Jangrui/docs.jangrui.com/rhce/README.md",
+		"/Volumes/Jangrui/docs.jangrui.com/rhce/rhcsa练习题.md",
+		"/Users/jangrui/Documents/www/rhcsa 练习题.md",
 		"/Volumes/Jangrui/docs.jangrui.com/_sidebar.md",
 		"/Volumes/Jangrui/docs.jangrui.com/docker/README.md",
 		"/Volumes/Jangrui/docs.jangrui.com/docker/docker国内加速.md",
@@ -93,7 +108,6 @@
 		"/Volumes/Jangrui/docs.jangrui.com/docker/docker创建pxc集群.md",
 		"/Volumes/Jangrui/docs.jangrui.com/docker/docker的常用指令.md",
 		"/Users/jangrui/Documents/www/rhce.md",
-		"/Volumes/Jangrui/docs.jangrui.com/command/firewall-cmd.md",
 		"/Volumes/Jangrui/docs.jangrui.com/index.html",
 		"/Volumes/Jangrui/docs.jangrui.com/rhce/_coverpage.md",
 		"/Volumes/Jangrui/docs.jangrui.com/docker/_sidebar.md",
@@ -198,9 +212,7 @@
 		"/Applications/VMware Fusion.app/Contents/Library/isoimages/tools-solaris.plist",
 		"/Applications/VMware Fusion.app/Contents/Library/isoimages/tools-darwin.plist",
 		"/Applications/VMware Fusion.app/Contents/Library/isoimages/tools-darwinPre15.plist",
-		"/Applications/VMware Fusion.app/Contents/_CodeSignature/CodeResources",
-		"/Applications/VMware Fusion.app/Contents/Info.plist",
-		"/Applications/VMware Fusion.app/Contents/Frameworks/libbasichttp.dylib"
+		"/Applications/VMware Fusion.app/Contents/_CodeSignature/CodeResources"
 	],
 	"find":
 	{
@@ -218,6 +230,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"- [ ] ",
 			"-[ ] ",
 			"[]",
 			"unpkg.com",
