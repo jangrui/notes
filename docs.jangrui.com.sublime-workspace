@@ -58,15 +58,21 @@
 			[
 				"Package Control: ",
 				"Package Control: Install Package"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
 			]
 		],
 		"width": 0.0
 	},
 	"console":
 	{
-		"height": 0.0,
+		"height": 158.0,
 		"history":
 		[
+			"import urllib.request,os,hashlib; h = '6f4c264a24d933ce70df5dedcf1dcaee' + 'ebe013ee18cced0ef93d5f746d80ef60'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)",
+			"import urllib.request,os,hashlib; h = 'eb2297e1a458f27d836c04bb0cbaf282' + 'd0e7a3098092775ccb37ca9d6b2e4b7d'; pf = 'Package Control.sublime-、package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by) "
 		]
 	},
 	"distraction_free":
@@ -80,20 +86,50 @@
 	},
 	"expanded_folders":
 	[
-		"/Volumes/Jangrui/docs.jangrui.com",
-		"/Volumes/Jangrui/docs.jangrui.com/rhce"
+		"/E/docs.jangrui.com",
+		"/E/docs.jangrui.com/command"
 	],
 	"file_history":
 	[
+		"/E/docs.jangrui.com/command/rmdir.md",
+		"/E/docs.jangrui.com/command/rm.md",
+		"/E/docs.jangrui.com/command/mv.md",
+		"/E/docs.jangrui.com/command/cp.md",
+		"/E/docs.jangrui.com/command/ls.md",
+		"/E/docs.jangrui.com/command/touch.md",
+		"/E/docs.jangrui.com/command/mkdir.md",
+		"/E/docs.jangrui.com/command/tree.md",
+		"/C/Users/jangr/AppData/Roaming/Sublime Text 3/Packages/User/Package Control.sublime-settings",
+		"/E/docs.jangrui.com/command/pwd.md",
+		"/C/Users/jangr/AppData/Roaming/Sublime Text 3/Packages/Package Control/Package Control.sublime-settings",
+		"/E/docs.jangrui.com/command/dumpe2fs.md",
+		"/E/docs.jangrui.com/command/cd.md",
+		"/E/docs.jangrui.com/shell/shell变量替换.md",
+		"/E/docs.jangrui.com/shell/Shell特殊变量.md",
+		"/E/docs.jangrui.com/_sidebar.md",
+		"/E/docs.jangrui.com/command/grep.md",
+		"/E/docs.jangrui.com/command/awk.md",
+		"/E/docs.jangrui.com/command/sed.md",
+		"/E/docs.jangrui.com/command/tee.md",
+		"/E/docs.jangrui.com/command/uniq.md",
+		"/E/docs.jangrui.com/command/paste.md",
+		"/E/docs.jangrui.com/command/cut.md",
+		"/E/docs.jangrui.com/command/sort.md",
+		"/E/docs.jangrui.com/command/tr.md",
+		"/Volumes/Jangrui/docs.jangrui.com/shell/shell 变量替换.md",
+		"/Volumes/Jangrui/docs.jangrui.com/shell/字符串处理.md",
+		"/Volumes/Jangrui/docs.jangrui.com/rhce/rhcsa.md",
+		"/Volumes/Jangrui/docs.jangrui.com/nginx/Nginx模块.md",
+		"/Volumes/Jangrui/docs.jangrui.com/nginx/README.md",
+		"/Volumes/Jangrui/docs.jangrui.com/_sidebar.md",
+		"/Volumes/Jangrui/docs.jangrui.com/nginx/Nginx中间件架构.md",
 		"/Volumes/UEFI/EFI/CLOVER/config.plist",
 		"/Volumes/Jangrui/docs.jangrui.com/rhce/rhce.md",
-		"/Volumes/Jangrui/docs.jangrui.com/rhce/rhcsa.md",
 		"/Volumes/Jangrui/docs.jangrui.com/rhce/RHCSA-7-模拟试题.pdf",
 		"/Volumes/Jangrui/docs.jangrui.com/command/firewall-cmd.md",
 		"/Volumes/Jangrui/docs.jangrui.com/rhce/README.md",
 		"/Volumes/Jangrui/docs.jangrui.com/rhce/rhcsa练习题.md",
 		"/Users/jangrui/Documents/www/rhcsa 练习题.md",
-		"/Volumes/Jangrui/docs.jangrui.com/_sidebar.md",
 		"/Volumes/Jangrui/docs.jangrui.com/docker/README.md",
 		"/Volumes/Jangrui/docs.jangrui.com/docker/docker国内加速.md",
 		"/Volumes/Jangrui/docs.jangrui.com/command/df.md",
@@ -182,41 +218,11 @@
 		"/Volumes/Jangrui/Miniprogram/app.jangrui.com/project.config.json",
 		"/Users/jangrui/Desktop/NewFile.txt",
 		"/Users/jangrui/Downloads/PowerPhotos_1.5.3_SN.txt",
-		"/Users/jangrui/Downloads/Recovery.Profesional.6.7./Recovery.Profesional.6.7.txt",
-		"/Users/jangrui/Downloads/Recovery.Profesional.6.7./Recovery.Profesional.6.7",
-		"/Volumes/AdobePhotoshop19.1.6-mul/Crack/crack.command",
-		"/Users/jangrui/Downloads/AppNee.com.Adobe.Zii.for.Photoshop.v4.0.0/notes.txt",
-		"/Users/jangrui/Downloads/Y410P Hotpatch CLOVER 4726 2/CLOVER/ACPI/patched/SSDT-HDAU.aml",
-		"/Volumes/Jangrui/docs.jangrui.com/command/bind.md",
-		"/Users/jangrui/Documents/linux就该这么学笔记本/要学的命令.md",
-		"/Users/jangrui/Downloads/SniffPass_lng.ini",
-		"/Volumes/Jangrui/web/Tint-jangrui/Tint-jangrui-2.5.0/functions.php",
-		"/Volumes/Jangrui/web/Tint-jangrui/Tint-jangrui-2.5.0/dash/options.php",
-		"/Volumes/Jangrui/docs.jangrui.com/command/TCP-Wrappers.md",
-		"/Applications/VMware Fusion.app/Contents/Library/vmnet-cli",
-		"/Applications/VMware Fusion.app/Contents/Library/vmnet-cfgcli",
-		"/Applications/VMware Fusion.app/Contents/Library/ntfsresize",
-		"/Applications/VMware Fusion.app/Contents/Library/mkntfs",
-		"/Applications/VMware Fusion.app/Contents/Library/mkisofs",
-		"/Applications/VMware Fusion.app/Contents/Library/messages/zh-Hans/vmware.vmsg",
-		"/Applications/VMware Fusion.app/Contents/Library/licenses/site/license-fusion-110-e1-201804",
-		"/Applications/VMware Fusion.app/Contents/Library/licenses/vmware-licenseTool",
-		"/Applications/VMware Fusion.app/Contents/Library/LaunchServices/com.vmware.VMMonHelper.plist",
-		"/Applications/VMware Fusion.app/Contents/Library/LaunchServices/com.vmware.MountHelper.plist",
-		"/Applications/VMware Fusion.app/Contents/Library/LaunchServices/com.vmware.MountHelper",
-		"/Applications/VMware Fusion.app/Contents/Library/LaunchServices/com.vmware.KextControlHelper.plist",
-		"/Applications/VMware Fusion.app/Contents/Library/LaunchServices/com.vmware.DiskHelper.plist",
-		"/Applications/VMware Fusion.app/Contents/Library/LaunchServices/com.vmware.DiskHelper",
-		"/Applications/VMware Fusion.app/Contents/Library/languageSpecificMacToWinKeymap/com.apple.keylayout.British.csv",
-		"/Applications/VMware Fusion.app/Contents/Library/languageSpecificMacToWinKeymap/com.apple.keylayout.Belgian.csv",
-		"/Applications/VMware Fusion.app/Contents/Library/isoimages/tools-solaris.plist",
-		"/Applications/VMware Fusion.app/Contents/Library/isoimages/tools-darwin.plist",
-		"/Applications/VMware Fusion.app/Contents/Library/isoimages/tools-darwinPre15.plist",
-		"/Applications/VMware Fusion.app/Contents/_CodeSignature/CodeResources"
+		"/Users/jangrui/Downloads/Recovery.Profesional.6.7./Recovery.Profesional.6.7.txt"
 	],
 	"find":
 	{
-		"height": 48.0
+		"height": 24.0
 	},
 	"find_in_files":
 	{
@@ -230,6 +236,9 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"word",
+			"word_warp",
+			"复制代码",
 			"- [ ] ",
 			"-[ ] ",
 			"[]",
@@ -242,6 +251,7 @@
 		"regex": false,
 		"replace_history":
 		[
+			"表示当前目录上一级目录。"
 		],
 		"reverse": false,
 		"show_context": true,
@@ -259,11 +269,11 @@
 	],
 	"incremental_find":
 	{
-		"height": 23.0
+		"height": 24.0
 	},
 	"input":
 	{
-		"height": 39.0
+		"height": 40.0
 	},
 	"layout":
 	{
@@ -300,7 +310,7 @@
 	"project": "docs.jangrui.com.sublime-project",
 	"replace":
 	{
-		"height": 42.0
+		"height": 44.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -341,8 +351,8 @@
 	"show_minimap": false,
 	"show_open_files": true,
 	"show_tabs": true,
-	"side_bar_visible": true,
-	"side_bar_width": 202.0,
+	"side_bar_visible": false,
+	"side_bar_width": 194.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{

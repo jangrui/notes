@@ -12,6 +12,8 @@
 
 进入单用户模式修改密码
 
+开机出现引导菜单时按 e 键,在 linux16行后添加 rd.break 参数,Ctrl+X 引导启动
+
 ```bash
 mount -o remount,rw /sysroot/
 chroot /sysroot

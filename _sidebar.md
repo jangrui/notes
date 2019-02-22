@@ -8,6 +8,9 @@
 	- [VPS 一键测试脚本 bench.sh](shell/bench.sh)
 	- [Shadowsocks 一键安装脚本（四合一）](shell/Shadowsocks)
 	- [一键安装最新内核并开启 BBR 脚本](shell/一键安装最新内核并开启BBR脚本)
+	- [Shell特殊变量](shell/Shell特殊变量)
+	- [shell变量替换](shell/shell变量替换)
+	- [字符串处理](shell/字符串处理)
 	
 * [Docker](docker/)
 	- [docker 国内加速](docker/docker国内加速)
