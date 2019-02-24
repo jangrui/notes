@@ -22,19 +22,16 @@ somecommand |xargs -item  command
 
 ## 参数：
 
-- -a file 从文件中读入作为sdtin
-- -e flag ，注意有的时候可能会是-E，flag必须是一个以空格分隔的标志，当xargs分析到含有flag这个标志的时候就停止。
-- -p 当每次执行一个argument的时候询问一次用户。
-- -n num 后面加次数，表示命令在执行的时候一次用的argument的个数，默认是用所有的。
-- -t 表示先打印命令，然后再执行。
-- -i 或者是-I，这得看linux支持了，将xargs的每项名称，一般是一行一行赋值给 {}，可以用 {} 代替。
-- -r no-run-if-empty 当xargs的输入为空的时候则停止xargs，不用再去执行了。
-- -s num 命令行的最大字符数，指的是 xargs 后面那个命令的最大命令行字符数。
-- -L num 从标准输入一次读取 num 行送给 command 命令。
-- -l 同 -L。
-- -d delim 分隔符，默认的xargs分隔符是回车，argument的分隔符是空格，这里修改的是xargs的分隔符。
-- -x exit的意思，主要是配合-s使用。。
-- -P 修改最大的进程数，默认是1，为0时候为as many as it can ，这个例子我没有想到，应该平时都用不到的吧。
+- `-a`		file 从文件中读入作为 sdtin（标准输入）
+- `-d`		自定义分隔符。
+- `-i`		以 `{}` 代替前面的结果。
+- `-I`		制定一个符号代替前面的结果，而不用 `-i` 参数默认的 `{}`。
+- `-lnum` 	同 -L。(-l与数字间无空格）
+- `-L num` 	从标准输入一次读取 num 行。
+- `-n` 		指定每行的最大参数量 n ，可以将标准输入的文本划分为多行，每行 n 个参数，默认空格分割。
+- `-p` 		提示让用户确认是否执行后面操作，y 执行，n 不执行。
+- `-t` 		表示先打印命令，然后再执行。
+- `-0` 		用 null 代替空格作为分割符，配合 find 命令的 `-print0` 选项的输出使用。
 
 ## 实例
 
@@ -52,7 +49,7 @@ r s t
 u v w x y z
 ```
 
-多行输入单行输出：
+1. 多行输入单行输出：
 
 
 ```bash
@@ -60,7 +57,7 @@ u v w x y z
 a b c d e f g h i j k l m n o p q r s t u v w x y z
 ```
 
--n 选项多行输出：
+2. -n 选项多行输出：
 
 ```bash
 # cat test.txt | xargs -n3
@@ -76,7 +73,7 @@ v w x
 y z
 ```
 
--d 选项可以自定义一个定界符：
+3. -d 选项可以自定义一个定界符：
 
 ```bash
 # echo "nameXnameXnameXname" | xargs -dX
@@ -84,7 +81,7 @@ y z
 name name name name
 ```
 
-结合 -n 选项使用：
+4. 结合 -n 选项使用：
 
 ```bash
 # echo "nameXnameXnameXname" | xargs -dX -n2
@@ -93,38 +90,36 @@ name name
 name name
 ```
 
+5. 参数 -I 可以指定一个替换的字符
+
 读取 stdin，将格式化后的参数传递给命令
 
-假设一个命令为 sk.sh 和一个保存参数的文件 arg.txt：
+xargs 的一个选项 -I，使用 -I 指定一个替换字符串 []，这个字符串在 xargs 扩展时会被替换掉，当 -I 与 xargs 结合使用，每一个参数命令都会被执行一次：
 
 ```bash
-#!/bin/bash
-#sk.sh命令内容，打印出所有参数。
-
-echo $*
+[root@localhost data]# ls
+123   234   345   456   arg.txt  file2  file4  sk.sh
+1txt  2txt  3txt  4txt  file1    file3  log
+[root@localhost data]# ls |xargs -I [] echo hello-[]-word
+hello-123-word
+hello-1txt-word
+hello-234-word
+hello-2txt-word
+hello-345-word
+hello-3txt-word
+hello-456-word
+hello-4txt-word
+hello-arg.txt-word
+hello-file1-word
+hello-file2-word
+hello-file3-word
+hello-file4-word
+hello-log-word
+hello-sk.sh-word
+[root@localhost data]#
 ```
 
-arg.txt文件内容：
-
-```bash
-# cat arg.txt
-
-aaa
-bbb
-ccc
-```
-
-xargs 的一个选项 -I，使用 -I 指定一个替换字符串 {}，这个字符串在 xargs 扩展时会被替换掉，当 -I 与 xargs 结合使用，每一个参数命令都会被执行一次：
-
-```bash
-# cat arg.txt | xargs -I {} ./sk.sh -p {} -l
-
--p aaa -l
--p bbb -l
--p ccc -l
-```
-
-复制所有图片文件到 /data/images 目录下：
+6. 复制所有图片文件到 /data/images 目录下：
 
 ```bash
 ls *.jpg | xargs -n1 -I cp {} /data/images

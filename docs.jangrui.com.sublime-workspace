@@ -4,6 +4,30 @@
 		"selected_items":
 		[
 			[
+				"re",
+				"regex"
+			],
+			[
+				"w",
+				"wnnn"
+			],
+			[
+				"di",
+				"dir3"
+			],
+			[
+				"dir",
+				"dir2"
+			],
+			[
+				"lo",
+				"localhost"
+			],
+			[
+				"file",
+				"file1"
+			],
+			[
 				"addr",
 				"address"
 			],
@@ -34,10 +58,6 @@
 			[
 				"com",
 				"command"
-			],
-			[
-				"re",
-				"README"
 			]
 		]
 	},
@@ -86,143 +106,17 @@
 	},
 	"expanded_folders":
 	[
-		"/E/docs.jangrui.com",
-		"/E/docs.jangrui.com/command"
+		"/Volumes/Jangrui/docs.jangrui.com",
+		"/Volumes/Jangrui/docs.jangrui.com/command"
 	],
 	"file_history":
 	[
-		"/E/docs.jangrui.com/command/rmdir.md",
-		"/E/docs.jangrui.com/command/rm.md",
-		"/E/docs.jangrui.com/command/mv.md",
-		"/E/docs.jangrui.com/command/cp.md",
-		"/E/docs.jangrui.com/command/ls.md",
-		"/E/docs.jangrui.com/command/touch.md",
-		"/E/docs.jangrui.com/command/mkdir.md",
-		"/E/docs.jangrui.com/command/tree.md",
-		"/C/Users/jangr/AppData/Roaming/Sublime Text 3/Packages/User/Package Control.sublime-settings",
-		"/E/docs.jangrui.com/command/pwd.md",
-		"/C/Users/jangr/AppData/Roaming/Sublime Text 3/Packages/Package Control/Package Control.sublime-settings",
-		"/E/docs.jangrui.com/command/dumpe2fs.md",
-		"/E/docs.jangrui.com/command/cd.md",
-		"/E/docs.jangrui.com/shell/shell变量替换.md",
-		"/E/docs.jangrui.com/shell/Shell特殊变量.md",
-		"/E/docs.jangrui.com/_sidebar.md",
-		"/E/docs.jangrui.com/command/grep.md",
-		"/E/docs.jangrui.com/command/awk.md",
-		"/E/docs.jangrui.com/command/sed.md",
-		"/E/docs.jangrui.com/command/tee.md",
-		"/E/docs.jangrui.com/command/uniq.md",
-		"/E/docs.jangrui.com/command/paste.md",
-		"/E/docs.jangrui.com/command/cut.md",
-		"/E/docs.jangrui.com/command/sort.md",
-		"/E/docs.jangrui.com/command/tr.md",
-		"/Volumes/Jangrui/docs.jangrui.com/shell/shell 变量替换.md",
-		"/Volumes/Jangrui/docs.jangrui.com/shell/字符串处理.md",
-		"/Volumes/Jangrui/docs.jangrui.com/rhce/rhcsa.md",
-		"/Volumes/Jangrui/docs.jangrui.com/nginx/Nginx模块.md",
-		"/Volumes/Jangrui/docs.jangrui.com/nginx/README.md",
-		"/Volumes/Jangrui/docs.jangrui.com/_sidebar.md",
-		"/Volumes/Jangrui/docs.jangrui.com/nginx/Nginx中间件架构.md",
-		"/Volumes/UEFI/EFI/CLOVER/config.plist",
-		"/Volumes/Jangrui/docs.jangrui.com/rhce/rhce.md",
-		"/Volumes/Jangrui/docs.jangrui.com/rhce/RHCSA-7-模拟试题.pdf",
-		"/Volumes/Jangrui/docs.jangrui.com/command/firewall-cmd.md",
-		"/Volumes/Jangrui/docs.jangrui.com/rhce/README.md",
-		"/Volumes/Jangrui/docs.jangrui.com/rhce/rhcsa练习题.md",
-		"/Users/jangrui/Documents/www/rhcsa 练习题.md",
-		"/Volumes/Jangrui/docs.jangrui.com/docker/README.md",
-		"/Volumes/Jangrui/docs.jangrui.com/docker/docker国内加速.md",
-		"/Volumes/Jangrui/docs.jangrui.com/command/df.md",
-		"/Volumes/Jangrui/docs.jangrui.com/command/README.md",
-		"/Volumes/Jangrui/docs.jangrui.com/command/resize2fs.md",
-		"/Volumes/Jangrui/docs.jangrui.com/command/e2fsck.md",
-		"/Volumes/Jangrui/docs.jangrui.com/command/fsck.md",
-		"/Volumes/Jangrui/docs.jangrui.com/command/du.md",
-		"/Volumes/Jangrui/docs.jangrui.com/command/dumpe2fs.md",
-		"/Volumes/Jangrui/docs.jangrui.com/docker/Docker下实现PXC集群负载均衡.md",
-		"/Volumes/Jangrui/docs.jangrui.com/docker/Docker下利用Keepalived实现双机热备.md",
-		"/Volumes/Jangrui/docs.jangrui.com/docker/docker创建pxc集群.md",
-		"/Volumes/Jangrui/docs.jangrui.com/docker/docker的常用指令.md",
-		"/Users/jangrui/Documents/www/rhce.md",
-		"/Volumes/Jangrui/docs.jangrui.com/index.html",
-		"/Volumes/Jangrui/docs.jangrui.com/rhce/_coverpage.md",
-		"/Volumes/Jangrui/docs.jangrui.com/docker/_sidebar.md",
-		"/Volumes/Jangrui/docs.jangrui.com/command/_sidebar.md",
-		"/Volumes/Jangrui/docs.jangrui.com/git/_sidebar.md",
-		"/Volumes/Jangrui/docs.jangrui.com/shell/_sidebar.md",
-		"/Volumes/Jangrui/docs.jangrui.com/rhce/_sidebar.md",
-		"/Volumes/Jangrui/docs.jangrui.com/shell/_navbar.md",
-		"/Volumes/Jangrui/docs.jangrui.com/rhce/_navbar.md",
-		"/Volumes/Jangrui/docs.jangrui.com/command/_navbar.md",
-		"/Volumes/Jangrui/docs.jangrui.com/docker/_navbar.md",
-		"/Volumes/Jangrui/docs.jangrui.com/git/_navbar.md",
-		"/Volumes/Jangrui/docs.jangrui.com/command/iptables.md",
-		"/Volumes/Jangrui/docs.jangrui.com/docker/安装.md",
-		"/Volumes/Jangrui/docs.jangrui.com/shell/bench.sh.md",
-		"/Volumes/Jangrui/docs.jangrui.com/git/给gitlab添加SMTP.md",
-		"/Volumes/Jangrui/docs.jangrui.com/docker/docker-install.md",
-		"/Volumes/Jangrui/docs.jangrui.com/git/gitlab-add-smtp.md",
-		"/Volumes/Jangrui/docs.jangrui.com/_navbar.md",
-		"/Volumes/Jangrui/docs.jangrui.com/docs.jangrui.com.sublime-workspace",
-		"/Volumes/Jangrui/docs.jangrui.com/docs.jangrui.com.sublime-project",
-		"/Volumes/Jangrui/docs.jangrui.com/untitled.sublime-workspace",
-		"/Users/jangrui/Library/Application Support/Sublime Text 3/Packages/User/Package Control.sublime-settings",
-		"/Users/jangrui/Library/Application Support/Sublime Text 3/Packages/Package Control/Package Control.sublime-settings",
-		"/Volumes/Jangrui/docs.jangrui.com/RHCE/_navbar.md",
-		"/Users/jangrui/Downloads/资料/PXC集群/h2/keepalived.conf",
-		"/Users/jangrui/Downloads/资料/PXC集群/宿主机/keepalived.conf",
-		"/Users/jangrui/Downloads/资料/PXC集群/h1/haproxy.cfg",
-		"/Users/jangrui/Downloads/资料/PXC集群/h1/keepalived(1).conf",
-		"/Users/jangrui/Downloads/DataGrip 2018.2 for Mac/DataGrip 2018.2 for Mac.txt",
-		"/Applications/DataGrip.app/Contents/bin/datagrip.vmoptions",
-		"/Users/jangrui/dhcpd.conf",
-		"/Applications/Eclipse.app/Contents/Eclipse/eclipse.ini",
-		"/Users/jangrui/git-completion.bash",
-		"/Volumes/iMac.hk 1/AMPED/AMPED.txt",
-		"/Users/jangrui/Documents/renren/renren-fast/src/main/resources/application-dev.yml",
-		"/usr/local/Cellar/maven/3.6.0/libexec/conf/settings.xml",
-		"/Users/jangrui/Downloads/bilai_formac/说明必看.txt",
-		"/Applications/英雄联盟 日服.app/Contents/LoL/Config/PersistedSettings.json",
-		"/Applications/英雄联盟 日服.app/Contents/LoL/Config/PerksPreferences.yaml",
-		"/Applications/英雄联盟 日服.app/Contents/LoL/Config/LeagueClientSettings.yaml",
-		"/Applications/英雄联盟 日服.app/Contents/LoL/Config/LCUAccountPreferences.yaml",
-		"/Applications/英雄联盟 日服.app/Contents/LoL/Config/ItemSets.json",
-		"/Applications/英雄联盟 日服.app/Contents/LoL/Config/Global/Recommended/RIOT_ItemSet_1.json",
-		"/Applications/英雄联盟 日服.app/Contents/LoL/Config/input.ini",
-		"/Users/jangrui/Documents/www/rhce",
-		"/Applications/英雄联盟 日服.app/Contents/LoL/Config/game.cfg",
-		"/Users/jangrui/Downloads/VMware.Fusion.Professional.v11.0.0 Keygen",
-		"/Library/Preferences/VMware Fusion/networking",
-		"/Users/jangrui/Documents/关于如何做好班组安全管理的设想.md",
-		"/# 关于如何做好班组安全管理的设想.md",
-		"/Users/jangrui/Desktop/HTML_RedHat/RHCSA7-answer.html",
-		"/Users/jangrui/Documents/linux就该这么学笔记本/lvm.txt",
-		"/Users/jangrui/Desktop/RHEL7考试环境classroom/考试环境使用方法.txt",
-		"/Users/jangrui/Documents/RT.EW3929/rtthinpackage.js",
-		"/Users/jangrui/Documents/RT.EW3929/rteregconfdata.js",
-		"/Users/jangrui/Downloads/RHEL7考试环境classroom/考试环境使用方法.txt",
-		"/Volumes/Jangrui/web/blog/Tinection_v2.0.0_jangrui/functions.php",
-		"/Users/jangrui/Desktop/123.js",
-		"/Volumes/Jangrui/web/blog/Tinection_v2.0.0_jangrui/includes/js/theme.js",
-		"/Volumes/Jangrui/web/blog/Tinection_v2.0.0_jangrui/comments.php",
-		"/Volumes/Jangrui/web/blog/Tinection_v2.0.0_jangrui/functions/comments-ajax.php",
-		"/Volumes/Jangrui/web/blog/Tinection_v2.0.0_jangrui/functions/comment.php",
-		"/private/var/folders/xh/1q_yz8893y1d7ln0t5bsq2440000gn/T/fz3temp-2/xmlmap.php",
-		"/private/var/folders/xh/1q_yz8893y1d7ln0t5bsq2440000gn/T/fz3temp-2/functions.php",
-		"/Users/jangrui/Downloads/jangrui.wordpress.2018-11-11.xml",
-		"/private/var/folders/xh/1q_yz8893y1d7ln0t5bsq2440000gn/T/fz3temp-2/readme.txt",
-		"/private/var/folders/xh/1q_yz8893y1d7ln0t5bsq2440000gn/T/fz3temp-2/token.php",
-		"/private/var/folders/xh/1q_yz8893y1d7ln0t5bsq2440000gn/T/fz3temp-2/reply.php",
-		"/Users/jangrui/Desktop/wechat.php",
-		"/Volumes/Jangrui/docs.jangrui.com/README.md",
-		"/Volumes/Jangrui/Miniprogram/app.jangrui.com/project.config.json",
-		"/Users/jangrui/Desktop/NewFile.txt",
-		"/Users/jangrui/Downloads/PowerPhotos_1.5.3_SN.txt",
-		"/Users/jangrui/Downloads/Recovery.Profesional.6.7./Recovery.Profesional.6.7.txt"
+		"/Volumes/Jangrui/docs.jangrui.com/command/find.md",
+		"/Users/jangrui/npm.log"
 	],
 	"find":
 	{
-		"height": 24.0
+		"height": 48.0
 	},
 	"find_in_files":
 	{
@@ -236,6 +130,10 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"jangrui",
+			"[root@dvm ~]",
+			"[jangrui@jangrui linux]$",
+			"dvm",
 			"word",
 			"word_warp",
 			"复制代码",
@@ -269,7 +167,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 24.0
+		"height": 23.0
 	},
 	"input":
 	{
@@ -310,7 +208,7 @@
 	"project": "docs.jangrui.com.sublime-project",
 	"replace":
 	{
-		"height": 44.0
+		"height": 42.0
 	},
 	"save_all_on_build": true,
 	"select_file":

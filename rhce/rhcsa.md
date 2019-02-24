@@ -289,21 +289,21 @@ systemctl restart chronyd
 systemctl enabel chronyd
 ```
 
-13. 打包文件
+## 13. 打包文件
 
 ```bash
 tar cjvf /root/sysconfig.tar.bz2 /etc/sysconfig/
 tar tvf /root/sysconfig.tar.bz2
 ```
 
-14. 添加用户
+## 14. 添加用户
 
 ```bash
 useradd -u 3456 alex
 echo glegunge | passwd --stdin alex
 ```
 
-15. 创建 swap 分区
+## 15. 创建 swap 分区
 
 ```bash
 [root@server0 ~]# fdisk /dev/sdb 
