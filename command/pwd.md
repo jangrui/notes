@@ -10,8 +10,8 @@ pwd [--help][--version]
 
 ## 参数说明
 
-- --help 在线帮助
-- --version 显示版本信息
+- `--help` 在线帮助
+- `--version` 显示版本信息
 
 ## 实例
 

@@ -4,6 +4,14 @@
 		"selected_items":
 		[
 			[
+				"ls",
+				"ls"
+			],
+			[
+				"rot",
+				"root_word"
+			],
+			[
 				"re",
 				"regex"
 			],
@@ -111,12 +119,30 @@
 	],
 	"file_history":
 	[
+		"/Volumes/Jangrui/docs.jangrui.com/command/ls.md",
+		"/Volumes/Jangrui/docs.jangrui.com/command/ln.md",
+		"/Volumes/Jangrui/docs.jangrui.com/command/pwd.md",
+		"/Volumes/Jangrui/docs.jangrui.com/command/常用命令.md",
+		"/Volumes/Jangrui/docs.jangrui.com/command/umask.md",
+		"/Volumes/Jangrui/docs.jangrui.com/command/chgrp.md",
+		"/Volumes/Jangrui/docs.jangrui.com/command/chmod.md",
+		"/Volumes/Jangrui/docs.jangrui.com/command/chown.md",
+		"/Volumes/Jangrui/docs.jangrui.com/command/md5sum.md",
+		"/Volumes/Jangrui/docs.jangrui.com/command/file.md",
+		"/Volumes/Jangrui/docs.jangrui.com/command/lsattr.md",
+		"/Volumes/Jangrui/docs.jangrui.com/command/chattr.md",
+		"/Volumes/Jangrui/docs.jangrui.com/command/dirname.md",
+		"/Volumes/Jangrui/docs.jangrui.com/command/basename.md",
+		"/Volumes/Jangrui/docs.jangrui.com/command/rename.md",
+		"/Volumes/Jangrui/docs.jangrui.com/command/xargs.md",
+		"/Volumes/Jangrui/docs.jangrui.com/command/README.md",
+		"/Volumes/Jangrui/docs.jangrui.com/rhce/rhcsa.md",
 		"/Volumes/Jangrui/docs.jangrui.com/command/find.md",
 		"/Users/jangrui/npm.log"
 	],
 	"find":
 	{
-		"height": 48.0
+		"height": 23.0
 	},
 	"find_in_files":
 	{
@@ -130,6 +156,10 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			")",
+			"(command/",
+			"(command",
+			"()",
 			"jangrui",
 			"[root@dvm ~]",
 			"[jangrui@jangrui linux]$",
@@ -249,7 +279,7 @@
 	"show_minimap": false,
 	"show_open_files": true,
 	"show_tabs": true,
-	"side_bar_visible": false,
+	"side_bar_visible": true,
 	"side_bar_width": 194.0,
 	"status_bar_visible": true,
 	"template_settings":
