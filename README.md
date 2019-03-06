@@ -2,22 +2,23 @@
 
 ![Linux](./_media/linux.png "linux.png")
 
-## CentOS 国内镜像
+- [Linux](#linux)
+	
+	- [x] [Command](command/#command)
+	- [x] [Shell](shell/#shell)
 
-CentOS : 163  [CentOS : 163](http://mirrors.163.com/centos/)
+- [Ansible](http://www.ansible.com.cn/)
 
-CentOS : aliyun [CentOS : aliyun](https://mirrors.aliyun.com/centos/)
+	- [ ] [Playbook](http://www.ansible.com.cn/docs/playbooks.html)
 
-## Docker 镜像
+- [Docker](https://www.w3cschool.cn/reqsgr/)
 
-CentOS7/Dockerfile [CentOS7/Dockerfile](https://github.com/CentOS/sig-cloud-instance-images/blob/24c0d04946b72e37776309224712b5f05aa52639/docker/Dockerfile)
+	- [ ] [Dockerfile](https://www.w3cschool.cn/reqsgr/hbyu4cqm.html)
 
-## vim 修改tab为四个空格
+- [Jenkins](https://jenkins.io/zh/doc/)
 
-```bash
-vim /etc/vimrc
+	- [ ] [Pipeline](https://jenkins.io/zh/doc/book/pipeline/syntax/)
 
-set ts=4
-set expandtab
-set autoindent
-```
+- [Jumpserver](http://docs.jumpserver.org/zh/docs/index.html)
+
+
