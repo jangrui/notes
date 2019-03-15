@@ -1,3 +1,4 @@
 # Tools
 
-- [vim](/tools/vim)
+- [vim](tools/vim)
+- [zsh](tool/zsh)

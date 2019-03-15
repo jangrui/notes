@@ -37,3 +37,4 @@
 
 * Tools
 	- [vim](tools/vim)
+	- [zsh](tools/zsh)
