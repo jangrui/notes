@@ -24,6 +24,9 @@
 * Git
 	- [给 gitlab 添加 SMTP](git/给gitlab添加SMTP)
 
+* Python
+    - [判断字符串类型](python/判断字符串类型)
+
 * RHCE
 	- [RHCSA](rhce/rhcsa)
 	- [RHCE](rhce/rhce)
