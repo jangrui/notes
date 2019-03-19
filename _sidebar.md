@@ -42,3 +42,4 @@
 * Tools
 	- [vim](tools/vim)
 	- [zsh](tools/zsh)
+	- [pam](tools/pam)
