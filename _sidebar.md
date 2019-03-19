@@ -21,6 +21,9 @@
 	- [Docker下部署RedisCluster集群](docker/Docker下部署RedisCluster集群)
 	- [Docker下部署Nginx高可用负载均衡集群](docker/Docker下部署Nginx高可用负载均衡集群)
 
+* Ansible
+	- [ansible](ansible/ansible)
+
 * Git
 	- [给 gitlab 添加 SMTP](git/给gitlab添加SMTP)
 
