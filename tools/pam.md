@@ -18,7 +18,7 @@ auth		required	pam_wheel.so use_uid
 修改只允许 wheel 组切换 root 
 
 ```bash
-echo "US_WHEEL_ONLY yes" >> /etc/login.defs
+echo "SU_WHEEL_ONLY yes" >> /etc/login.defs
 ```
 
 加入用户到 wheel 组

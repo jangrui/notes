@@ -1,4 +1,8 @@
-# docker 国内加速
+# docker 安装及国内加速
+
+Docker 分为 CE 和 EE 两大版本。CE 即社区版（免费，支持周期 7 个月），EE 即企业版，强调安全，付费使用，支持周期 24 个月。
+
+Docker CE 分为 stable, test, 和 nightly 三个更新频道。每六个月发布一个 stable 版本 (18.09, 19.03, 19.09...)。
 
 ## 安装
 内核需3.10以上
@@ -6,65 +10,61 @@
 ## ubuntu
 
 ```bash
-wget -qO- https://get.docker.com/ | sh
-```
-
-- 以非root用户直接运行docker
-
-```bash
-sudo usermod -aG docker runoob
-```
-
-- 启动docker后台服务
-
-```bash
-sudo service docker start
+sudo apt-get update
+sudo apt-get install docker-ce
 ```
 
 ## CentOS
 
-- 软件源安装
+- 卸载旧版:
 
 ```bash
-yum -y install docker-io
+sudo yum remove -y docker docker-*
 ```
 
-- 启动dokcer后台服务
+- yum源安装
 
 ```bash
-systemctl start docker
+sudo yum install -y yum-utils \
+                    device-mapper-persistent-data \
+                    lvm2
 ```
 
-- 脚本安装
+执行下面的命令添加 yum 软件源:
 
-更新yum包到最新版：
+鉴于国内网络问题，强烈建议使用国内源。
 
 ```bash
-sudo yum update
+# aliyun
+sudo yum-config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+# 中国科技大学
+sudo yum-config-manager \
+    --add-repo \
+    https://mirrors.ustc.edu.cn/docker-ce/linux/centos/docker-ce.repo
+sudo yum makecache fast
 ```
 
-docker按照脚本：
+安装 docker-ce ：
 
 ```bash
-curl -fsSL https://get.docker.com/ | sh
-```
-
-- 启动docker进程
-
-```bash
-service docker start
+sudo yum install -y docker-ce
 ```
 
 ## 国内镜像加速
 
-新版的 Docker 使用 /etc/docker/daemon.json（Linux） 或者 %programdata%\docker\config\daemon.json（Windows） 来配置 Daemon。
-
-请在该配置文件中加入（没有该文件的话，请先建一个）：
-
 ```bash
+tee /etc/docker/daemon.json <<-'end'
 {
   "registry-mirrors": ["http://hub-mirror.c.163.com"]
 }
+end
+```
+
+重启 docker：
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl restart docker
 ```
 
 ### 加速地址:

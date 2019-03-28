@@ -11,9 +11,9 @@
 
 	- [ ] [Playbook](http://www.ansible.com.cn/docs/playbooks.html)
 
-- [Docker](https://www.w3cschool.cn/reqsgr/)
+- [Docker](https://docker_practice.gitee.io)
 
-	- [ ] [Dockerfile](https://www.w3cschool.cn/reqsgr/hbyu4cqm.html)
+	- [ ] [Dockerfile](https://docker_practice.gitee.io/image/dockerfile/)
 
 - [Jenkins](https://jenkins.io/zh/doc/)
 
