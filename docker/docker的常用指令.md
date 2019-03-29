@@ -151,7 +151,7 @@ OPTIONS='-Htcp://0.0.0.0:2375 -H unix:///var/run/docker.sock'
 ```
 
 ```bash
-dcoker run -d -p 9000:9000 --name docker-web -v /var/run/docker.sock:/var/run/docker.sock --privileged --restart=always portainer/portainer
+docker run -d -p 9000:9000 --name docker-web -v /var/run/docker.sock:/var/run/docker.sock --privileged --restart=always portainer/portainer:latest
 ```
  
 > --restart=always # 检查容器状态,如果容器停止则启动容器
