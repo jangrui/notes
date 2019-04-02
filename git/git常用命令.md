@@ -13,10 +13,12 @@ git push 						# 把本地库的修改提交到远程库中
 git push origin master 			# 把本地库的修改提交到远程master中
 git branch -r/-a 				# 查看远程分支/全部分支
 git branch -v 					# 可以看见每一个分支的最后一次提交
+git branch -d test 				# 删除test分支
+git branch -r -d origin/dev		# 删除远程分支dev
+git push origin :test			# 删除远程分支test
 git checkout -- file 			# 撤销文件修改，commit前
 git checkout master/branch 		# 切换到某个分支
 git checkout -b test 			# 新建test分支
-git checkout -d test 			# 删除test分支
 git merge master 				# 假设当前在test分支上面，把master分支上的修改同步到test分支上
 git merge tool 					# 调用merge工具
 git stash 						# 把未完成的修改缓存到栈容器中
@@ -39,5 +41,8 @@ git show net_tag				# 查看相应标签的版本信息
 git tag -a new_tag commit_id	# 后期加注标签
 git push origin new_tag			# 推送标签，默认 git push 不会推送 tag
 git push origin --tags			# 一次推送所有本地新增的标签上去
+git tag -d v1.0					# 删除本地标签
+git push origin :[tag]			# 删除远程标签（先删除本地标签）
+git push origin :refs/tags/v1.0	# 删除远程标签（先删除本地标签）
 git reflog						# 历史记录
 ```
