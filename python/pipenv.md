@@ -40,17 +40,20 @@ $ pip install pipenv
 
 新建一个运行虚拟环境的目录，并进入该文件夹：
 
-- pipenv --three 				# 会使用当前系统的Python3创建环境
-- pipenv --python 3.6 			# 指定某一Python版本创建环境
-- pipenv shell 					# 激活虚拟环境
-- pipenv --where  				# 显示目录信息
-- pipenv --venv  				# 显示虚拟环境信息
-- pipenv --py  					# 显示Python解释器信息
-- pipenv install requests 		# 安装相关模块并加入到Pipfile
-- pipenv install django==1.11 	# 安装固定版本模块并加入到Pipfile
-- pipenv graph 					# 查看目前安装的库及其依赖
-- pipenv check 					# 检查安全漏洞
-- pipenv uninstall --all  		# 卸载全部包并从Pipfile中移除
+```bash
+pipenv --three 				# 会使用当前系统的Python3创建环境
+pipenv --python 3.6 		# 指定某一Python版本创建环境
+pipenv shell 				# 激活虚拟环境
+pipenv --where  			# 显示目录信息
+pipenv --venv  				# 显示虚拟环境信息
+pipenv --py  				# 显示Python解释器信息
+pipenv install requests 	# 安装相关模块并加入到Pipfile
+pipenv install django==1.11 # 安装固定版本模块并加入到Pipfile
+pipenv graph 				# 查看目前安装的库及其依赖
+pipenv check 				# 检查安全漏洞
+pipenv uninstall --all  	# 卸载全部包并从Pipfile中移除
+exit 						# 退出虚拟环境
+```
 
 ## 设置国内源：
 
