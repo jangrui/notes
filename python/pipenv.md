@@ -16,9 +16,8 @@ pip install web.py -i http://pypi.douban.com/simple
 
 需要创建或修改配置文件（一般都是创建）
 
-linux的文件在 `~/.pip/pip.conf `
-
-windows在 `%HOMEPATH%\pip\pip.ini`
+- linux的在 `~/.pip/pip.conf `
+- windows在 `%HOMEPATH%\pip\pip.ini`
 
 修改内容为：
 
