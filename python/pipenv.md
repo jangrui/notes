@@ -60,3 +60,16 @@ exit 						# 退出虚拟环境
 修改Pipfile文件中[source]下面url属性
 
 `url = "https://pypi.tuna.tsinghua.edu.cn/simple"`
+
+## 安装 autoenv
+
+```bash
+pip install autoenv
+```
+
+pipenv 结合 autoenv使用
+
+```bash
+echo "source `which activate.sh`" >> ~/.bashrc
+echo 'pipenv shell' >> .env
+```
