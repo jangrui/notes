@@ -1,4 +1,4 @@
-# Ansible
+# Ansible 安装
 
 ## 安装
 
@@ -20,6 +20,16 @@ apt-get install -y ansible
 
 ```bash
 brew install ansible
+```
+
+- pipenv
+
+```bash
+pip install pipenv
+mkdir py-ansible;cd py-ansible
+pipenv --python 3
+pipenv shell
+pipevn install ansible
 ```
 
 ## Ansible 配置文件路径
