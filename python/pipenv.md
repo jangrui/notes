@@ -28,7 +28,7 @@ index-url = http://pypi.douban.com/simple
 trusted-host=pypi.douban.com
 ```
 
-## 安装pip
+## 安装pipenv
 
 ```bash
 $ pip install pipenv
