@@ -13,7 +13,7 @@
 	- [字符串处理](shell/字符串处理)
 	
 * Docker
-	- [docker安装及加速](docker/docker国内加速)
+	- [docker安装及加速](docker/docker安装及加速)
 	- [docker的常用指令](docker/docker的常用指令)
 	- [Docker下实现PXC集群负载均衡](docker/Docker下实现PXC集群负载均衡)
 	- [Docker下利用Keepalived实现双机热备](docker/Docker下利用Keepalived实现双机热备)
@@ -22,12 +22,12 @@
 	- [Docker下部署Nginx高可用负载均衡集群](docker/Docker下部署Nginx高可用负载均衡集群)
 
 * Ansible
-	- [ansible](ansible/ansible)
+	- [ansible安装](ansible/ansible安装)
 	- [ansible常用模块](ansible/ansible常用模块)
 
 * Git
 	- [给gitlab添加SMTP](git/给gitlab添加SMTP)
-	- [gitlab 安装](git/gitlab安装)
+	- [gitlab安装](git/gitlab安装)
 	- [git常用命令](git/git常用命令)
 
 * Python
