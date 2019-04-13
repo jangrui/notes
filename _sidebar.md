@@ -32,8 +32,8 @@
 	- [template 模块](ansible/module?id=template)
 	- [pakaging 模块](ansible/module?id=pakaging)
 	- [service 模块](ansible/module?id=service)
-	- [yum_repository 模块](ansible/module?id=yum_repository)
 	- [systemd 模块](ansible/module?id=systemd)
+	- [yum_repository 模块](ansible/module?id=yum_repository)
 
 * Git
 	- [给gitlab添加SMTP](git/给gitlab添加SMTP)

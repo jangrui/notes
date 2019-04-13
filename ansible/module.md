@@ -70,6 +70,55 @@
   template: src=roles/testbox/templates/nginx.conf.j2 dest=/etc/nginx/nginx.conf
 ```
 
+## yum_repository
+
+- 在基于RPM的Linux发行版中添加或删除YUM源。
+- 如果要更新现有源，请改用ini_file。
+
+```bash
+- name:  添加源
+  yum_repository:
+    name: epel
+    description: EPEL YUM repo
+    baseurl: https://download.fedoraproject.org/pub/epel/$releasever/$basearch/
+
+- name: 将多个源添加到同一个文件中 (1/2)
+  yum_repository:
+    name: epel
+    description: EPEL YUM repo
+    file: external_repos
+    baseurl: https://download.fedoraproject.org/pub/epel/$releasever/$basearch/
+    gpgcheck: no
+
+- name: 将多个源添加到同一个文件中 (2/2)
+  yum_repository:
+    name: rpmforge
+    description: RPMforge YUM repo
+    file: external_repos
+    baseurl: http://apt.sw.be/redhat/el7/en/$basearch/rpmforge
+    mirrorlist: http://mirrorlist.repoforge.org/el7/mirrors-rpmforge
+    enabled: no
+
+# Handler showing how to clean yum metadata cache
+- name: 清理缓存
+  command: yum clean metadata
+  args:
+    warn: no
+
+# Example removing a repository and cleaning up metadata cache
+- name: 删除源并清理缓存
+  yum_repository:
+    name: epel
+    state: absent
+  notify: yum-clean-metadata
+
+- name: 制定删除repo文件
+  yum_repository:
+    name: epel
+    file: external_repos
+    state: absent
+```
+
 ## Packaging
 
 调用目标主机系统包管理工具（yum，apt）进行安装软件包
@@ -84,61 +133,53 @@
 
 ## Service
 
-调用 service/systemctl 管理目标主机系统服务
+- 控制远程主机上的服务。支持的init系统包括BSD init，OpenRC，SysV，Solaris SMF，systemd，upstart。
+- 对于Windows目标，请改用win_service模块。
 
 ```bash
-- name: 启动 nignx 服务
-  service: name=nginx state=started
-```
-## yum_repository
+- name: 启动 httpd
+  service:
+    name: httpd
+    state: started
 
-在基于RPM的Linux发行版中添加或删除YUM源。
+- name: 停止 httpd
+  service:
+    name: httpd
+    state: stopped
 
-```bash
-- name: Add repository
-  yum_repository:
-    name: epel
-    description: EPEL YUM repo
-    baseurl: https://download.fedoraproject.org/pub/epel/$releasever/$basearch/
+- name: 重启 httpd
+  service:
+    name: httpd
+    state: restarted
 
-- name: Add multiple repositories into the same file (1/2)
-  yum_repository:
-    name: epel
-    description: EPEL YUM repo
-    file: external_repos
-    baseurl: https://download.fedoraproject.org/pub/epel/$releasever/$basearch/
-    gpgcheck: no
+- name: 重载 httpd
+  service:
+    name: httpd
+    state: reloaded
 
-- name: Add multiple repositories into the same file (2/2)
-  yum_repository:
-    name: rpmforge
-    description: RPMforge YUM repo
-    file: external_repos
-    baseurl: http://apt.sw.be/redhat/el7/en/$basearch/rpmforge
-    mirrorlist: http://mirrorlist.repoforge.org/el7/mirrors-rpmforge
-    enabled: no
+- name: 开机启动 httpd
+  service:
+    name: httpd
+    enabled: yes
 
-# Handler showing how to clean yum metadata cache
-- name: yum-clean-metadata
-  command: yum clean metadata
-  args:
-    warn: no
+- name: 基于进程启动, 启动 /usr/bin/foo 
+  service:
+    name: foo
+    pattern: /usr/bin/foo
+    state: started
 
-# Example removing a repository and cleaning up metadata cache
-- name: Remove repository (and clean up left-over metadata)
-  yum_repository:
-    name: epel
-    state: absent
-  notify: yum-clean-metadata
-
-- name: Remove repository from a specific repo file
-  yum_repository:
-    name: epel
-    file: external_repos
-    state: absent
+- name: 带参数, 重启 etho 网卡
+  service:
+    name: network
+    state: restarted
+    args: eth0
 ```
 
 ## systemd
+
+控制远程主机上的systemd服务。
+
+> 由systemd管理的系统。
 
 ```bash
 - name: 确保服务正在运行
@@ -146,18 +187,18 @@
     state: started
     name: httpd
 
-- name: 在 debian 上停止 cron 服务，如果运行
+- name: 在 debian 上停止 cron 服务
   systemd:
     name: cron
     state: stopped
 
-- name: 在 centos 上重新加载 systemd 配置文件并重启 cron 服务, 在所有情况下
+- name: 重启 crond 服务前先重载配置
   systemd:
     state: restarted
     daemon_reload: yes
     name: crond
 
-- name: 重新加载 httpd, 在所有情况下
+- name: 重载 httpd
   systemd:
     name: httpd
     state: reloaded
@@ -174,7 +215,8 @@
     state: started
     enabled: yes
 
-- name: 强制加载 systemd 配置文件 (2.4及以上版本)
+- name: 强制重载配置 (2.4及以上版本)
   systemd:
     daemon_reload: yes
 ```
+
