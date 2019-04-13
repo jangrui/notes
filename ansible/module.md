@@ -137,3 +137,44 @@
     file: external_repos
     state: absent
 ```
+
+## systemd
+
+```bash
+- name: 确保服务正在运行
+  systemd:
+    state: started
+    name: httpd
+
+- name: 在 debian 上停止 cron 服务，如果运行
+  systemd:
+    name: cron
+    state: stopped
+
+- name: 在 centos 上重新加载 systemd 配置文件并重启 cron 服务, 在所有情况下
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: crond
+
+- name: 重新加载 httpd, 在所有情况下
+  systemd:
+    name: httpd
+    state: reloaded
+
+- name: 开机启动 httpd, 并确保没有被锁定
+  systemd:
+    name: httpd
+    enabled: yes
+    masked: no
+
+- name: 启动 dnf-automatic.timer 并开机启动
+  systemd:
+    name: dnf-automatic.timer
+    state: started
+    enabled: yes
+
+- name: 强制加载 systemd 配置文件 (2.4及以上版本)
+  systemd:
+    daemon_reload: yes
+```

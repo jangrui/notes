@@ -22,8 +22,18 @@
 	- [Docker下部署Nginx高可用负载均衡集群](docker/Docker下部署Nginx高可用负载均衡集群)
 
 * Ansible
-	- [ansible安装](ansible/ansible安装)
-	- [ansible常用模块](ansible/ansible常用模块)
+	- [ansible 安装](ansible/install)
+	- [file 模块](ansible/module?id=file)
+	- [copy 模块](ansible/module?id=copy)
+	- [stat 模块](ansible/module?id=stat)
+	- [debug 模块](ansible/module?id=debug)
+	- [command 模块](ansible/module?id=command)
+	- [shell 模块](ansible/module?id=shell)
+	- [template 模块](ansible/module?id=template)
+	- [pakaging 模块](ansible/module?id=pakaging)
+	- [service 模块](ansible/module?id=service)
+	- [yum_repository 模块](ansible/module?id=yum_repository)
+	- [systemd 模块](ansible/module?id=systemd)
 
 * Git
 	- [给gitlab添加SMTP](git/给gitlab添加SMTP)
