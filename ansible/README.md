@@ -1,3 +1,0 @@
-# Ansible
-
-- [ansible](ansible/ansible)
