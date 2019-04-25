@@ -44,9 +44,12 @@
     - [判断字符串类型](python/判断字符串类型)
     - [格式化输出](python/格式化输出字符串)
     - [pipenv](python/pipenv)
-    - [list](python/basic?id=list)
-    - [tuple](python/basic?id=tuple)
-
+    - [python 基础](python/basic)
+    	- [格式化字符串](python/basic?id=格式化)
+    	- [list](python/basic?id=list)
+    	- [tuple](python/basic?id=tuple)
+    	- [dict](python/basic?id=dict)
+    	- [set](python/basic?id=set)
 
 * RHCE
 	- [RHCSA](rhce/rhcsa)
@@ -63,4 +66,4 @@
 	- [vim](tools/vim)
 	- [zsh](tools/zsh)
 	- [pam](tools/pam)
-	- [brew国内源](tools/brew国内源)
+	- [brew国内源](tools/brew)
