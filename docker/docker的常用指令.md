@@ -7,6 +7,7 @@ docker images
 docker save docker.io/java > /root/java.tar.gz
 docker rmi docker.io/java
 docker ps -a # 查看容器运行状态
+docker build -t myimage:tag . 
 ```
 
 容器生命周期管理
