@@ -49,29 +49,8 @@ sed -i '' 's/^plugins.*/plugins=(zsh-completions git)/' ~/.zshrc
 
 ## 命令补全插件
 
-- MacOS
-
 ```bash
-brew install zsh-completions
-```
-
-- Ubuntu
-
-```bash
-apt-get install -y zsh-completions
-```
-
-- CentOS
-
-```bash
-yum install -y yum-utils yum-config-manager
-yum-config-manager --add-repo=https://download.opensuse.org/repositories/shells:zsh-users:zsh-completions/CentOS_7/shells:zsh-users:zsh-completions.repo
-yum install -y zsh-completions
-```
-
-### 配置 zshrc
-
-```bash
+git clone https://github.com/zsh-users/zsh-completions.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-completions
 sed -i 's/^plugins.*/plugins=(zsh-completions git)/' ~/.zshrc
 echo 'autoload -U compinit && compinit' >> ~/.zshrc
 source ~/.zshrc
@@ -79,18 +58,16 @@ source ~/.zshrc
 
 ## 自动补全插件
 
-- MacOS
-
 ```bash
-brew install zsh-autosuggestions
-echo 'source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh' >> ~/.zshrc
+git clone https://github.com/zsh-users/zsh-autosuggestions.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+sed -i 's/^plugins.*/plugins=(zsh-autosuggestions zsh-completions git)/' ~/.zshrc
 source ~/.zshrc
 ```
 
-- Linux
+## 高亮插件
 
 ```bash
-git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-sed -i 's/^plugins.*/plugins=(zsh-autosuggestions zsh-completions git)/' ~/.zshrc
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+sed -i 's/^plugins.*/plugins=(zsh-syntax-highlighting zsh-autosuggestions zsh-completions git)/' ~/.zshrc
 source ~/.zshrc
 ```
