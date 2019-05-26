@@ -31,7 +31,7 @@ chsh -s /bin/zsh
 ## 安装 oh-my-zsh
 
 ```bash
-sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
+sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
 ```
 
 ## 切换 agnoster
