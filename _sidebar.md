@@ -51,6 +51,10 @@
 	- [systemd 模块](ansible/module?id=systemd)
 	- [yum_repository 模块](ansible/module?id=yum_repository)
 
+* Jenkins
+	- [安装](jenkins/install)
+	- [pipline](jenkins/pipline)
+
 * Git
 	- [给gitlab添加SMTP](git/给gitlab添加SMTP)
 	- [gitlab安装](git/gitlab安装)
