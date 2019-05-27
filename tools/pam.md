@@ -52,3 +52,9 @@ su: 拒绝权限
 最有一次成功登录后有 1 次失败的登录尝试。
 [root@localhost ~]# 
 ```
+
+### sudo 无需密码验证
+
+```bash
+[jangrui@localhost ~]$ sudo echo "%wheel  ALL=(ALL)       NOPASSWD: ALL" >> /etc/sudoers
+```
