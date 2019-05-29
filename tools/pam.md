@@ -1,6 +1,6 @@
 # PAM 身份认证
 
-## 使用 pam 只允许 wheel 组成员切换 root
+## 只允许 wheel 组成员切换 root
 
 ```bash
 [root@localhost ~]# cat /etc/pam.d/su
@@ -27,7 +27,7 @@ echo "SU_WHEEL_ONLY yes" >> /etc/login.defs
 usermod -G wheel jangrui
 ```
 
-### 效果
+- 效果
 
 ```bash
 [jangrui@localhost ~]$ sudo useradd wpeng
@@ -53,7 +53,7 @@ su: 拒绝权限
 [root@localhost ~]# 
 ```
 
-### sudo 无需密码验证
+## sudo 无需密码验证
 
 ```bash
 [jangrui@localhost ~]$ sudo echo "%wheel  ALL=(ALL)       NOPASSWD: ALL" >> /etc/sudoers

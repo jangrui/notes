@@ -36,11 +36,17 @@ sudo yum install -y yum-utils \
 
 ```bash
 # aliyun
-sudo yum-config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+sudo yum-config-manager \ 
+	--add-repo \
+	https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
 # 中国科技大学
 sudo yum-config-manager \
     --add-repo \
     https://mirrors.ustc.edu.cn/docker-ce/linux/centos/docker-ce.repo
+# 官方
+sudo yum-config-manager \
+	--add-repo \
+	https://download.docker.com/linux/centos/docker-ce.repo
 sudo yum makecache fast
 ```
 

@@ -1,6 +1,6 @@
 # vim
 
-## vim 修改tab为四个空格
+## tab 长度
 
 ```bash
 vim /etc/vimrc
