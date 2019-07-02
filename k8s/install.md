@@ -58,7 +58,7 @@ curl -so /etc/yum.repos.d/docker-ce.repo https://mirrors.aliyun.com/docker-ce/li
 yum makecache fast
 
 # Step 4: 更新并安装 Docker-CE
-yum install docker-ce
+yum install -y docker-ce
 
 # Step 5: 设置开机启动
 systemctl enable docker
