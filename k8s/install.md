@@ -72,7 +72,7 @@ sysctemctl restart docker
 ```bash
 tee /etc/docker/daemon.json <<end
 {
-  "registry-mirrors": ["registry.aliyuncs.com"]
+  "registry-mirrors": ["https://registry.aliyuncs.com"]
 }
 end
 systemctl daemon-reload && systemctl restart docker
@@ -216,7 +216,7 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 还需要部署一个 Pod Network 到集群中，此处选择 flannel ：
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.10.0/Documentation/kube-flannel.yml
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.11.0/Documentation/kube-flannel.yml
 ```
 
 至此，Master 节点初始化完毕，查看集群相关信息：
@@ -231,7 +231,7 @@ To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
 # 查看节点信息
 $ kubectl get nodes
 NAME           STATUS    ROLES     AGE       VERSION
-lab-backend1   Ready     master    1m        v1.10.4
+lab-backend1   Ready     master    31m        v1.15.0
 # 查看 Pods 信息
 $ kubectl get pods --all-namespaces
 NAMESPACE     NAME                                   READY     STATUS    RESTARTS   AGE
@@ -256,7 +256,7 @@ rm -f $HOME/.kube/config
 
 2、添加 Worker 节点
 
-方式 ① 使用 kubeadm init 时返回的信息kube3
+方式 ① 使用 kubeadm init 时返回的信息
 
 ```bash
 kubeadm join 172.17.58.201:6443 --token 831831rf83188831rfg.dw0vyb1h3beab5as --discovery-token-ca-cert-hash sha256:623681fde5b2bf564a8631942f31797f9bef75f40b14a86ef75e1d31b43709f1
