@@ -6,18 +6,26 @@
 
 kube1 、kube2 、kube3 ，配置：2 核 4G
 
-### 关闭、禁用防火墙：
+关闭、禁用防火墙：
 
 ```bash
 systemctl stop firewalld
 systemctl disable firewalld
 ```
 
-### 禁用 SELINUX：
+禁用 SELINUX：
 
 ```bash
 setenforce 0
 sed -i 's/^SELINUX=.*/SELINUX=disabled/' /etc/selinux/config
+```
+
+关闭 swap
+
+Kubernetes 从 1.8 开始要求关闭系统的 Swap ，如果不关闭，默认配置的 kubelet 将无法启动：
+
+```bash
+swapoff -a
 ```
 
 创建 /etc/sysctl.d/k8s.conf 文件，添加如下内容：
@@ -37,34 +45,15 @@ modprobe br_netfilter
 sysctl -p /etc/sysctl.d/k8s.conf
 ```
 
-## 关闭 swap
-
-Kubernetes 从 1.8 开始要求关闭系统的 Swap ，如果不关闭，默认配置的 kubelet 将无法启动：
-
-```bash
-swapoff -a
-```
-
 ### 安装 Docker-CE
 
 ```bash
-# step 1: 安装必要的一些系统工具
 yum install -y device-mapper-persistent-data lvm2
-
-# Step 2: 添加软件源信息
 curl -so /etc/yum.repos.d/docker-ce.repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
-
-# Step 3: 更新软件源
 yum makecache fast
-
-# Step 4: 更新并安装 Docker-CE
 yum install -y docker-ce
-
-# Step 5: 设置开机启动
 systemctl enable docker
-
-# Step 6: 开启Docker服务
-sysctemctl restart docker
+systemctl restart docker
 ```
 
 ### 配置阿里云镜像加速器：
@@ -174,11 +163,19 @@ k8s.gcr.io/coredns:1.3.1
 1、初始化 Master 节点 kube1
 
 ```bash
-kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=172.17.58.201 --kubernetes-version=v1.15.0
+kubeadm init
+
+# 或者
+
+kubeadm init \
+	--pod-network-cidr=10.244.0.0/16 \
+	--apiserver-advertise-address=172.17.58.201 \
+	--kubernetes-version=v1.15.0
 ```
 
-- –pod-network-cidr ：后续安装 flannel 的前提条件，且值为 10.244.0.0/16， 参考资料
-- –apiserver-advertise-address ：Master 节点的 IP 地址
+- –pod-network-cidr：后续安装 flannel 的前提条件，且值为 10.244.0.0/16
+- –apiserver-advertise-address：Master 节点的 IP 地址
+- --kubernetes-version: Kubernetes 版本
 
 输出日志：
 
