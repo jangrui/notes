@@ -1,4 +1,4 @@
-# k8s install
+# k8s 安装
 
 ## 环境
 
@@ -54,13 +54,16 @@ yum install -y device-mapper-persistent-data lvm2
 # Step 2: 添加软件源信息
 curl -so /etc/yum.repos.d/docker-ce.repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
 
-# Step 3: 更新并安装 Docker-CE
-yum install docker-ce.ce
+# Step 3: 更新软件源
+yum makecache fast
 
-# Step 4: 设置开机启动
+# Step 4: 更新并安装 Docker-CE
+yum install docker-ce
+
+# Step 5: 设置开机启动
 systemctl enable docker
 
-# Step 5: 开启Docker服务
+# Step 6: 开启Docker服务
 sysctemctl restart docker
 ```
 
@@ -72,8 +75,7 @@ tee /etc/docker/daemon.json <<end
   "registry-mirrors": ["registry.aliyuncs.com"]
 }
 end
-systemctl daemon-reload
-systemctl restart docker
+systemctl daemon-reload && systemctl restart docker
 ```
 
 ## 所需镜像
