@@ -37,6 +37,9 @@
 	- [Docker 下部署 RedisCluster 集群](docker/Docker下部署RedisCluster集群)
 	- [Docker 下部署 Nginx 高可用负载均衡集群](docker/Docker下部署Nginx高可用负载均衡集群)
 
+* Kubernetes
+	- [k8s 安装](k8s/install)
+
 * Ansible
 	- [ansible 安装](ansible/install)
 	- [file 模块](ansible/module?id=file)
