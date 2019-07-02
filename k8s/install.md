@@ -1,32 +1,54 @@
 # k8s 安装
 
-## 环境
+## 初始化环境
 
 三台 CentOS 7.4 服务器：
 
 kube1 、kube2 、kube3 ，配置：2 核 4G
 
-关闭、禁用防火墙：
+### 设置主机名
+
+```bash
+hostnamectl set-hostname kube1 --static
+hostnamectl set-hostname kube2 --static
+hostnamectl set-hostname kube3 --static
+```
+
+> node节点无法加入master日志也看不出什么，因为hostname相同，kubeadm reset里面会还原hostname
+
+### 添加主机别名
+
+```bash
+cat >> /etc/hosts <<EOF
+192.168.11.141 kube1
+192.168.11.142 kube2
+192.168.11.143 kube3
+EOF
+```
+
+### 关闭防火墙：
 
 ```bash
 systemctl stop firewalld
 systemctl disable firewalld
 ```
 
-禁用 SELINUX：
+### 禁用SELinux
 
 ```bash
 setenforce 0
 sed -i 's/^SELINUX=.*/SELINUX=disabled/' /etc/selinux/config
 ```
 
-关闭 swap
+### 关闭交换分区
 
 Kubernetes 从 1.8 开始要求关闭系统的 Swap ，如果不关闭，默认配置的 kubelet 将无法启动：
 
 ```bash
 swapoff -a
 ```
+
+### 添加路由
 
 创建 /etc/sysctl.d/k8s.conf 文件，添加如下内容：
 
@@ -67,62 +89,7 @@ end
 systemctl daemon-reload && systemctl restart docker
 ```
 
-## 所需镜像
-
-Master (kube1) 节点所需镜像：
-
-```bash
-export image=pause:3.1
-docker pull registry.aliyuncs.com/google_containers/${image}
-docker tag registry.aliyuncs.com/google_containers/${image} k8s.gcr.io/${image}
-docker rmi registry.aliyuncs.com/google_containers/${image}
-
-export image=kube-apiserver:v1.15.0
-docker pull registry.aliyuncs.com/google_containers/${image}
-docker tag registry.aliyuncs.com/google_containers/${image} k8s.gcr.io/${image}
-docker rmi registry.aliyuncs.com/google_containers/${image}
-
-export image=kube-scheduler:v1.15.0
-docker pull registry.aliyuncs.com/google_containers/${image}
-docker tag registry.aliyuncs.com/google_containers/${image} k8s.gcr.io/${image}
-docker rmi registry.aliyuncs.com/google_containers/${image}
-
-export image=kube-controller-manager:v1.15.0
-docker pull registry.aliyuncs.com/google_containers/${image}
-docker tag registry.aliyuncs.com/google_containers/${image} k8s.gcr.io/${image}
-docker rmi registry.aliyuncs.com/google_containers/${image}
-
-export image=kube-proxy:v1.15.0
-docker pull registry.aliyuncs.com/google_containers/${image}
-docker tag registry.aliyuncs.com/google_containers/${image} k8s.gcr.io/${image}
-docker rmi registry.aliyuncs.com/google_containers/${image}
-
-export image=etcd:3.3.10
-docker pull registry.aliyuncs.com/google_containers/${image}
-docker tag registry.aliyuncs.com/google_containers/${image} k8s.gcr.io/${image}
-docker rmi registry.aliyuncs.com/google_containers/${image}
-
-export image=coredns:1.3.1
-docker pull registry.aliyuncs.com/google_containers/${image}
-docker tag registry.aliyuncs.com/google_containers/${image} k8s.gcr.io/${image}
-docker rmi registry.aliyuncs.com/google_containers/${image}
-```
-
-Node (kube2 / kube3) 节点所需镜像：
-
-```bash
-export image=pause:3.1
-docker pull registry.aliyuncs.com/google_containers/${image}
-docker tag registry.aliyuncs.com/google_containers/${image} k8s.gcr.io/${image}
-docker rmi registry.aliyuncs.com/google_containers/${image}
-
-export image=kube-proxy:v1.15.0
-docker pull registry.aliyuncs.com/google_containers/${image}
-docker tag registry.aliyuncs.com/google_containers/${image} k8s.gcr.io/${image}
-docker rmi registry.aliyuncs.com/google_containers/${image}
-```
-
-## 安装脚手架
+### 安装脚手架
 
 Master 和 Node 节点 安装 kubelet kubeadm kubectl
 
@@ -142,11 +109,10 @@ yum install -y kubelet kubeadm kubectl
 systemctl enable kubelet && systemctl start kubelet && systemctl daemon-reload
 ```
 
-## 构建 Kubernetes 集群
 
-如果初始化集群报错了说明版本下载的没有对应，重新下载镜像并且打tag(镜像都在国外的，所以必须aliyun下载下来打上tag才能拉下来)
+## 所需镜像
 
-查看1.15.0版本的k8s可以使用命令获取需要的镜像版本如下（版本一定要对应）:
+查看 k8s 所需要的镜像版本如下（版本一定要对应）:
 
 ```bash
 kubeadm config images list
@@ -159,6 +125,65 @@ k8s.gcr.io/pause:3.1
 k8s.gcr.io/etcd:3.3.10
 k8s.gcr.io/coredns:1.3.1
 ```
+
+Master (kube1) 节点所需镜像：
+
+```bash
+
+export image=kube-apiserver:v1.15.0
+docker pull registry.aliyuncs.com/google_containers/${image}
+docker tag registry.aliyuncs.com/google_containers/${image} k8s.gcr.io/${image}
+docker rmi registry.aliyuncs.com/google_containers/${image}
+
+export image=kube-controller-manager:v1.15.0
+docker pull registry.aliyuncs.com/google_containers/${image}
+docker tag registry.aliyuncs.com/google_containers/${image} k8s.gcr.io/${image}
+docker rmi registry.aliyuncs.com/google_containers/${image}
+
+export image=kube-scheduler:v1.15.0
+docker pull registry.aliyuncs.com/google_containers/${image}
+docker tag registry.aliyuncs.com/google_containers/${image} k8s.gcr.io/${image}
+docker rmi registry.aliyuncs.com/google_containers/${image}
+
+
+export image=kube-proxy:v1.15.0
+docker pull registry.aliyuncs.com/google_containers/${image}
+docker tag registry.aliyuncs.com/google_containers/${image} k8s.gcr.io/${image}
+docker rmi registry.aliyuncs.com/google_containers/${image}
+
+export image=pause:3.1
+docker pull registry.aliyuncs.com/google_containers/${image}
+docker tag registry.aliyuncs.com/google_containers/${image} k8s.gcr.io/${image}
+docker rmi registry.aliyuncs.com/google_containers/${image}
+
+export image=etcd:3.3.10
+docker pull registry.aliyuncs.com/google_containers/${image}
+docker tag registry.aliyuncs.com/google_containers/${image} k8s.gcr.io/${image}
+docker rmi registry.aliyuncs.com/google_containers/${image}
+
+export image=coredns:1.3.1
+docker pull registry.aliyuncs.com/google_containers/${image}
+docker tag registry.aliyuncs.com/google_containers/${image} k8s.gcr.io/${image}
+docker rmi registry.aliyuncs.com/google_containers/${image}
+```
+
+Node (kube2 / kube3) 节点所需镜像：
+
+```bash
+export image=kube-proxy:v1.15.0
+docker pull registry.aliyuncs.com/google_containers/${image}
+docker tag registry.aliyuncs.com/google_containers/${image} k8s.gcr.io/${image}
+docker rmi registry.aliyuncs.com/google_containers/${image}
+
+export image=pause:3.1
+docker pull registry.aliyuncs.com/google_containers/${image}
+docker tag registry.aliyuncs.com/google_containers/${image} k8s.gcr.io/${image}
+docker rmi registry.aliyuncs.com/google_containers/${image}
+```
+
+## 构建 Kubernetes 集群
+
+如果初始化集群报错了说明版本下载的没有对应，重新下载镜像并且打tag(镜像都在国外的，所以必须aliyun下载下来打上tag才能拉下来)
 
 1、初始化 Master 节点 kube1
 
@@ -213,7 +238,7 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 还需要部署一个 Pod Network 到集群中，此处选择 flannel ：
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.11.0/Documentation/kube-flannel.yml
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 ```
 
 至此，Master 节点初始化完毕，查看集群相关信息：
@@ -286,3 +311,25 @@ lab-backend3   Ready     <none>    14s       v1.11.2
 ```
 
 至此，1 Master + 2 Worker 的 kubernetes 集群就创建成功了
+
+## 常用命令
+
+```bash
+# 启动一个 Kubernetes 主节点
+kubeadm init 
+
+# 启动一个 Kubernetes 工作节点并且将其加入到集群
+kubeadm join 
+
+# 更新一个 Kubernetes 集群到新版本
+kubeadm upgrade 
+
+# 如果使用 v1.7.x 或者更低版本的 kubeadm 初始化集群，您需要对集群做一些配置以便使用 kubeadm upgrade 命令
+kubeadm config 
+
+# 管理 kubeadm join 使用的令牌
+kubeadm token 
+
+# 还原 kubeadm init 或者 kubeadm join 对主机所做的任何更改
+kubeadm reset 
+```
