@@ -8,15 +8,19 @@ kube1 、kube2 、kube3 ，配置：2 核 4G
 
 ### 设置主机名
 
+分别设置三台主机名
+
 ```bash
 hostnamectl set-hostname kube1 --static
 hostnamectl set-hostname kube2 --static
 hostnamectl set-hostname kube3 --static
 ```
 
-> node节点无法加入master日志也看不出什么，因为hostname相同，kubeadm reset里面会还原hostname
+> node 节点无法加入 master 日志也看不出什么，因为 hostname 相同，kubeadm reset 里面会还原 hostname
 
 ### 添加主机别名
+
+为每台主机添加主机别名，使所有节点之间可以通过 hostname 互相访问
 
 ```bash
 cat >> /etc/hosts <<EOF
@@ -26,11 +30,11 @@ cat >> /etc/hosts <<EOF
 EOF
 ```
 
-### 关闭防火墙：
+### 关闭并清理防火墙：
 
 ```bash
-systemctl stop firewalld
-systemctl disable firewalld
+systemctl stop firewalld && systemctl disable firewalld
+iptables -F && iptables -X && iptables -F -t nat && iptables -X -t nat && iptables -P FORWARD ACCEPT
 ```
 
 ### 禁用SELinux
@@ -45,24 +49,29 @@ sed -i 's/^SELINUX=.*/SELINUX=disabled/' /etc/selinux/config
 Kubernetes 从 1.8 开始要求关闭系统的 Swap ，如果不关闭，默认配置的 kubelet 将无法启动：
 
 ```bash
-swapoff -a
+swapoff -a && sed -i '/swap/s/^\(.*\)$/#\1/g' /etc/fstab
+```
+
+### 关闭dnsmasq
+
+可能导致docker容器无法解析域名
+
+```bash
+service dnsmasq stop && systemctl disable dnsmasq
 ```
 
 ### 添加路由
-
-创建 /etc/sysctl.d/k8s.conf 文件，添加如下内容：
 
 ```bash
 tee /etc/sysctl.d/k8s.conf <<end
 net.bridge.bridge-nf-call-ip6tables = 1
 net.bridge.bridge-nf-call-iptables = 1
 net.ipv4.ip_forward = 1
+vm.swappiness=0
+vm.overcommit_memory=1
+vm.panic_on_oom=0
+fs.inotify.max_user_watches=89100
 end
-```
-
-执行如下命令使修改生效：
-
-```bash
 modprobe br_netfilter
 sysctl -p /etc/sysctl.d/k8s.conf
 ```
@@ -78,20 +87,27 @@ systemctl enable docker
 systemctl restart docker
 ```
 
-### 配置阿里云镜像加速器：
+### 配置docker启动参数：
 
 ```bash
 tee /etc/docker/daemon.json <<end
 {
-  "registry-mirrors": ["https://registry.aliyuncs.com"]
+  "registry-mirrors": ["https://registry.aliyuncs.com"],
+  "exec-opts": ["native.cgroupdriver=cgroupfs"],
+  "graph": "/docker/data/path"
 }
 end
 systemctl daemon-reload && systemctl restart docker
 ```
+- registry-mirrors: 设置国内镜像加速
+- graph: 设置docker数据目录：选择比较大的分区（我这里是根目录就不需要配置了，默认为/var/lib/docker）
+- exec-opts: 设置cgroup driver（默认是cgroupfs，不推荐设置systemd）
 
 ### 安装脚手架
 
-Master 和 Node 节点 安装 kubelet kubeadm kubectl
+- kubeadm: 部署集群用的命令
+- kubelet: 在集群中每台机器上都要运行的组件，负责管理pod、容器的生命周期
+- kubectl: 集群管理工具（可选，只要在控制集群的节点上安装即可）
 
 ```bash
 tee /etc/yum.repos.d/kubernetes.repo <<end
@@ -103,12 +119,24 @@ gpgcheck=1
 repo_gpgcheck=1
 gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
 end
-
 yum install -y kubelet kubeadm kubectl
-
 systemctl enable kubelet && systemctl start kubelet && systemctl daemon-reload
 ```
 
+### 设置kubelet的cgroupdriver
+
+kubelet的cgroupdriver默认为systemd，如果上面没有设置docker的exec-opts为systemd，这里就需要将kubelet的设置为cgroupfs
+
+由于各自的系统配置不同，配置位置和内容都不相同
+
+1. /etc/systemd/system/kubelet.service.d/10-kubeadm.conf(如果此配置存在的情况执行下面命令：)
+
+```bash
+sed -i "s/cgroup-driver=systemd/cgroup-driver=cgroupfs/g" /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+systemctl enable kubelet && systemctl start kubelet
+```
+
+2. 如果1中的配置不存在，则此配置应该存在(不需要做任何操)：/usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf
 
 ## 所需镜像
 
