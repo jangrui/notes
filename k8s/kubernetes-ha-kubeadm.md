@@ -38,26 +38,44 @@ cat >> /etc/hosts <<end
 192.168.11.151 w1
 192.168.11.152 w2
 end
+scp /etc/hosts root@m2:/etc/hosts
+scp /etc/hosts root@m3:/etc/hosts
+scp /etc/hosts root@w1:/etc/hosts
+scp /etc/hosts root@w2:/etc/hosts
 ```
 
 ### 关闭并清理防火墙
 
 ```bash
-systemctl stop firewalld && systemctl disable firewalld
-iptables -F && iptables -X && iptables -F -t nat && iptables -X -t nat && iptables -P FORWARD ACCEPT
+ssh root@m1 "systemctl stop firewalld && systemctl disable firewalld && iptables -F && iptables -X && iptables -F -t nat && iptables -X -t nat && iptables -P FORWARD ACCEPT"
+
+ssh root@m2 "systemctl stop firewalld && systemctl disable firewalld && iptables -F && iptables -X && iptables -F -t nat && iptables -X -t nat && iptables -P FORWARD ACCEPT"
+
+ssh root@m3 "systemctl stop firewalld && systemctl disable firewalld && iptables -F && iptables -X && iptables -F -t nat && iptables -X -t nat && iptables -P FORWARD ACCEPT"
+
+ssh root@w1 "systemctl stop firewalld && systemctl disable firewalld && iptables -F && iptables -X && iptables -F -t nat && iptables -X -t nat && iptables -P FORWARD ACCEPT"
+
+ssh root@w1 "systemctl stop firewalld && systemctl disable firewalld && iptables -F && iptables -X && iptables -F -t nat && iptables -X -t nat && iptables -P FORWARD ACCEPT"
 ```
 
 ### 关闭交换分区
 
 ```bash
-swapoff -a && sed -i '/swap/s/^\(.*\)$/#\1/' /etc/fstab
+ssh root@m1 "swapoff -a && sed -i '/swap/s/^\(.*\)$/#\1/' /etc/fstab"
+ssh root@m2 "swapoff -a && sed -i '/swap/s/^\(.*\)$/#\1/' /etc/fstab"
+ssh root@m3 "swapoff -a && sed -i '/swap/s/^\(.*\)$/#\1/' /etc/fstab"
+ssh root@21 "swapoff -a && sed -i '/swap/s/^\(.*\)$/#\1/' /etc/fstab"
+ssh root@w2 "swapoff -a && sed -i '/swap/s/^\(.*\)$/#\1/' /etc/fstab"
 ```
 
 ### 关闭SELINUX
 
 ```bash
-setenforce 0
-sed -i 's/^SELINUX=.*/SELINUX=disabled/g' /etc/selinux/config
+ssh root@m1 "setenforce 0 && sed -i 's/^SELINUX=.*/SELINUX=disabled/g' /etc/selinux/config"
+ssh root@m2 "setenforce 0 && sed -i 's/^SELINUX=.*/SELINUX=disabled/g' /etc/selinux/config"
+ssh root@m3 "setenforce 0 && sed -i 's/^SELINUX=.*/SELINUX=disabled/g' /etc/selinux/config"
+ssh root@w1 "setenforce 0 && sed -i 's/^SELINUX=.*/SELINUX=disabled/g' /etc/selinux/config"
+ssh root@w2 "setenforce 0 && sed -i 's/^SELINUX=.*/SELINUX=disabled/g' /etc/selinux/config"
 ```
 
 ### 添加系统路由
@@ -72,21 +90,42 @@ vm.overcommit_memory=1
 vm.panic_on_oom=0
 fs.inotify.max_user_watches=89100
 end
-modprobe br_netfilter
-sysctl -p /etc/sysctl.d/Kubernetes.conf
+
+scp /etc/sysctl.d/kubernetes.conf root@m2:/etc/sysctl.d/Kubernetes.conf
+scp /etc/sysctl.d/kubernetes.conf root@m3:/etc/sysctl.d/Kubernetes.conf
+scp /etc/sysctl.d/kubernetes.conf root@w1:/etc/sysctl.d/Kubernetes.conf
+scp /etc/sysctl.d/kubernetes.conf root@w2:/etc/sysctl.d/Kubernetes.conf
+
+ssh root@m1 "modprobe br_netfilter && sysctl -p /etc/sysctl.d/Kubernetes.conf"
+ssh root@m2 "modprobe br_netfilter && sysctl -p /etc/sysctl.d/Kubernetes.conf"
+ssh root@m3 "modprobe br_netfilter && sysctl -p /etc/sysctl.d/Kubernetes.conf"
+ssh root@w1 "modprobe br_netfilter && sysctl -p /etc/sysctl.d/Kubernetes.conf"
+ssh root@w2 "modprobe br_netfilter && sysctl -p /etc/sysctl.d/Kubernetes.conf"
 ```
 
-### 安装Docker
+### 安装依赖
 
 ```bash
-yum update -y
-yum install -y conntrack ipvsadm ipset jq sysstat curl iptables libseccomp device-mapper-persistent-data lvm2
-curl -so /etc/yum.repos.d/docker-ce.repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
-yum makecache fast
-yum install -y docker-ce
-systemctl daemon-reload
-systemctl enable docker
-systemctl restart docker
+# 下载 docker-ce 源
+ssh root@m1 "curl -so /etc/yum.repos.d/docker-ce.repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo"
+ssh root@m2 "curl -so /etc/yum.repos.d/docker-ce.repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo"
+ssh root@m3 "curl -so /etc/yum.repos.d/docker-ce.repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo"
+ssh root@w1 "curl -so /etc/yum.repos.d/docker-ce.repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo"
+ssh root@w2 "curl -so /etc/yum.repos.d/docker-ce.repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo"
+
+# 安装依赖
+ssh root@m1 "yum update -y && yum install -y conntrack ipvsadm ipset jq sysstat curl iptables libseccomp device-mapper-persistent-data lvm2 docker-ce"
+ssh root@m2 "yum update -y && yum install -y conntrack ipvsadm ipset jq sysstat curl iptables libseccomp device-mapper-persistent-data lvm2 docker-ce"
+ssh root@m3 "yum update -y && yum install -y conntrack ipvsadm ipset jq sysstat curl iptables libseccomp device-mapper-persistent-data lvm2 docker-ce"
+ssh root@w1 "yum update -y && yum install -y conntrack ipvsadm ipset jq sysstat curl iptables libseccomp device-mapper-persistent-data lvm2 docker-ce"
+ssh root@w2 "yum update -y && yum install -y conntrack ipvsadm ipset jq sysstat curl iptables libseccomp device-mapper-persistent-data lvm2 docker-ce"
+
+# 启动 docker
+ssh root@m1 "systemctl daemon-reload && systemctl enable docker && systemctl restart docker"
+ssh root@m2 "systemctl daemon-reload && systemctl enable docker && systemctl restart docker"
+ssh root@m3 "systemctl daemon-reload && systemctl enable docker && systemctl restart docker"
+ssh root@w1 "systemctl daemon-reload && systemctl enable docker && systemctl restart docker"
+ssh root@w2 "systemctl daemon-reload && systemctl enable docker && systemctl restart docker"
 ```
 
 配置Docker的启动参数
@@ -98,8 +137,17 @@ cat > /etc/docker/daemon.json <<end
 	"exec-opts": ["native.cgroupdriver=cgroupfs"]
 }
 end
-systemctl daemon-reload
-systemctl restart docker
+
+scp /etc/docker/daemon.json root@m2:/etc/docker/daemon.json
+scp /etc/docker/daemon.json root@m3:/etc/docker/daemon.json
+scp /etc/docker/daemon.json root@w1:/etc/docker/daemon.json
+scp /etc/docker/daemon.json root@w2:/etc/docker/daemon.json
+
+ssh root@m1 "systemctl daemon-reload && systemctl restart docker"
+ssh root@m2 "systemctl daemon-reload && systemctl restart docker"
+ssh root@m3 "systemctl daemon-reload && systemctl restart docker"
+ssh root@w1 "systemctl daemon-reload && systemctl restart docker"
+ssh root@w2 "systemctl daemon-reload && systemctl restart docker"
 ```
 
 - registry-mirrors: 设置 docker 镜像地址，可配置国内镜像加速
@@ -123,42 +171,53 @@ repo_gpgcheck=0
 gpgkey=http://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg
        http://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
 end
-yum install -y kubectl kubeadm kubelet
-systemctl daemon-reload
-systemctl enabled kubelet
-systemctl restart kubelet
+
+# 分发 kubernetes.repo
+scp /etc/yum.repos.d/kubernetes.repo root@m2:/etc/yum.repos.d/kubernetes.repo
+scp /etc/yum.repos.d/kubernetes.repo root@m3:/etc/yum.repos.d/kubernetes.repo
+scp /etc/yum.repos.d/kubernetes.repo root@w1:/etc/yum.repos.d/kubernetes.repo
+scp /etc/yum.repos.d/kubernetes.repo root@w2:/etc/yum.repos.d/kubernetes.repo
+
+# 安装 kubeadm kubelet kubectl 并重启 kubelet
+ssh root@m1 "yum install -y kubectl kubeadm kubelet && systemctl daemon-reload && systemctl enabled kubelet && systemctl restart kubelet"
+ssh root@m2 "yum install -y kubectl kubeadm kubelet && systemctl daemon-reload && systemctl enabled kubelet && systemctl restart kubelet"
+ssh root@m3 "yum install -y kubectl kubeadm kubelet && systemctl daemon-reload && systemctl enabled kubelet && systemctl restart kubelet"
+ssh root@w1 "yum install -y kubectl kubeadm kubelet && systemctl daemon-reload && systemctl enabled kubelet && systemctl restart kubelet"
+ssh root@w2 "yum install -y kubectl kubeadm kubelet && systemctl daemon-reload && systemctl enabled kubelet && systemctl restart kubelet"
 ```
 
 > 官方地址：http://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64
 
-### 配置kubelet
-
-kubelet 的 cgroupdriver 默认为 systemd，如果上面没有设置 docker 的 exec-opts 为 systemd，这里就需要将 kubelet 的设置为 cgroupfs。
-
-由于各自的系统配置不同，配置位置和内容都不相同
-
-1. /etc/systemd/system/kubelet.service.d/10-kubeadm.conf(如果此配置存在的情况执行下面命令：)
-
-```bash
-sed -i "s/cgroup-driver=systemd/cgroup-driver=cgroupfs/g" /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
-systemctl enable kubelet && systemctl start kubelet
-```
-2. /usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf(如果 1 中的配置不存在，则此配置应该存在，不需要做任何操)
+> ### 配置kubelet
+> 
+> kubelet 的 cgroupdriver 默认为 systemd，如果上面没有设置 docker 的 exec-opts 为 systemd，这里就需要将 kubelet 的设置为 cgroupfs。
+> 
+> 由于各自的系统配置不同，配置位置和内容都不相同
+> 
+> 1. /etc/systemd/system/kubelet.service.d/10-kubeadm.conf(如果此配置存在的情况执行下面命令：)
+> 
+> ```bash
+> sed -i "s/cgroup-driver=systemd/cgroup-driver=cgroupfs/g" /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+> systemctl enable kubelet && systemctl start kubelet
+> ```
+> 2. /usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf(如果 1 中的配置不存在，则此配置应该存在，不需要做任何操)
 
 ## 部署高可用集群
 
 ### 安装Keepalived
 
-> 至少两台 master 节点安装 keepalived，这里选择所有节点都部署 keepalived。
+> 至少两台 master 节点安装 keepalived，这里选择所有 master 节点都部署 keepalived。
 
 ```bash
-yum install -y keepalived
-systemctl daemon-reload && systemctl enable keepalived && systemctl start keepalived
+ssh root@m1 "yum install -y keepalived && systemctl daemon-reload && systemctl enable keepalived && systemctl start keepalived"
+ssh root@m2 "yum install -y keepalived && systemctl daemon-reload && systemctl enable keepalived && systemctl start keepalived"
+ssh root@m3 "yum install -y keepalived && systemctl daemon-reload && systemctl enable keepalived && systemctl start keepalived"
 ``` 
 
 修改 keepalived 配置文件：
 
 ```bash
+# m1 节点
 ssh root@m1 cat > /etc/keepalived/keepalived.conf <<end
 ! Configuration File for keepalived
 global_defs {
@@ -187,6 +246,7 @@ vrrp_instance VI-kube {
 }
 end
 
+# m2 节点
 ssh root@m2 cat > /etc/keepalived/keepalived.conf <<end
 ! Configuration File for keepalived
 global_defs {
@@ -215,6 +275,7 @@ vrrp_instance VI-kube {
 }
 end
 
+# m3 节点
 ssh root@m3 cat > /etc/keepalived/keepalived.conf <<end
 ! Configuration File for keepalived
 global_defs {
@@ -243,6 +304,7 @@ vrrp_instance VI-kube {
 }
 end
 
+
 ssh root@m1 cat > /etc/keepalived/check_apiserver.sh <<end
 #!/bin/sh
 
@@ -250,22 +312,23 @@ netstat -ntlp|grep 6443 || exit 1
 
 end
 
-ssh root@m2 cat > /etc/keepalived/check_apiserver.sh <<end
-#!/bin/sh
+# 分发检测脚本
+scp /etc/keepalived/check_apiserver.sh root@m2:/etc/keepalived/check_apiserver.sh
+scp /etc/keepalived/check_apiserver.sh root@m3:/etc/keepalived/check_apiserver.sh
 
-netstat -ntlp|grep 6443 || exit 1
-
-end
-
-ssh root@m3 cat > /etc/keepalived/check_apiserver.sh <<end
-#!/bin/sh
-
-netstat -ntlp|grep 6443 || exit 1
-
-end
+# 重启 keepalived
 ssh root@m1 systemctl restart keepalived
 ssh root@m2 systemctl restart keepalived
 ssh root@m3 systemctl restart keepalived
+```
+
+查看虚拟 ip 是否添加
+
+```bash
+# 这里的网卡是 ens32
+ssh root@m1 ip a show ens32
+ssh root@m2 ip a show ens32
+ssh root@m3 ip a show ens32
 ```
 
 ### 安装HAproxy
@@ -372,6 +435,8 @@ listen  admin
 end
 scp /etc/haproxy/haproxy.cfg root@m2:/etc/haproxy/haproxy.cfg
 scp /etc/haproxy/haproxy.cfg root@m3:/etc/haproxy/haproxy.cfg
+
+# 重启 haproxy
 ssh root@m1 systemctl restart haproxy
 ssh root@m2 systemctl restart haproxy
 ssh root@m3 systemctl restart haproxy
@@ -441,12 +506,11 @@ iasnf5.zlav24b7q28ekoxy
 w8ewfm.kl9c7slc1qqjqhby
 ```
 
-加入 master 节点：
+加入 master 节点并查看当前所有节点信息：
 
 ```bash
-kubeadm join --token iasnf5.zlav24b7q28ekoxy \
-  --discovery-token-unsafe-skip-ca-verification \
-  --experimental-control-plane
+ssh root@m2 "kubeadm join --token iasnf5.zlav24b7q28ekoxy --discovery-token-unsafe-skip-ca-verification --experimental-control-plane && cp -i /etc/kubernetes/admin.conf ~/.kube/config && chown $(id -u):$(id -g) ~/.kube/config && kubectl get nodes"
+ssh root@m3 "kubeadm join --token iasnf5.zlav24b7q28ekoxy --discovery-token-unsafe-skip-ca-verification --experimental-control-plane && cp -i /etc/kubernetes/admin.conf ~/.kube/config && chown $(id -u):$(id -g) ~/.kube/config && kubectl get nodes"
 ```
 
 - --discovery-token-unsafe-skip-ca-verification: 忽略 ca 校验
@@ -470,19 +534,9 @@ kubeadm join 192.168.11.188:6443 --token iasnf5.zlav24b7q28ekoxy     --discovery
 加入 master 节点：
 
 ```bash
-ssh root@m2 kubeadm join 192.168.11.188:6443 \
-  --token iasnf5.zlav24b7q28ekoxy \
-  --discovery-token-ca-cert-hash \
-  sha256:cb503a6e95702a8ba9ebc35861301126cd03da3d8666d21bebf640cc661545eb \
-  --experimental-control-plane
+ssh root@m2 "kubeadm join 192.168.11.188:6443 --token iasnf5.zlav24b7q28ekoxy --discovery-token-ca-cert-hash sha256:cb503a6e95702a8ba9ebc35861301126cd03da3d8666d21bebf640cc661545eb --experimental-control-plane && cp -i /etc/kubernetes/admin.conf ~/.kube/config && chown $(id -u):$(id -g) ~/.kube/config && kubectl get nodes"
 
-ssh root@m3 kubeadm join 192.168.11.188:6443 \
-  --token iasnf5.zlav24b7q28ekoxy \
-  --discovery-token-ca-cert-hash \
-  sha256:cb503a6e95702a8ba9ebc35861301126cd03da3d8666d21bebf640cc661545eb \
-  --experimental-control-plane
-
-kubectl get nodes
+ssh root@m3 "kubeadm join 192.168.11.188:6443 --token iasnf5.zlav24b7q28ekoxy --discovery-token-ca-cert-hash sha256:cb503a6e95702a8ba9ebc35861301126cd03da3d8666d21bebf640cc661545eb --experimental-control-plane && cp -i /etc/kubernetes/admin.conf ~/.kube/config && chown $(id -u):$(id -g) ~/.kube/config && kubectl get nodes"
 ```
 
 ### 加入worker节点
@@ -497,26 +551,26 @@ ssh root@w2 kubeadm join --token iasnf5.zlav24b7q28ekoxy --discovery-token-unsaf
 kubectl get nodes
 ```
 
-### 移除node节点
-
-查看所有节点：
-
-```bash
-kubectl get nodes
-```
-
-移除指定节点：
-
-```bash
-kubectl drain w2 --delete-local-data --force --ignore-daemonsets
-kubectl delete node w2
-```
-
-在 w2 节点执行：
-
-```bash
-kubeadm reset
-```
+> ### 移除node节点
+> 
+> 查看所有节点：
+> 
+> ```bash
+> kubectl get nodes
+> ```
+> 
+> 移除指定节点：
+> 
+> ```bash
+> kubectl drain w2 --delete-local-data --force --ignore-daemonsets
+> kubectl delete node w2
+> ```
+> 
+> 在 w2 节点执行：
+> 
+> ```bash
+> kubeadm reset
+> ```
 
 ## 部署Dashboard
 
