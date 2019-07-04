@@ -619,5 +619,6 @@ export KDT=$(kubectl describe secret -n kube-system `kubectl get secrets -n kube
 alias kdt='echo $KDT'
 end
 
+source ~/.bashrc
 kdt
 ```
