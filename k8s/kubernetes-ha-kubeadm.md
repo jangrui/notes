@@ -456,7 +456,9 @@ ssh root@m3 "ss -lnt | grep -E '16443|8888'"
 cat > ~/kubeadm-config.yml <<end
 apiVersion: kubeadm.k8s.io/v1beta1
 kind: ClusterConfiguration
+# 指定 kubernetes 的版本
 kubernetesVersion: v1.15.0
+# apiServer 的访问地址
 controlPlaneEndpoint: "192.168.11.188:6443"
 networking:
     # This CIDR is a Calico default. Substitute or remove for your CNI provider.
@@ -516,11 +518,10 @@ ssh root@m3 "kubeadm join --token iasnf5.zlav24b7q28ekoxy --discovery-token-unsa
 - --discovery-token-unsafe-skip-ca-verification: 忽略 ca 校验
 - --experimental-control-plane: 添加 master 节点
 
-2. 重新生成 token 添加节点。
+2. 重新生成 token 。
 
 ```bash
-kubeadm token generate
-kubeadm token create <generated-token> --print-join-command --ttl=24h
+kubeadm token create --print-join-command --ttl=24h
 ```
 
 生成的 token：
