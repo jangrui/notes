@@ -40,6 +40,7 @@
 * Kubernetes
 	- [k8s 安装](k8s/install)
 	- [Kubernetes 高可用集群部署](k8s/kubernetes-ha-kubeadm)
+	- [Master 节点也做 Worker 节点](k8s/master-worker)
 
 * Ansible
 	- [ansible 安装](ansible/install)
