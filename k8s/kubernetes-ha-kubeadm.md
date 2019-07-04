@@ -6,13 +6,19 @@
 
 五台 CentOS 虚拟机:
 
-|IP				|节点	|CPU |Memory |Hostname	|
-|-				|-		|-	 |-		 |-			|
-|192.168.11.141 |master |>=2 |>=2G	 |m1		|
-|192.168.11.142 |master |>=2 |>=2G	 |m2		|
-|192.168.11.143 |master |>=2 |>=2G	 |m3		|
-|192.168.11.151 |worker |>=2 |>=2G	 |w1		|
-|192.168.11.152 |worker |>=2 |>=2G	 |w2		|
+|IP				      |节点	  |CPU    |Memory   |Hostname	|
+|-				      |-		  |-	    |-		    |-			  |
+|192.168.11.141 |master |>=2    |>=2G	    |m1		    |
+|192.168.11.142 |master |>=2    |>=2G	    |m2		    |
+|192.168.11.143 |master |>=2    |>=2G	    |m3		    |
+|192.168.11.151 |worker |>=2    |>=2G	    |w1		    |
+|192.168.11.152 |worker |>=2    |>=2G	    |w2		    |
+
+- keepalived 提供 kube-apiserver 对外服务的 VIP;
+- haproxy 监听 VIP，后端连接所有 kube-apiserver 实例，提供健康检查和负载均衡功能；
+- 由于 keepalived 是一主多备运行模式，故至少两个节点安装 keepalived 和 haporxy。
+- 注意：如果是云服务器（需要申请虚拟IP并绑定到服务器上，公有云不支持 keepalived 虚拟VIP）
+
 
 ### 主机名
 
@@ -88,7 +94,7 @@ systemctl restart docker
 ```bash
 cat > /etc/docker/daemon.json <<end
 {
-	"registry-mirrors": ["https://registry.aliyun.com"],
+	"registry-mirrors": ["https://registry.aliyuncs.com"],
 	"exec-opts": ["native.cgroupdriver=cgroupfs"]
 }
 end
@@ -143,7 +149,7 @@ systemctl enable kubelet && systemctl start kubelet
 
 ### 安装Keepalived
 
-> 任选两个 master 节点部署 keepalived
+> 至少两台 master 节点安装 keepalived，这里选择所有节点都部署 keepalived。
 
 ```bash
 yum install -y keepalived
@@ -156,56 +162,84 @@ systemctl daemon-reload && systemctl enable keepalived && systemctl start keepal
 ssh root@m1 cat > /etc/keepalived/keepalived.conf <<end
 ! Configuration File for keepalived
 global_defs {
- router_id keepalive-master # 负载均衡名
+  router_id keepalive-1  # 主机名,每个节点不同
 }
 
 vrrp_script check_apiserver { # 检测脚本。
- script "/etc/keepalived/check-apiserver.sh"
- interval 3
- weight -2
+  script "/etc/keepalived/check-apiserver.sh"
+  interval 3
+  weight -2
 }
 
-vrrp_instance VI-kube-master {
-   state MASTER 		# 主服务
-   interface ens32 		# 网卡
-   virtual_router_id 68
-   priority 100
-   dont_track_primary
-   advert_int 3
-   virtual_ipaddress {
-     192.168.11.188 	# 虚拟 ip (同网段)
-   }
-   track_script {
-       check_apiserver
-   }
+vrrp_instance VI-kube {
+  state MASTER                # 主服务器
+  interface ens32             # VIP 漂移到的网卡
+  virtual_router_id 68        # 多个几点必须相同
+  priority 100                # 优先级，备用服务器比主服务器低
+  dont_track_primary
+  advert_int 3
+  virtual_ipaddress {
+    192.168.11.188         # vip 虚拟 ip (同网段)
+  }
+  track_script {
+      check_apiserver
+  }
 }
 end
 
 ssh root@m2 cat > /etc/keepalived/keepalived.conf <<end
 ! Configuration File for keepalived
 global_defs {
- router_id keepalive-backup # 负载均衡名
+  router_id keepalive-2  # 主机名,每个节点不同
 }
 
-vrrp_script check_apiserver { # 检测脚本
- script "/etc/keepalived/check-apiserver.sh"
- interval 3
- weight -2	# 权重-2
+vrrp_script check_apiserver { # 检测脚本。
+  script "/etc/keepalived/check-apiserver.sh"
+  interval 3
+  weight -2
 }
 
-vrrp_instance VI-kube-master {
-   state BACKUP 		# 从服务
-   interface ens32  	# 网卡
-   virtual_router_id 68
-   priority 99
-   dont_track_primary
-   advert_int 3
-   virtual_ipaddress {
-     192.168.11.188 	# 虚拟 ip (同网段)
-   }
-   track_script {
-       check_apiserver
-   }
+vrrp_instance VI-kube {
+  state BACKUP                # 主服务器
+  interface ens32             # VIP 漂移到的网卡
+  virtual_router_id 68        # 多个几点必须相同
+  priority 90                # 优先级，备用服务器比主服务器低
+  dont_track_primary
+  advert_int 3
+  virtual_ipaddress {
+    192.168.11.188         # vip 虚拟 ip (同网段)
+  }
+  track_script {
+      check_apiserver
+  }
+}
+end
+
+ssh root@m3 cat > /etc/keepalived/keepalived.conf <<end
+! Configuration File for keepalived
+global_defs {
+  router_id keepalive-3  # 主机名,每个节点不同
+}
+
+vrrp_script check_apiserver { # 检测脚本。
+  script "/etc/keepalived/check-apiserver.sh"
+  interval 3
+  weight -2
+}
+
+vrrp_instance VI-kube {
+  state BACKUP                # 主服务器
+  interface ens32             # VIP 漂移到的网卡
+  virtual_router_id 68        # 多个几点必须相同
+  priority 80                # 优先级，备用服务器比主服务器低
+  dont_track_primary
+  advert_int 3
+  virtual_ipaddress {
+    192.168.11.188         # vip 虚拟 ip (同网段)
+  }
+  track_script {
+      check_apiserver
+  }
 }
 end
 
@@ -222,6 +256,133 @@ ssh root@m2 cat > /etc/keepalived/check_apiserver.sh <<end
 netstat -ntlp|grep 6443 || exit 1
 
 end
+
+ssh root@m3 cat > /etc/keepalived/check_apiserver.sh <<end
+#!/bin/sh
+
+netstat -ntlp|grep 6443 || exit 1
+
+end
+ssh root@m1 systemctl restart keepalived
+ssh root@m2 systemctl restart keepalived
+ssh root@m3 systemctl restart keepalived
+```
+
+### 安装HAproxy
+
+所有 master 节点安装 haproxy
+
+```bash
+ssh root@m1 "yum install -y haproxy && systemctl daemon-reload && systemctl enable haproxy && systemctl start haproxy"
+
+ssh root@m2 "yum install -y haproxy && systemctl daemon-reload && systemctl enable haproxy && systemctl start haproxy"
+
+ssh root@m3 "yum install -y haproxy && systemctl daemon-reload && systemctl enable haproxy && systemctl start haproxy"
+```
+
+修改 haproxy 配置文件：
+
+```bash
+cat > /etc/haproxy/haproxy.cfg <<end
+#---------------------------------------------------------------------
+# Example configuration for a possible web application.  See the
+# full configuration options online.
+#
+#   http://haproxy.1wt.eu/download/1.4/doc/configuration.txt
+#
+#---------------------------------------------------------------------
+
+#---------------------------------------------------------------------
+# Global settings
+#---------------------------------------------------------------------
+global
+    # to have these messages end up in /var/log/haproxy.log you will
+    # need to:
+    #
+    # 1) configure syslog to accept network log events.  This is done
+    #    by adding the '-r' option to the SYSLOGD_OPTIONS in
+    #    /etc/sysconfig/syslog
+    #
+    # 2) configure local2 events to go to the /var/log/haproxy.log
+    #   file. A line like the following can be added to
+    #   /etc/sysconfig/syslog
+    #
+    #    local2.*                       /var/log/haproxy.log
+    #
+    log         127.0.0.1 local2
+
+    chroot      /var/lib/haproxy
+    pidfile     /var/run/haproxy.pid
+    maxconn     4000
+    user        haproxy
+    group       haproxy
+    daemon
+
+    # turn on stats unix socket
+    stats socket /var/lib/haproxy/stats
+
+#---------------------------------------------------------------------
+# common defaults that all the 'listen' and 'backend' sections will
+# use if not designated in their block
+#---------------------------------------------------------------------
+defaults
+    mode                    http
+    log                     global
+    option                  httplog
+    option                  dontlognull
+    option http-server-close
+    option forwardfor       except 127.0.0.0/8
+    option                  redispatch
+    retries                 3
+    timeout http-request    10s
+    timeout queue           1m
+    timeout connect         10s
+    timeout client          1m
+    timeout server          1m
+    timeout http-keep-alive 10s
+    timeout check           10s
+    maxconn                 3000
+
+#---------------------------------------------------------------------
+# main frontend which proxys to the backends
+#---------------------------------------------------------------------
+frontend  kubernetes-apiserver
+    mode tcp
+    bind *:16443
+    option tcplog
+    default_backend             kubernetes-apiserver
+
+#---------------------------------------------------------------------
+# round robin balancing between the various backends
+#---------------------------------------------------------------------
+backend kubernetes-apiserver
+    mode tcp
+    balance     roundrobin
+    server  m1 192.168.11.141:6443 check
+    server  m2 192.168.11.142:6443 check
+    server  m3 192.168.11.143:6443 check
+
+# 监控界面
+listen  admin
+    bind        *:8888                #监控界面的访问的IP和端口
+    mode        http
+    stats uri   /admin                #URI相对地址
+    stats realm Global\ statistics    #统计报告格式
+    stats auth  admin:abc123456       #登陆帐户信息
+end
+scp /etc/haproxy/haproxy.cfg root@m2:/etc/haproxy/haproxy.cfg
+scp /etc/haproxy/haproxy.cfg root@m3:/etc/haproxy/haproxy.cfg
+ssh root@m1 systemctl restart haproxy
+ssh root@m2 systemctl restart haproxy
+ssh root@m3 systemctl restart haproxy
+```
+
+查看端口是否正常：
+
+```bash
+ssh root@m1 "ss -lnt | grep -E '16443|8888'"
+ssh root@m2 "ss -lnt | grep -E '16443|8888'"
+ssh root@m3 "ss -lnt | grep -E '16443|8888'"
 ```
 
 ### 部署第一个Master
@@ -259,14 +420,102 @@ kubectl apply -f /etc/kubernetes/addons/calico-rbac-kdd.yaml
 ### 加入其它Master节点
 
 ```bash
-kubeadm join ...
+ssh root@m2 "kubeadm join ... && mkdir -p ~/.kube && cp -i /etc/kubernetes/admin.conf ~/.kube/config && chown $(id -u):$(id -g) ~/.kube/config && kubectl get nodes"
+ssh root@m2 "kubeadm join ... && mkdir -p ~/.kube && cp -i /etc/kubernetes/admin.conf ~/.kube/config && chown $(id -u):$(id -g) ~/.kube/config && kubectl get nodes"
+```
+
+1. 利用未过期的 token 添加节点。
+
+查看 token 命令：
+
+```bash
+kubeadm token list
+```
+
+例如：
+
+```bash
+[root@m1 ~]# kubeadm token list|awk 'NR!=1{print $1}'
+f9ubb1.0l3jfp2dxz4v20sy
+iasnf5.zlav24b7q28ekoxy
+w8ewfm.kl9c7slc1qqjqhby
+```
+
+加入 master 节点：
+
+```bash
+kubeadm join --token iasnf5.zlav24b7q28ekoxy \
+  --discovery-token-unsafe-skip-ca-verification \
+  --experimental-control-plane
+```
+
+- --discovery-token-unsafe-skip-ca-verification: 忽略 ca 校验
+- --experimental-control-plane: 添加 master 节点
+
+2. 重新生成 token 添加节点。
+
+```bash
+kubeadm token generate
+kubeadm token create <generated-token> --print-join-command --ttl=24h
+```
+
+生成的 token：
+
+```bash
+kubeadm join 192.168.11.188:6443 --token iasnf5.zlav24b7q28ekoxy     --discovery-token-ca-cert-hash sha256:cb503a6e95702a8ba9ebc35861301126cd03da3d8666d21bebf640cc661545eb 
+```
+
+- --ttl=24: 表示这个 token 的有效期为 24 小时，初始化默认生成的 token 有效期也是 24 小时
+
+加入 master 节点：
+
+```bash
+ssh root@m2 kubeadm join 192.168.11.188:6443 \
+  --token iasnf5.zlav24b7q28ekoxy \
+  --discovery-token-ca-cert-hash \
+  sha256:cb503a6e95702a8ba9ebc35861301126cd03da3d8666d21bebf640cc661545eb \
+  --experimental-control-plane
+
+ssh root@m3 kubeadm join 192.168.11.188:6443 \
+  --token iasnf5.zlav24b7q28ekoxy \
+  --discovery-token-ca-cert-hash \
+  sha256:cb503a6e95702a8ba9ebc35861301126cd03da3d8666d21bebf640cc661545eb \
+  --experimental-control-plane
+
 kubectl get nodes
 ```
 
 ### 加入worker节点
 
+> worker 节点的 join 命令没有 `--experimental-control-plane` 参数。
+
 ```bash
-kubeadm join ...
+ssh root@w1 kubeadm join --token iasnf5.zlav24b7q28ekoxy --discovery-token-unsafe-skip-ca-verification
+
+ssh root@w2 kubeadm join --token iasnf5.zlav24b7q28ekoxy --discovery-token-unsafe-skip-ca-verification
+
+kubectl get nodes
+```
+
+### 移除node节点
+
+查看所有节点：
+
+```bash
+kubectl get nodes
+```
+
+移除指定节点：
+
+```bash
+kubectl drain w2 --delete-local-data --force --ignore-daemonsets
+kubectl delete node w2
+```
+
+在 w2 节点执行：
+
+```bash
+kubeadm reset
 ```
 
 ## 部署Dashboard
@@ -306,8 +555,11 @@ kubectl create sa dashboard-admin -n kube-system
 
 # 创建角色绑定关系
 kubectl create clusterrolebinding dashboard-admin --clusterrole=cluster-admin --serviceaccount=kube-system:dashboard-admin
+```
 
-# 打印dashboard-admin-secret的token
+### 打印Dashboard的登录token
+
+```bash
 cat >> ~/.bashrc <<end
 export KDT=$(kubectl describe secret -n kube-system `kubectl get secrets -n kube-system | grep dashboard-admin | awk '{print $1}'` | grep -E '^token' | awk '{print $2}')
 alias kdt='echo $KDT'
