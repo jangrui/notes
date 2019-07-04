@@ -39,6 +39,7 @@
 
 * Kubernetes
 	- [k8s 安装](k8s/install)
+	- [Kubernetes 高可用集群部署](kubernetes-ha-kubeadm)
 
 * Ansible
 	- [ansible 安装](ansible/install)

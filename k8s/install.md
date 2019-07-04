@@ -23,11 +23,11 @@ hostnamectl set-hostname kube3 --static
 为每台主机添加主机别名，使所有节点之间可以通过 hostname 互相访问
 
 ```bash
-cat >> /etc/hosts <<EOF
+cat >> /etc/hosts <<end
 192.168.11.141 kube1
 192.168.11.142 kube2
 192.168.11.143 kube3
-EOF
+end
 ```
 
 ### 关闭并清理防火墙：
