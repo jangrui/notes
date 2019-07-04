@@ -507,10 +507,9 @@ kubeadm token list
 例如：
 
 ```bash
-[root@m1 ~]# kubeadm token list|awk 'NR!=1{print $1}'
-f9ubb1.0l3jfp2dxz4v20sy
-iasnf5.zlav24b7q28ekoxy
-w8ewfm.kl9c7slc1qqjqhby
+[root@m1 ~]# kubeadm token list|awk 'NR!=1{print $1,$2}'
+iasnf5.zlav24b7q28ekoxy 20h
+v89wfj.rpm44adpaujvwe25 22h
 ```
 
 加入 master 节点并查看当前所有节点信息：
