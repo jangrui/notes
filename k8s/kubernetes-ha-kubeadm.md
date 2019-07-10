@@ -128,6 +128,8 @@ ssh root@w1 "systemctl daemon-reload && systemctl enable docker && systemctl res
 ssh root@w2 "systemctl daemon-reload && systemctl enable docker && systemctl restart docker"
 ```
 
+> docker-ce 官方 repo：https://download.docker.com/linux/centos/docker-ce.repo
+
 配置Docker的启动参数
 
 ```bash
@@ -178,11 +180,11 @@ scp /etc/yum.repos.d/kubernetes.repo root@w1:/etc/yum.repos.d/kubernetes.repo
 scp /etc/yum.repos.d/kubernetes.repo root@w2:/etc/yum.repos.d/kubernetes.repo
 
 # 安装 kubeadm kubelet kubectl 并重启 kubelet
-ssh root@m1 "yum makecache fast && yum install -y kubectl kubeadm kubelet && systemctl daemon-reload && systemctl enabled kubelet && systemctl restart kubelet"
-ssh root@m2 "yum makecache fast && yum install -y kubectl kubeadm kubelet && systemctl daemon-reload && systemctl enabled kubelet && systemctl restart kubelet"
-ssh root@m3 "yum makecache fast && yum install -y kubectl kubeadm kubelet && systemctl daemon-reload && systemctl enabled kubelet && systemctl restart kubelet"
-ssh root@w1 "yum makecache fast && yum install -y kubectl kubeadm kubelet && systemctl daemon-reload && systemctl enabled kubelet && systemctl restart kubelet"
-ssh root@w2 "yum makecache fast && yum install -y kubectl kubeadm kubelet && systemctl daemon-reload && systemctl enabled kubelet && systemctl restart kubelet"
+ssh root@m1 "yum makecache fast && yum install -y kubectl kubeadm kubelet && systemctl daemon-reload && systemctl enable kubelet && systemctl restart kubelet"
+ssh root@m2 "yum makecache fast && yum install -y kubectl kubeadm kubelet && systemctl daemon-reload && systemctl enable kubelet && systemctl restart kubelet"
+ssh root@m3 "yum makecache fast && yum install -y kubectl kubeadm kubelet && systemctl daemon-reload && systemctl enable kubelet && systemctl restart kubelet"
+ssh root@w1 "yum makecache fast && yum install -y kubectl kubeadm kubelet && systemctl daemon-reload && systemctl enable kubelet && systemctl restart kubelet"
+ssh root@w2 "yum makecache fast && yum install -y kubectl kubeadm kubelet && systemctl daemon-reload && systemctl enable kubelet && systemctl restart kubelet"
 ```
 
 > google 官方：https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
@@ -475,23 +477,33 @@ kubectl get pods --all-namespaces
 
 - --experimental-upload-certs: 表示可以在后续执行加入节点时自动分发证书文件。
 
+### 部署网络插件Flannel
+
+> 网络插件挑一款安装即可，这里选择 Flannel。
+
+```bash
+mkdir -p /etc/kubernetes/addons
+curl -o /etc/kubernetes/addons/kube-flannel.yml https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+kubectl apply -f /etc/kubernetes/addons/kube-flannel.yml
+```
+
 ### 部署网络插件Calico
+
+> 网络插件挑一款安装即可。
 
 ```bash
 mkdir -p /etc/kubernetes/addons
 curl -o /etc/kubernetes/addons/calico-policy-only.yaml https://docs.projectcalico.org/v3.8/manifests/calico-policy-only.yaml
 curl -o /etc/kubernetes/addons/calico-rbac-kdd.yaml https://docs.projectcalico.org/v3.8/manifests/rbac/rbac-kdd-calico.yaml
+# 指定 podSubnet
 sed -ie "s?192.168.0.0?172.22.0.0?g" /etc/kubernetes/addons/calico-policy-only.yaml
 kubectl apply -f /etc/kubernetes/addons/calico-policy-only.yaml
 kubectl apply -f /etc/kubernetes/addons/calico-rbac-kdd.yaml
 ```
 
-### 加入其它Master节点
+> 如果部署初始化 kubernetes 时 podSubnet 未指定，这里无需修改。
 
-```bash
-ssh root@m2 "kubeadm join ... && mkdir -p ~/.kube && cp -i /etc/kubernetes/admin.conf ~/.kube/config && chown $(id -u):$(id -g) ~/.kube/config && kubectl get nodes"
-ssh root@m2 "kubeadm join ... && mkdir -p ~/.kube && cp -i /etc/kubernetes/admin.conf ~/.kube/config && chown $(id -u):$(id -g) ~/.kube/config && kubectl get nodes"
-```
+### 加入其它Master节点
 
 1. 查看初始化日志。上一步初始化时指定了输出日志，里面有 master 和 worker 节点的 token 信息，默认有效期为 24h。 
 
@@ -514,8 +526,8 @@ v89wfj.rpm44adpaujvwe25 22h
 加入 master 节点并查看当前所有节点信息：
 
 ```bash
-ssh root@m2 "kubeadm join --token iasnf5.zlav24b7q28ekoxy --discovery-token-unsafe-skip-ca-verification --experimental-control-plane && cp -i /etc/kubernetes/admin.conf ~/.kube/config && chown $(id -u):$(id -g) ~/.kube/config && kubectl get nodes"
-ssh root@m3 "kubeadm join --token iasnf5.zlav24b7q28ekoxy --discovery-token-unsafe-skip-ca-verification --experimental-control-plane && cp -i /etc/kubernetes/admin.conf ~/.kube/config && chown $(id -u):$(id -g) ~/.kube/config && kubectl get nodes"
+ssh root@m2 "kubeadm join --token iasnf5.zlav24b7q28ekoxy --discovery-token-unsafe-skip-ca-verification --experimental-control-plane && mkdir -p ~/.kube && cp -i /etc/kubernetes/admin.conf ~/.kube/config && chown $(id -u):$(id -g) ~/.kube/config && kubectl get nodes"
+ssh root@m3 "kubeadm join --token iasnf5.zlav24b7q28ekoxy --discovery-token-unsafe-skip-ca-verification --experimental-control-plane && mkdir -p ~/.kube && cp -i /etc/kubernetes/admin.conf ~/.kube/config && chown $(id -u):$(id -g) ~/.kube/config && kubectl get nodes"
 ```
 
 - --discovery-token-unsafe-skip-ca-verification: 忽略 ca 校验
