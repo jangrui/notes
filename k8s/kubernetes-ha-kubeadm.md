@@ -81,7 +81,7 @@ ssh root@w2 "setenforce 0 && sed -i 's/^SELINUX=.*/SELINUX=disabled/g' /etc/seli
 ### 添加系统路由
 
 ```bash
-tee /etc/sysctl.d/Kubernetes.conf <<end
+tee /etc/sysctl.d/kubernetes.conf <<end
 net.bridge.bridge-nf-call-ip6tables = 1
 net.bridge.bridge-nf-call-iptables = 1
 net.ipv4.ip_forward = 1
@@ -91,34 +91,34 @@ vm.panic_on_oom=0
 fs.inotify.max_user_watches=89100
 end
 
-scp /etc/sysctl.d/kubernetes.conf root@m2:/etc/sysctl.d/Kubernetes.conf
-scp /etc/sysctl.d/kubernetes.conf root@m3:/etc/sysctl.d/Kubernetes.conf
-scp /etc/sysctl.d/kubernetes.conf root@w1:/etc/sysctl.d/Kubernetes.conf
-scp /etc/sysctl.d/kubernetes.conf root@w2:/etc/sysctl.d/Kubernetes.conf
+scp /etc/sysctl.d/kubernetes.conf root@m2:/etc/sysctl.d/kubernetes.conf
+scp /etc/sysctl.d/kubernetes.conf root@m3:/etc/sysctl.d/kubernetes.conf
+scp /etc/sysctl.d/kubernetes.conf root@w1:/etc/sysctl.d/kubernetes.conf
+scp /etc/sysctl.d/kubernetes.conf root@w2:/etc/sysctl.d/kubernetes.conf
 
-ssh root@m1 "modprobe br_netfilter && sysctl -p /etc/sysctl.d/Kubernetes.conf"
-ssh root@m2 "modprobe br_netfilter && sysctl -p /etc/sysctl.d/Kubernetes.conf"
-ssh root@m3 "modprobe br_netfilter && sysctl -p /etc/sysctl.d/Kubernetes.conf"
-ssh root@w1 "modprobe br_netfilter && sysctl -p /etc/sysctl.d/Kubernetes.conf"
-ssh root@w2 "modprobe br_netfilter && sysctl -p /etc/sysctl.d/Kubernetes.conf"
+ssh root@m1 "modprobe br_netfilter && sysctl -p /etc/sysctl.d/kubernetes.conf"
+ssh root@m2 "modprobe br_netfilter && sysctl -p /etc/sysctl.d/kubernetes.conf"
+ssh root@m3 "modprobe br_netfilter && sysctl -p /etc/sysctl.d/kubernetes.conf"
+ssh root@w1 "modprobe br_netfilter && sysctl -p /etc/sysctl.d/kubernetes.conf"
+ssh root@w2 "modprobe br_netfilter && sysctl -p /etc/sysctl.d/kubernetes.conf"
 ```
 
 ### 安装依赖
 
 ```bash
 # 下载 docker-ce 源
-ssh root@m1 "curl -so /etc/yum.repos.d/docker-ce.repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo"
-ssh root@m2 "curl -so /etc/yum.repos.d/docker-ce.repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo"
-ssh root@m3 "curl -so /etc/yum.repos.d/docker-ce.repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo"
-ssh root@w1 "curl -so /etc/yum.repos.d/docker-ce.repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo"
-ssh root@w2 "curl -so /etc/yum.repos.d/docker-ce.repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo"
+ssh root@m1 "curl -so /etc/yum.repos.d/docker-ce.repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo && yum makecache fast"
+ssh root@m2 "curl -so /etc/yum.repos.d/docker-ce.repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo && yum makecache fast"
+ssh root@m3 "curl -so /etc/yum.repos.d/docker-ce.repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo && yum makecache fast"
+ssh root@w1 "curl -so /etc/yum.repos.d/docker-ce.repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo && yum makecache fast"
+ssh root@w2 "curl -so /etc/yum.repos.d/docker-ce.repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo && yum makecache fast"
 
 # 安装依赖
-ssh root@m1 "yum update -y && yum install -y conntrack ipvsadm ipset jq sysstat curl iptables libseccomp device-mapper-persistent-data lvm2 docker-ce"
-ssh root@m2 "yum update -y && yum install -y conntrack ipvsadm ipset jq sysstat curl iptables libseccomp device-mapper-persistent-data lvm2 docker-ce"
-ssh root@m3 "yum update -y && yum install -y conntrack ipvsadm ipset jq sysstat curl iptables libseccomp device-mapper-persistent-data lvm2 docker-ce"
-ssh root@w1 "yum update -y && yum install -y conntrack ipvsadm ipset jq sysstat curl iptables libseccomp device-mapper-persistent-data lvm2 docker-ce"
-ssh root@w2 "yum update -y && yum install -y conntrack ipvsadm ipset jq sysstat curl iptables libseccomp device-mapper-persistent-data lvm2 docker-ce"
+ssh root@m1 "yum update -y && yum install -y epel-release conntrack ipvsadm ipset jq sysstat curl iptables libseccomp device-mapper-persistent-data lvm2 docker-ce"
+ssh root@m2 "yum update -y && yum install -y epel-release conntrack ipvsadm ipset jq sysstat curl iptables libseccomp device-mapper-persistent-data lvm2 docker-ce"
+ssh root@m3 "yum update -y && yum install -y epel-release conntrack ipvsadm ipset jq sysstat curl iptables libseccomp device-mapper-persistent-data lvm2 docker-ce"
+ssh root@w1 "yum update -y && yum install -y epel-release conntrack ipvsadm ipset jq sysstat curl iptables libseccomp device-mapper-persistent-data lvm2 docker-ce"
+ssh root@w2 "yum update -y && yum install -y epel-release conntrack ipvsadm ipset jq sysstat curl iptables libseccomp device-mapper-persistent-data lvm2 docker-ce"
 
 # 启动 docker
 ssh root@m1 "systemctl daemon-reload && systemctl enable docker && systemctl restart docker"
@@ -133,8 +133,7 @@ ssh root@w2 "systemctl daemon-reload && systemctl enable docker && systemctl res
 ```bash
 cat > /etc/docker/daemon.json <<end
 {
-	"registry-mirrors": ["https://registry.aliyuncs.com"],
-	"exec-opts": ["native.cgroupdriver=cgroupfs"]
+	"registry-mirrors": ["https://registry.aliyuncs.com"]
 }
 end
 
@@ -151,7 +150,7 @@ ssh root@w2 "systemctl daemon-reload && systemctl restart docker"
 ```
 
 - registry-mirrors: 设置 docker 镜像地址，可配置国内镜像加速
-- exec-opts: 设置 cgroup driver (默认是 cgroupfs，不推荐设置 systemd)
+- exec-opts: 设置 cgroup driver (默认是 systemd，不推荐设置 cgroupfs)
 - graph: 设置 docker 数据目录地址
 
 ### 安装Kubernetes脚手架
@@ -179,14 +178,14 @@ scp /etc/yum.repos.d/kubernetes.repo root@w1:/etc/yum.repos.d/kubernetes.repo
 scp /etc/yum.repos.d/kubernetes.repo root@w2:/etc/yum.repos.d/kubernetes.repo
 
 # 安装 kubeadm kubelet kubectl 并重启 kubelet
-ssh root@m1 "yum install -y kubectl kubeadm kubelet && systemctl daemon-reload && systemctl enabled kubelet && systemctl restart kubelet"
-ssh root@m2 "yum install -y kubectl kubeadm kubelet && systemctl daemon-reload && systemctl enabled kubelet && systemctl restart kubelet"
-ssh root@m3 "yum install -y kubectl kubeadm kubelet && systemctl daemon-reload && systemctl enabled kubelet && systemctl restart kubelet"
-ssh root@w1 "yum install -y kubectl kubeadm kubelet && systemctl daemon-reload && systemctl enabled kubelet && systemctl restart kubelet"
-ssh root@w2 "yum install -y kubectl kubeadm kubelet && systemctl daemon-reload && systemctl enabled kubelet && systemctl restart kubelet"
+ssh root@m1 "yum makecache fast && yum install -y kubectl kubeadm kubelet && systemctl daemon-reload && systemctl enabled kubelet && systemctl restart kubelet"
+ssh root@m2 "yum makecache fast && yum install -y kubectl kubeadm kubelet && systemctl daemon-reload && systemctl enabled kubelet && systemctl restart kubelet"
+ssh root@m3 "yum makecache fast && yum install -y kubectl kubeadm kubelet && systemctl daemon-reload && systemctl enabled kubelet && systemctl restart kubelet"
+ssh root@w1 "yum makecache fast && yum install -y kubectl kubeadm kubelet && systemctl daemon-reload && systemctl enabled kubelet && systemctl restart kubelet"
+ssh root@w2 "yum makecache fast && yum install -y kubectl kubeadm kubelet && systemctl daemon-reload && systemctl enabled kubelet && systemctl restart kubelet"
 ```
 
-> 官方地址：http://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64
+> google 官方：https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
 
 > ### 配置kubelet
 > 
