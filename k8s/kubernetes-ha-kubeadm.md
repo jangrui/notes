@@ -497,8 +497,6 @@ kubectl apply -f /etc/kubernetes/addons/kube-flannel.yml
 mkdir -p /etc/kubernetes/addons
 curl -o /etc/kubernetes/addons/calico-policy-only.yaml https://docs.projectcalico.org/v3.8/manifests/calico-policy-only.yaml
 curl -o /etc/kubernetes/addons/calico-rbac-kdd.yaml https://docs.projectcalico.org/v3.8/manifests/rbac/rbac-kdd-calico.yaml
-# 指定 podSubnet
-sed -ie "s?192.168.0.0?192.168.0.0?g" /etc/kubernetes/addons/calico-policy-only.yaml
 kubectl apply -f /etc/kubernetes/addons/calico-policy-only.yaml
 kubectl apply -f /etc/kubernetes/addons/calico-rbac-kdd.yaml
 ```
