@@ -462,8 +462,7 @@ kubernetesVersion: v1.15.0
 # apiServer 的访问地址
 controlPlaneEndpoint: "192.168.11.188:6443"
 networking:
-    # This CIDR is a Calico default. Substitute or remove for your CNI provider.
-    podSubnet: "172.22.0.0/16"
+    podSubnet: "192.168.0.0/16"
 # 指定 aliyun 仓库
 imageRepository: registry.aliyuncs.com/google_containers
 end
@@ -488,6 +487,8 @@ sed -ie "s?10.240.0.0?192.168.0.0?g" /etc/kubernetes/addons/kube-flannel.yml
 kubectl apply -f /etc/kubernetes/addons/kube-flannel.yml
 ```
 
+> Flannet 默认指定 podSubnet 为 10.244.0.0/16 网段。
+
 ### 部署网络插件Calico
 
 > 网络插件挑一款安装即可。
@@ -497,12 +498,12 @@ mkdir -p /etc/kubernetes/addons
 curl -o /etc/kubernetes/addons/calico-policy-only.yaml https://docs.projectcalico.org/v3.8/manifests/calico-policy-only.yaml
 curl -o /etc/kubernetes/addons/calico-rbac-kdd.yaml https://docs.projectcalico.org/v3.8/manifests/rbac/rbac-kdd-calico.yaml
 # 指定 podSubnet
-sed -ie "s?192.168.0.0?172.22.0.0?g" /etc/kubernetes/addons/calico-policy-only.yaml
+sed -ie "s?192.168.0.0?192.168.0.0?g" /etc/kubernetes/addons/calico-policy-only.yaml
 kubectl apply -f /etc/kubernetes/addons/calico-policy-only.yaml
 kubectl apply -f /etc/kubernetes/addons/calico-rbac-kdd.yaml
 ```
 
-> 如果部署初始化 kubernetes 时 podSubnet 未指定，这里无需修改。
+> Calico 默认指定 podSubnet 为 192.168.0.0/16 网段。
 
 ### 加入其它Master节点
 
