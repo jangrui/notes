@@ -484,6 +484,7 @@ kubectl get pods --all-namespaces
 ```bash
 mkdir -p /etc/kubernetes/addons
 curl -o /etc/kubernetes/addons/kube-flannel.yml https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+sed -ie "s?10.240.0.0?192.168.0.0?g" /etc/kubernetes/addons/kube-flannel.yml
 kubectl apply -f /etc/kubernetes/addons/kube-flannel.yml
 ```
 
@@ -591,21 +592,17 @@ kubectl get nodes
 ## 部署Dashboard
 
 ```bash
-curl -o /etc/kubernetes/addons/kubernetes-dashboard.yaml https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended/kubernetes-dashboard.yaml
-sed 's/targetPort.*/&\n      nodePort: 30005/g' /etc/kubernetes/addons/kubernetes-dashboard.yaml
-cat >> /etc/kubernetes/addons/kubernetes-dashboard.yaml <<end
-  type: NodePort
-end
+curl -so /etc/kubernetes/addons/kubernetes-dashboard.yaml https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/recommended/kubernetes-dashboard.yaml
 kubectl apply -f /etc/kubernetes/addons/kubernetes-dashboard.yaml
+kubectl get svc/kubernetes-dashboard  -n kube-system  -o yaml | sed 's/ClusterIP/NodePort/g' | kubectl apply -f -
+kubectl get svc/kubernetes-dashboard  -n kube-system  -o yaml | sed 's/nodePort:.*/nodePort: 30443/g' | kubectl apply -f -
 ```
 
 查看服务运行情况
 
 ```bash
-$ kubectl get deployment kubernetes-dashboard -n kube-system
-$ kubectl --namespace kube-system get pods -o wide
-$ kubectl get services kubernetes-dashboard -n kube-system
-$ netstat -ntlp|grep 30005
+kubectl get svc -A
+netstat -ntlp|grep 30005
 ```
 
 从 1.7 开始，dashboard 只允许通过 https 访问，我们使用nodeport的方式暴露服务，可以使用 https://NodeIP:NodePort 地址访问 关于自定义证书 默认dashboard的证书是自动生成的，肯定是非安全的证书，如果大家有域名和对应的安全证书可以自己替换掉。使用安全的域名方式访问dashboard。 在dashboard-all.yaml中增加dashboard启动参数，可以指定证书文件，其中证书文件是通过secret注进来的。
@@ -627,11 +624,43 @@ kubectl create sa dashboard-admin -n kube-system
 kubectl create clusterrolebinding dashboard-admin --clusterrole=cluster-admin --serviceaccount=kube-system:dashboard-admin
 ```
 
+或者创建 admin-token.yaml :
+
+```bash
+tee <<end> /etc/kubernetes/addons/admin-token.yaml
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: adm
+  annotations:
+    rbac.authorization.kubernetes.io/autoupdateee: "true"
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+- kind: ServiceAccount
+  name: admin
+  namespace: kube-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: admin
+  namespace: kube-system
+  labels:
+    kubernetes.io/cluster-service: "true"
+    addonmanager.kubernetes.io/mode: Reconcile
+end
+
+kubectl apply -f /etc/kubernetes/addons/admin-token.yaml
+```
+
 ### 打印Dashboard的登录token
 
 ```bash
 cat >> ~/.bashrc <<end
-export KDT=$(kubectl describe secret -n kube-system `kubectl get secrets -n kube-system | grep dashboard-admin | awk '{print $1}'` | grep -E '^token' | awk '{print $2}')
+export KDT=$(kubectl describe secret -n kube-system `kubectl get secrets -n kube-system | grep admin-token | awk '{print $1}'` | grep -E '^token' | awk '{print $2}')
 alias kdt='echo $KDT'
 end
 
