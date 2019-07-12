@@ -483,7 +483,7 @@ kubectl get pods --all-namespaces
 ```bash
 mkdir -p /etc/kubernetes/addons
 curl -o /etc/kubernetes/addons/kube-flannel.yml https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
-sed -ie "s?10.240.0.0?192.168.0.0?g" /etc/kubernetes/addons/kube-flannel.yml
+sed -ie "s?10.244.0.0?192.168.0.0?g" /etc/kubernetes/addons/kube-flannel.yml
 kubectl apply -f /etc/kubernetes/addons/kube-flannel.yml
 ```
 
