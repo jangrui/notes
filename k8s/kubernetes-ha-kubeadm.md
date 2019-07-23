@@ -103,6 +103,30 @@ ssh root@w1 "modprobe br_netfilter && sysctl -p /etc/sysctl.d/kubernetes.conf"
 ssh root@w2 "modprobe br_netfilter && sysctl -p /etc/sysctl.d/kubernetes.conf"
 ```
 
+### 开启ipvs
+
+```bash
+cat > /etc/sysconfig/modules/ipvs.modules <<EOF
+#!/bin/bash
+modprobe -- ip_vs
+modprobe -- ip_vs_rr
+modprobe -- ip_vs_wrr
+modprobe -- ip_vs_sh
+modprobe -- nf_conntrack
+EOF
+
+scp /etc/sysconfig/modules/ipvs.modules root@m2:/etc/sysconfig/modules
+scp /etc/sysconfig/modules/ipvs.modules root@m3:/etc/sysconfig/modules
+scp /etc/sysconfig/modules/ipvs.modules root@w1:/etc/sysconfig/modules
+scp /etc/sysconfig/modules/ipvs.modules root@w2:/etc/sysconfig/modules
+
+ssh root@m1 "chmod 755 /etc/sysconfig/modules/ipvs.modules && bash /etc/sysconfig/modules/ipvs.modules && lsmod | grep -e ip_vs -e nf_conntrack"
+ssh root@m2 "chmod 755 /etc/sysconfig/modules/ipvs.modules && bash /etc/sysconfig/modules/ipvs.modules && lsmod | grep -e ip_vs -e nf_conntrack"
+ssh root@m3 "chmod 755 /etc/sysconfig/modules/ipvs.modules && bash /etc/sysconfig/modules/ipvs.modules && lsmod | grep -e ip_vs -e nf_conntrack"
+ssh root@w1 "chmod 755 /etc/sysconfig/modules/ipvs.modules && bash /etc/sysconfig/modules/ipvs.modules && lsmod | grep -e ip_vs -e nf_conntrack"
+ssh root@w2 "chmod 755 /etc/sysconfig/modules/ipvs.modules && bash /etc/sysconfig/modules/ipvs.modules && lsmod | grep -e ip_vs -e nf_conntrack"
+```
+
 ### 安装依赖
 
 ```bash
@@ -130,12 +154,15 @@ ssh root@w2 "systemctl daemon-reload && systemctl enable docker && systemctl res
 
 > docker-ce 官方 repo：https://download.docker.com/linux/centos/docker-ce.repo
 
-配置Docker的启动参数
+### 为Docker配置Cgroup
+
+根据文档 [CRI installation](https://kubernetes.io/docs/setup/cri/) 中的内容，对于使用 systemd 作为 init system 的 Linux 的发行版，使用 systemd 作为 docker 的 cgroup driver 可以确保服务器节点在资源紧张的情况更加稳定，因此这里修改各个节点上 docker 的 cgroup driver 为 systemd。
 
 ```bash
 cat > /etc/docker/daemon.json <<end
 {
-	"registry-mirrors": ["https://registry.aliyuncs.com"]
+	"registry-mirrors": ["https://registry.aliyuncs.com"],
+  "exec-opts": ["native.cgroupdriver=systemd"]
 }
 end
 
@@ -152,7 +179,7 @@ ssh root@w2 "systemctl daemon-reload && systemctl restart docker"
 ```
 
 - registry-mirrors: 设置 docker 镜像地址，可配置国内镜像加速
-- exec-opts: 设置 cgroup driver (默认是 systemd，不推荐设置 cgroupfs)
+- exec-opts: 设置 cgroup driver (默认是 cgroupfs，推荐设置 systemd)
 - graph: 设置 docker 数据目录地址
 
 ### 安装Kubernetes脚手架
@@ -453,9 +480,56 @@ ssh root@m3 "ss -lnt | grep -E '16443|8888'"
 
 ### 部署第一个Master
 
+官方推荐我们使用–config指定配置文件，并在配置文件中指定原来这些flag所配置的内容。具体内容可以查看这里 [Set Kubelet parameters via a config file](https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/)。这也是Kubernetes为了支持动态Kubelet配置（Dynamic Kubelet Configuration）才这么做的，参考 [Reconfigure a Node’s Kubelet in a Live Cluster](https://kubernetes.io/docs/tasks/administer-cluster/reconfigure-kubelet/)。
+
+使用 `kubeadm config print init-defaults` 可以打印集群初始化默认的使用的配置:
+
+```bash
+apiVersion: kubeadm.k8s.io/v1beta2
+bootstrapTokens:
+- groups:
+  - system:bootstrappers:kubeadm:default-node-token
+  token: abcdef.0123456789abcdef
+  ttl: 24h0m0s
+  usages:
+  - signing
+  - authentication
+kind: InitConfiguration
+localAPIEndpoint:
+  advertiseAddress: 1.2.3.4
+  bindPort: 6443
+nodeRegistration:
+  criSocket: /var/run/dockershim.sock
+  name: kube-master-a
+  taints:
+  - effect: NoSchedule
+    key: node-role.kubernetes.io/master
+---
+apiServer:
+  timeoutForControlPlane: 4m0s
+apiVersion: kubeadm.k8s.io/v1beta2
+certificatesDir: /etc/kubernetes/pki
+clusterName: kubernetes
+controllerManager: {}
+dns:
+  type: CoreDNS
+etcd:
+  local:
+    dataDir: /var/lib/etcd
+imageRepository: k8s.gcr.io
+kind: ClusterConfiguration
+kubernetesVersion: v1.14.0
+networking:
+  dnsDomain: cluster.local
+  serviceSubnet: 10.96.0.0/12
+scheduler: {}
+```
+
+基于默认配置定制出本次使用kubeadm初始化集群所需的配置文件kubeadm-config.yaml:
+
 ```bash
 cat > ~/kubeadm-config.yml <<end
-apiVersion: kubeadm.k8s.io/v1beta1
+apiVersion: kubeadm.k8s.io/v1beta2
 kind: ClusterConfiguration
 # 指定 kubernetes 的版本
 kubernetesVersion: v1.15.0
@@ -478,8 +552,6 @@ kubectl get pods --all-namespaces
 
 ### 部署网络插件Flannel
 
-> 网络插件挑一款安装即可，这里选择 Flannel。
-
 ```bash
 mkdir -p /etc/kubernetes/addons
 curl -o /etc/kubernetes/addons/kube-flannel.yml https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
@@ -488,20 +560,6 @@ kubectl apply -f /etc/kubernetes/addons/kube-flannel.yml
 ```
 
 > Flannet 默认指定 podSubnet 为 10.244.0.0/16 网段。
-
-### 部署网络插件Calico
-
-> 网络插件挑一款安装即可。
-
-```bash
-mkdir -p /etc/kubernetes/addons
-curl -o /etc/kubernetes/addons/calico-policy-only.yaml https://docs.projectcalico.org/v3.8/manifests/calico-policy-only.yaml
-curl -o /etc/kubernetes/addons/calico-rbac-kdd.yaml https://docs.projectcalico.org/v3.8/manifests/rbac/rbac-kdd-calico.yaml
-kubectl apply -f /etc/kubernetes/addons/calico-policy-only.yaml
-kubectl apply -f /etc/kubernetes/addons/calico-rbac-kdd.yaml
-```
-
-> Calico 默认指定 podSubnet 为 192.168.0.0/16 网段。
 
 ### 加入其它Master节点
 
