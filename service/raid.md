@@ -1,4 +1,4 @@
-# RAID 磁盘冗余列阵
+# RAID 磁盘冗余阵列
 
 ## 什么是 RAID
 
@@ -440,4 +440,13 @@ Consistency Policy : resync
 
        4       8       80        -      spare   /dev/sdf
 [root@localhost ~]#
+```
+
+## 解散阵列
+
+```bash
+[root@localhost ~]# mdadm -S /dev/md10
+mdadm: stopped /dev/md10
+[root@localhost ~]# ls -al /dev/md10
+ls: 无法访问/dev/md10: 没有那个文件或目录
 ```
