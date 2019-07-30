@@ -12,25 +12,48 @@
   - [shell 变量替换](shell/shell变量替换)
   - [字符串处理](shell/字符串处理)
 
+- Service
+  - [RAID](service/raid)
+  - [LVM](service/lvm)
+  - [FTP](service/ftp)
+  - [NFS](service/nfs)
+  - [SSH](service/ssh)
+  - [SSHFS](service/sshfs)
+  - [OXFS](service/oxfs)
+  - [Samba](service/samba)
+  - [Bind](service/bind)
+  - [DHCP](service/dhcp)
+  - [Postfix](service/postfix)
+  - [Squid](service/squid)
+  - [ISCSI](service/iscsi)
+  - [PXE](service/pxe)
+  - [LDAP](service/ldap)
+  - [Rsync](service/rsync)
+
+- Nginx
+  - [模块](/nginx/模块)
+  - [基本配置与参数说明](nginx/基本配置与参数说明)
+  - [负载均衡](nginx/负载均衡)
+  <!-- - [Nginx中间件架构](/nginx/Nginx中间件架构) -->
+
+- Mysql
+- Oracle
+- Mangodb
+
+- Jenkins
+  - [安装](jenkins/install)
+  - [pipline](jenkins/pipline)
+
+- Ansible
+  - [安装](ansible/install)
+  - [模块](ansible/module)
+
+- Zabbix
+
 - Docker
   - [docker 安装及加速](docker/docker安装及加速)
   - [docker 的常用指令](docker/docker的常用指令)
   - [Dockerfile](docker/dockerfile)
-    - [FROM](docker/dockerfile?id=FROM)
-    - [RUN](docker/dockerfile?id=RUN)
-    - [COPY](docker/dockerfile?id=COPY)
-    - [ADD](docker/dockerfile?id=ADD)
-    - [CMD](docker/dockerfile?id=CMD)
-    - [ENTRYPOINT](docker/dockerfile?id=ENTRYPOINT)
-    - [ENV](docker/dockerfile?id=ENV)
-    - [ARG](docker/dockerfile?id=ARG)
-    - [VOLUME](docker/dockerfile?id=VOLUME)
-    - [EXPOSE](docker/dockerfile?id=EXPOSE)
-    - [WORKDIR](docker/dockerfile?id=WORKDIR)
-    - [USER](docker/dockerfile?id=USER)
-    - [HEALTHCHECK](docker/dockerfile?id=HEALTHCHECK)
-    - [ONBUILD](docker/dockerfile?id=ONBUILD)
-    - [参考文献](docker/dockerfile?id=references)
   - [Docker 下实现 PXC 集群负载均衡](docker/Docker下实现PXC集群负载均衡)
   - [Docker 下利用 Keepalived 实现双机热备](docker/Docker下利用Keepalived实现双机热备)
   - [Docker 下利用 XtraBackup 进行数据库备份还原](docker/Docker下利用XtraBackup进行数据库备份还原)
@@ -41,24 +64,6 @@
   - [k8s 安装](k8s/install)
   - [Kubernetes 高可用集群部署](k8s/kubernetes-ha-kubeadm)
   - [Master 节点也做 Worker 节点](k8s/master-worker)
-
-- Ansible
-  - [ansible 安装](ansible/install)
-  - [file 模块](ansible/module?id=file)
-  - [copy 模块](ansible/module?id=copy)
-  - [stat 模块](ansible/module?id=stat)
-  - [debug 模块](ansible/module?id=debug)
-  - [command 模块](ansible/module?id=command)
-  - [shell 模块](ansible/module?id=shell)
-  - [template 模块](ansible/module?id=template)
-  - [pakaging 模块](ansible/module?id=pakaging)
-  - [service 模块](ansible/module?id=service)
-  - [systemd 模块](ansible/module?id=systemd)
-  - [yum_repository 模块](ansible/module?id=yum_repository)
-
-- Jenkins
-  - [安装](jenkins/install)
-  - [pipline](jenkins/pipline)
 
 - Git
   - [git 常用命令](git/git常用命令)
@@ -72,11 +77,12 @@
   - [格式化输出](python/格式化输出字符串)
   - [pipenv](python/pipenv)
   - [python 基础](python/basic)
-    - [格式化字符串](python/basic?id=格式化)
-    - [list](python/basic?id=list)
-    - [tuple](python/basic?id=tuple)
-    - [dict](python/basic?id=dict)
-    - [set](python/basic?id=set)
+
+- Tools
+  - [vim](tools/vim)
+  - [zsh](tools/zsh)
+  - [pam](tools/pam)
+  - [brew 国内源](tools/brew)
 
 - RHCE
   - [RHCSA](rhce/rhcsa)
@@ -84,15 +90,3 @@
 
 - WordPress
   - [REST-API](wordpress/REST-API)
-
-- Nginx
-  - [模块](/nginx/模块)
-  - [基本配置与参数说明](nginx/基本配置与参数说明)
-  - [负载均衡](nginx/负载均衡)
-  <!-- - [Nginx中间件架构](/nginx/Nginx中间件架构) -->
-
-- Tools
-  - [vim](tools/vim)
-  - [zsh](tools/zsh)
-  - [pam](tools/pam)
-  - [brew 国内源](tools/brew)
