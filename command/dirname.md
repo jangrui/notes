@@ -13,10 +13,10 @@ dirname [文件或目录]
 ```bash
 [root@localhost log]# pwd
 /root/data/log
-[root@localhost log]# dirname log/access_www_2019-01-01.log 
+[root@localhost log]# dirname log/access_www_2019-01-01.log
 log
-[root@localhost log]# dirname access_www_2019-01-01.log 
+[root@localhost log]# dirname access_www_2019-01-01.log
 .
-[root@localhost log]# dirname /etc/cron.d/atop 
+[root@localhost log]# dirname /etc/cron.d/atop
 /etc/cron.d
 ```

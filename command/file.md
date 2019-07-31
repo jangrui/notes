@@ -15,7 +15,7 @@ file [选项] [文件或目录]
 ## 实例
 
 ```bash
-[root@localhost data]# file -b 1txt 
+[root@localhost data]# file -b 1txt
 ASCII text
 [root@localhost data]# file *
 123:   directory

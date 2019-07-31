@@ -22,7 +22,7 @@ access_www_2019-01-03.log  access_www_2019-01-09.log  access_www_2019-01-15.log
 access_www_2019-01-04.log  access_www_2019-01-10.log  test_log.sh
 access_www_2019-01-05.log  access_www_2019-01-11.log
 access_www_2019-01-06.log  access_www_2019-01-12.log
-[root@localhost data]# basename log/access_www_2019-01-01.log 
+[root@localhost data]# basename log/access_www_2019-01-01.log
 access_www_2019-01-01.log
 [root@localhost data]# basename log/access_www_2019-01-01.log .log
 access_www_2019-01-01

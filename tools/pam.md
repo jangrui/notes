@@ -5,17 +5,17 @@
 ```bash
 [root@localhost ~]# cat /etc/pam.d/su
 #%PAM-1.0
-auth		sufficient	pam_rootok.so
+auth        sufficient    pam_rootok.so
 # Uncomment the following line to implicitly trust users in the "wheel" group.
-#auth		sufficient	pam_wheel.so trust use_uid
+#auth        sufficient    pam_wheel.so trust use_uid
 # Uncomment the following line to require a user to be in the "wheel" group.
-auth		required	pam_wheel.so use_uid
+auth        required    pam_wheel.so use_uid
 ...
 ```
 
 找到上面两行，去掉行首的“#”
 
-修改只允许 wheel 组切换 root 
+修改只允许 wheel 组切换 root
 
 ```bash
 echo "SU_WHEEL_ONLY yes" >> /etc/login.defs
@@ -50,7 +50,7 @@ su: 拒绝权限
 上一次登录：二 3月 19 16:52:10 CST 2019pts/0 上
 最后一次失败的登录：二 3月 19 16:54:03 CST 2019pts/0 上
 最有一次成功登录后有 1 次失败的登录尝试。
-[root@localhost ~]# 
+[root@localhost ~]#
 ```
 
 ## sudo 无需密码验证

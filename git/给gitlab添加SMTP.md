@@ -34,13 +34,13 @@ gitlab_rails['gitlab_email_from'] = 'gitlab@xxx.com'
 gitlab-ctl reconfigure
 ```
 
-3. 通过命令行测试邮件是否发送成功（也可以不测）
+- 通过命令行测试邮件是否发送成功（也可以不测）
 
 ```bash
 gitlab-rails console
 irb(main):003:0> Notify.test_email('xxx@qq.com', 'Message Subject', 'Message Body').deliver_now
 ```
 
-来自: 
+来自:
 
 [配置gitlab通过smtp发送邮件](https://www.centos.bz/2017/08/gitlab-send-email-with-smtp/)

@@ -16,15 +16,13 @@ dumpe2fs [ -bfhixV ] [ -o superblock=superblock ] [ -o blocksize=blocksize ] dev
 
 ## dumpe2fs常用命令选项　　
 
-|选项	|描述
-|-|-|
--b	|打印文件系统中的坏块
--o	|不常用，检查严重损坏文件系统时指定
--f	|强制显示所有信息，即便dumpe2fs对有些文件系统功能标识不能识别。
--i	|显示image文件系统信息。device指定image文件的路径
--h	|只显示超级块信息
--x	|将已分组的块的数量用十六进制显示
--v	|显示dumpe2fs的版本号并推出
+- -b 打印文件系统中的坏块
+- -o 不常用，检查严重损坏文件系统时指定
+- -f 强制显示所有信息，即便dumpe2fs对有些文件系统功能标识不能识别。
+- -i 显示image文件系统信息。device指定image文件的路径
+- -h 只显示超级块信息
+- -x 将已分组的块的数量用十六进制显示
+- -v 显示dumpe2fs的版本号并推出
 
 ## dumpe2fs命令实例
 

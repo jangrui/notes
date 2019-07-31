@@ -45,8 +45,8 @@ ln [-bdfinsvF] [-S backup-suffix] [-V {numbered,existing,simple}][--help][--vers
 
 ### 选择参数
 
-- `-S` `-S<字尾备份字符串>` 或 `--suffix=<字尾备份字符串>`
-- `-V` `-V<备份方式>` 或 `--version-control=<备份方式>` 
+- `-S` `-S <字尾备份字符串>` 或 `--suffix=<字尾备份字符串>`
+- `-V` `-V <备份方式>` 或 `--version-control=<备份方式>`
 - `--help` 显示帮助信息
 - `--version` 显示版本信息
 
@@ -88,5 +88,4 @@ ln log2019.log ln2019
 总用量 0
 -rw-r--r-- 2 root root 0 2月  22 23:15 ln2019
 -rw-r--r-- 2 root root 0 2月  22 23:15 log2019.log
-
 ```

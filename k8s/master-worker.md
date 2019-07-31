@@ -4,7 +4,7 @@
 
 也就是说, 只有一台主机的情况下, 我们无法启动pod, 但有的时候我们的确只有一台机器, 这个时候可以执行命令, 使Master Node参与工作负载。
 
-1. 允许 master 节点调度 pod
+1、 允许 master 节点调度 pod
 
 ```bash
 kubectl taint nodes --all node-role.kubernetes.io/master-
@@ -19,7 +19,7 @@ node/m3 untainted
 error: taint "node-role.kubernetes.io/master:" not found
 ```
 
-2. 禁止 master 节点调度 pod
+2、 禁止 master 节点调度 pod
 
 ```bash
 kebectl taint nodes m1 node-role.kubernetes.io/master=true:NoSchedule

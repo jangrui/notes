@@ -29,6 +29,7 @@ mv aaa bbb
 ```bash
 mv info logs
 ```
+
 将/usr/student下的所有文件和目录移动到当前目录下
 
 ```bash

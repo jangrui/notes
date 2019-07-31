@@ -6,24 +6,24 @@
 
 ```bash
 ok: [192.168.101.110] => (item=demoStop.results) => {
-    "item": "demoStop.results", 
+    "item": "demoStop.results",
     "var": {
         "demoStop": {
-            "changed": true, 
-            "cmd": "/data/server/eric/demo.sh stop", 
-            "delta": "0:00:10.062006", 
-            "end": "2015-10-13 16:40:13.367927", 
+            "changed": true,
+            "cmd": "/data/server/eric/demo.sh stop",
+            "delta": "0:00:10.062006",
+            "end": "2015-10-13 16:40:13.367927",
             "invocation": {
-                "module_args": "/data/server/eric/demo.sh stop", 
+                "module_args": "/data/server/eric/demo.sh stop",
                 "module_name": "shell"
-            }, 
-            "rc": 0, 
-            "start": "2015-10-13 16:40:03.305921", 
-            "stderr": "", 
-            "stdout": "stop finished", 
+            },
+            "rc": 0,
+            "start": "2015-10-13 16:40:03.305921",
+            "stderr": "",
+            "stdout": "stop finished",
             "stdout_lines": [
                 "stop finished"
-            ], 
+            ],
             "warnings": []
         }
     }
@@ -53,7 +53,7 @@ ok: [192.168.101.110] => (item=demoStop.results) => {
 
 ```bash
 ok: [192.168.101.110] => (item=demoStop.results) => {
-    "item": "demoStop.results", 
+    "item": "demoStop.results",
     "var": {
         "demoStop.stdout": "stop finished"
     }

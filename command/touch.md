@@ -31,7 +31,7 @@ touch [-acfm][-d<日期时间>][-r<参考文件或目录>] [-t<日期时间>][--
 
 ```bash
 ls -l testfile
--rw-r--r-- 1 hdd hdd 55 2019-02-22 16:09 testfile 
+-rw-r--r-- 1 hdd hdd 55 2019-02-22 16:09 testfile
 ```
 
 修改文件属性后，再次查看文件的时间属性
@@ -39,7 +39,7 @@ ls -l testfile
 ```bash
 touch testfile
 ls -l testfile
--rw-r--r-- 1 hdd hdd 55 2011-08-22 16:12 testfile 
+-rw-r--r-- 1 hdd hdd 55 2011-08-22 16:12 testfile
 ```
 
 如果指定的文件不存在，则创建一个新的空白文件。 例如，在当前目录下创建哪一个空白文件file

@@ -7,7 +7,7 @@ docker images
 docker save docker.io/java > /root/java.tar.gz
 docker rmi docker.io/java
 docker ps -a # 查看容器运行状态
-docker build -t myimage:tag . 
+docker build -t myimage:tag .
 ```
 
 容器生命周期管理
@@ -23,7 +23,6 @@ docker [ps|inspect|top|attach|events|logs|wait|export|port]
 ```
 
 容器rootfs命令
-
 
 ```bash
 docker [commit|cp|diff]
@@ -63,7 +62,7 @@ docker run -it --name myjava docker.io/java
 - -p 9001:8080
 
 > 9000:宿主机9000端口
-
+>
 > 8085:docker 虚拟主机8085端口
 
 把 docker 虚拟主机的8085端口映射到宿主机的9000端口上
@@ -99,7 +98,7 @@ docker swarm init
 ```
 
 > --listen-addr ip:port # 管理者节点
-> 
+>
 > -advertise-addr ip # 广播地址
 
 ```bash
@@ -110,7 +109,7 @@ docker swarm join-token manager
 docker swarm join-token worker
 
 # 节点查看
-doker node ls 
+doker node ls
 
 # 创建集群共享网络
 docker network create -d overlay --attachable swarm-net1
@@ -133,11 +132,10 @@ docker node rm node_id
 ```
 
 > docker node ls 只可以在manager 节点查看
-
+>
 > ingress网络用于管理swarm集群,容器与容器之间通讯还需要创建新的共享网络
-
+>
 > manager 节点需要先降级
-
 
 ## Portainer web 管理Docker
 
@@ -154,5 +152,5 @@ OPTIONS='-Htcp://0.0.0.0:2375 -H unix:///var/run/docker.sock'
 ```bash
 docker run -d -p 9000:9000 --name docker-web -v /var/run/docker.sock:/var/run/docker.sock --privileged --restart=always portainer/portainer:latest
 ```
- 
+
 > --restart=always # 检查容器状态,如果容器停止则启动容器

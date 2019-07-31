@@ -26,26 +26,26 @@ mode
 
 ## 实例
 
-1. 设置只能往文件里追加内容，但不能删除文件
+- 设置只能往文件里追加内容，但不能删除文件
 
 ```bash
-[root@localhost log]# lsattr test_log.sh 
+[root@localhost log]# lsattr test_log.sh
 -------------e-- test_log.sh
-[root@localhost log]# chattr +a test_log.sh 
-[root@localhost log]# lsattr test_log.sh 
+[root@localhost log]# chattr +a test_log.sh
+[root@localhost log]# lsattr test_log.sh
 -----a-------e-- test_log.sh
-[root@localhost log]# rm -rf test_log.sh 
+[root@localhost log]# rm -rf test_log.sh
 rm: 无法删除"test_log.sh": 不允许的操作
-[root@localhost log]# echo hello >> test_log.sh 
-[root@localhost log]# echo word > test_log.sh 
+[root@localhost log]# echo hello >> test_log.sh
+[root@localhost log]# echo word > test_log.sh
 -bash: test_log.sh: 不允许的操作
 ```
 
-2. 给文件加锁，使其只读
+- 给文件加锁，使其只读
 
 ```bash
-[root@localhost data]# chattr +i 1txt 
-[root@localhost data]# lsattr 1txt 
+[root@localhost data]# chattr +i 1txt
+[root@localhost data]# lsattr 1txt
 ----i--------e-- 1txt
 [root@localhost data]# rm 1txt
 rm：是否删除普通文件 "1txt"？y
@@ -54,6 +54,6 @@ rm: 无法删除"1txt": 不允许的操作
 -bash: 1txt: 权限不够
 [root@localhost data]# echo hello >> 1txt
 -bash: 1txt: 权限不够
-[root@localhost data]# cat 1txt 
+[root@localhost data]# cat 1txt
 wordwordxwordttttt
 ```

@@ -7,6 +7,7 @@
 ```bash
 yum install -y ansible
 ```
+
 - Ubuntu
   
 ```bash

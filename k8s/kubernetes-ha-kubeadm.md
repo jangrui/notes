@@ -6,19 +6,18 @@
 
 五台 CentOS 虚拟机:
 
-|IP				      |节点	  |CPU    |Memory   |Hostname	|
-|-				      |-		  |-	    |-		    |-			  |
-|192.168.11.141 |master |>=2    |>=2G	    |m1		    |
-|192.168.11.142 |master |>=2    |>=2G	    |m2		    |
-|192.168.11.143 |master |>=2    |>=2G	    |m3		    |
-|192.168.11.151 |worker |>=2    |>=2G	    |w1		    |
-|192.168.11.152 |worker |>=2    |>=2G	    |w2		    |
+|IP             |节点    |CPU    |Memory   |Hostname |
+|-              |-      |-      |-        |-        |
+|192.168.11.141 |master |>=2    |>=2G     |m1       |
+|192.168.11.142 |master |>=2    |>=2G     |m2       |
+|192.168.11.143 |master |>=2    |>=2G     |m3       |
+|192.168.11.151 |worker |>=2    |>=2G     |w1       |
+|192.168.11.152 |worker |>=2    |>=2G     |w2       |
 
 - keepalived 提供 kube-apiserver 对外服务的 VIP;
 - haproxy 监听 VIP，后端连接所有 kube-apiserver 实例，提供健康检查和负载均衡功能；
 - 由于 keepalived 是一主多备运行模式，故至少两个节点安装 keepalived 和 haporxy。
 - 注意：如果是云服务器（需要申请虚拟IP并绑定到服务器上，公有云不支持 keepalived 虚拟VIP）
-
 
 ### 主机名
 
@@ -152,7 +151,7 @@ ssh root@w1 "systemctl daemon-reload && systemctl enable docker && systemctl res
 ssh root@w2 "systemctl daemon-reload && systemctl enable docker && systemctl restart docker"
 ```
 
-> docker-ce 官方 repo：https://download.docker.com/linux/centos/docker-ce.repo
+> docker-ce 官方 repo：<https://download.docker.com/linux/centos/docker-ce.repo>
 
 ### 为Docker配置Cgroup
 
@@ -161,7 +160,7 @@ ssh root@w2 "systemctl daemon-reload && systemctl enable docker && systemctl res
 ```bash
 cat > /etc/docker/daemon.json <<end
 {
-	"registry-mirrors": ["https://registry.aliyuncs.com"],
+  "registry-mirrors": ["https://registry.aliyuncs.com"],
   "exec-opts": ["native.cgroupdriver=systemd"]
 }
 end
@@ -214,21 +213,22 @@ ssh root@w1 "yum makecache fast && yum install -y kubectl kubeadm kubelet && sys
 ssh root@w2 "yum makecache fast && yum install -y kubectl kubeadm kubelet && systemctl daemon-reload && systemctl enable kubelet && systemctl restart kubelet"
 ```
 
-> google 官方：https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
-
+> google 官方：<https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64>
+>
 > ### 配置kubelet
-> 
+>
 > kubelet 的 cgroupdriver 默认为 systemd，如果上面没有设置 docker 的 exec-opts 为 systemd，这里就需要将 kubelet 的设置为 cgroupfs。
-> 
+>
 > 由于各自的系统配置不同，配置位置和内容都不相同
-> 
-> 1. /etc/systemd/system/kubelet.service.d/10-kubeadm.conf(如果此配置存在的情况执行下面命令：)
-> 
+>
+> 1、 /etc/systemd/system/kubelet.service.d/10-kubeadm.conf(如果此配置存在的情况执行下面命令：)
+>
 > ```bash
 > sed -i "s/cgroup-driver=systemd/cgroup-driver=cgroupfs/g" /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
 > systemctl enable kubelet && systemctl start kubelet
 > ```
-> 2. /usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf(如果 1 中的配置不存在，则此配置应该存在，不需要做任何操)
+>
+> 2、 /usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf(如果 1 中的配置不存在，则此配置应该存在，不需要做任何操)
 
 ## 部署高可用集群
 
@@ -240,7 +240,7 @@ ssh root@w2 "yum makecache fast && yum install -y kubectl kubeadm kubelet && sys
 ssh root@m1 "yum install -y keepalived && systemctl daemon-reload && systemctl enable keepalived && systemctl start keepalived"
 ssh root@m2 "yum install -y keepalived && systemctl daemon-reload && systemctl enable keepalived && systemctl start keepalived"
 ssh root@m3 "yum install -y keepalived && systemctl daemon-reload && systemctl enable keepalived && systemctl start keepalived"
-``` 
+```
 
 修改 keepalived 配置文件：
 
@@ -563,9 +563,9 @@ kubectl apply -f /etc/kubernetes/addons/kube-flannel.yml
 
 ### 加入其它Master节点
 
-1. 查看初始化日志。上一步初始化时指定了输出日志，里面有 master 和 worker 节点的 token 信息，默认有效期为 24h。 
+1、 查看初始化日志。上一步初始化时指定了输出日志，里面有 master 和 worker 节点的 token 信息，默认有效期为 24h。
 
-2. 初始化默认生成的 token 有效期为 24h，如果 token 还未过期且又没有保留初始化日志，可以利用还未过期的 token 添加节点。
+2、 初始化默认生成的 token 有效期为 24h，如果 token 还未过期且又没有保留初始化日志，可以利用还未过期的 token 添加节点。
 
 查看 token 命令：
 
@@ -591,7 +591,7 @@ ssh root@m3 "kubeadm join --token iasnf5.zlav24b7q28ekoxy --discovery-token-unsa
 - --discovery-token-unsafe-skip-ca-verification: 忽略 ca 校验
 - --experimental-control-plane: 添加 master 节点
 
-3. 重新生成 token
+3、 重新生成 token
 
 ```bash
 kubeadm token create --print-join-command --ttl=24h
@@ -600,7 +600,7 @@ kubeadm token create --print-join-command --ttl=24h
 生成的 token：
 
 ```bash
-kubeadm join 192.168.11.188:6443 --token iasnf5.zlav24b7q28ekoxy     --discovery-token-ca-cert-hash sha256:cb503a6e95702a8ba9ebc35861301126cd03da3d8666d21bebf640cc661545eb 
+kubeadm join 192.168.11.188:6443 --token iasnf5.zlav24b7q28ekoxy     --discovery-token-ca-cert-hash sha256:cb503a6e95702a8ba9ebc35861301126cd03da3d8666d21bebf640cc661545eb
 ```
 
 - --ttl=24: 表示这个 token 的有效期为 24 小时，初始化默认生成的 token 有效期也是 24 小时
@@ -626,22 +626,22 @@ kubectl get nodes
 ```
 
 > ### 移除node节点
-> 
+>
 > 查看所有节点：
-> 
+>
 > ```bash
 > kubectl get nodes
 > ```
-> 
+>
 > 移除指定节点：
-> 
+>
 > ```bash
 > kubectl drain w2 --delete-local-data --force --ignore-daemonsets
 > kubectl delete node w2
 > ```
-> 
+>
 > 在 w2 节点执行：
-> 
+>
 > ```bash
 > kubeadm reset
 > ```
@@ -662,7 +662,7 @@ kubectl get svc -A
 netstat -ntlp|grep 30005
 ```
 
-从 1.7 开始，dashboard 只允许通过 https 访问，我们使用nodeport的方式暴露服务，可以使用 https://NodeIP:NodePort 地址访问 关于自定义证书 默认dashboard的证书是自动生成的，肯定是非安全的证书，如果大家有域名和对应的安全证书可以自己替换掉。使用安全的域名方式访问dashboard。 在dashboard-all.yaml中增加dashboard启动参数，可以指定证书文件，其中证书文件是通过secret注进来的。
+从 1.7 开始，dashboard 只允许通过 https 访问，我们使用nodeport的方式暴露服务，可以使用 <https://NodeIP:NodePort> 地址访问 关于自定义证书 默认dashboard的证书是自动生成的，肯定是非安全的证书，如果大家有域名和对应的安全证书可以自己替换掉。使用安全的域名方式访问dashboard。 在dashboard-all.yaml中增加dashboard启动参数，可以指定证书文件，其中证书文件是通过secret注进来的。
 
 - –tls-cert-file
 - dashboard.cer

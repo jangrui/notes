@@ -30,7 +30,7 @@ cat >> /etc/hosts <<end
 end
 ```
 
-### 关闭并清理防火墙：
+### 关闭并清理防火墙
 
 ```bash
 systemctl stop firewalld && systemctl disable firewalld
@@ -87,7 +87,7 @@ systemctl enable docker
 systemctl restart docker
 ```
 
-### 配置docker启动参数：
+### 配置docker启动参数
 
 ```bash
 tee /etc/docker/daemon.json <<end
@@ -99,6 +99,7 @@ tee /etc/docker/daemon.json <<end
 end
 systemctl daemon-reload && systemctl restart docker
 ```
+
 - registry-mirrors: 设置国内镜像加速
 - graph: 设置docker数据目录：选择比较大的分区（我这里是根目录就不需要配置了，默认为/var/lib/docker）
 - exec-opts: 设置cgroup driver（默认是cgroupfs，不推荐设置systemd）
@@ -129,14 +130,14 @@ kubelet的cgroupdriver默认为systemd，如果上面没有设置docker的exec-o
 
 由于各自的系统配置不同，配置位置和内容都不相同
 
-1. /etc/systemd/system/kubelet.service.d/10-kubeadm.conf(如果此配置存在的情况执行下面命令：)
+- /etc/systemd/system/kubelet.service.d/10-kubeadm.conf(如果此配置存在的情况执行下面命令：)
 
 ```bash
 sed -i "s/cgroup-driver=systemd/cgroup-driver=cgroupfs/g" /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
 systemctl enable kubelet && systemctl start kubelet
 ```
 
-2. 如果1中的配置不存在，则此配置应该存在(不需要做任何操)：/usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf
+- 如果1中的配置不存在，则此配置应该存在(不需要做任何操)：/usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf
 
 ## 所需镜像
 
@@ -221,9 +222,9 @@ kubeadm init
 # 或者
 
 kubeadm init \
-	--pod-network-cidr=10.244.0.0/16 \
-	--apiserver-advertise-address=172.17.58.201 \
-	--kubernetes-version=v1.15.0
+  --pod-network-cidr=10.244.0.0/16 \
+  --apiserver-advertise-address=172.17.58.201 \
+  --kubernetes-version=v1.15.0
 ```
 
 - –pod-network-cidr：后续安装 flannel 的前提条件，且值为 10.244.0.0/16
@@ -344,20 +345,20 @@ lab-backend3   Ready     <none>    14s       v1.11.2
 
 ```bash
 # 启动一个 Kubernetes 主节点
-kubeadm init 
+kubeadm init
 
 # 启动一个 Kubernetes 工作节点并且将其加入到集群
-kubeadm join 
+kubeadm join
 
 # 更新一个 Kubernetes 集群到新版本
-kubeadm upgrade 
+kubeadm upgrade
 
 # 如果使用 v1.7.x 或者更低版本的 kubeadm 初始化集群，您需要对集群做一些配置以便使用 kubeadm upgrade 命令
-kubeadm config 
+kubeadm config
 
 # 管理 kubeadm join 使用的令牌
-kubeadm token 
+kubeadm token
 
 # 还原 kubeadm init 或者 kubeadm join 对主机所做的任何更改
-kubeadm reset 
+kubeadm reset
 ```

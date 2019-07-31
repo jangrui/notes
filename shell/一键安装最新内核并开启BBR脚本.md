@@ -67,8 +67,8 @@ vi /etc/security/limits.conf
 
 添加这两行
 
-* soft nofile 51200
-* hard nofile 51200
+- soft nofile 51200
+- hard nofile 51200
 
 然后，在启动shadowsocks服务器之前，先设置ulimit
 
@@ -136,8 +136,8 @@ yum --enablerepo=elrepo-kernel -y install kernel-ml-headers
 ```
 
 > 如果是 CentOS 6 :
-> 
-> rpm -Uvh https://www.elrepo.org/elrepo-release-6-8.el6.elrepo.noarch.rpm
+>
+> rpm -Uvh <https://www.elrepo.org/elrepo-release-6-8.el6.elrepo.noarch.rpm>
 
 根据 CentOS 版本的不同，此时一般会出现类似于以下的错误提示：
 

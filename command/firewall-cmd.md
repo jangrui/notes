@@ -2,47 +2,47 @@
 
 ## 全部参数
 
-|参数	|作用|
+|参数    |作用|
 |-|-|
 |--add-forward-port=                      |指定端口接收到的请求转发到另一指定端口
-|--add-icmp-block=                      	|按icmp类型 设置阻塞
-|--add-interface=<网卡名称>					        |将源自该网卡的所有流量都导向某个指定区域
-|--add-lockdown-whitelist-command=      	|添加一个具体的command
-|--add-lockdown-whitelist-context=      	|添加一个具体的selinux contenxt
-|--add-lockdown-whitelist-uid=          	|添加一个具体指定的用户开放配置权限
-|--add-lockdown-whitelist-user=         	|添加一个具体指定的用户开放配置权限
-|--add-masquerade                       	|设置 ip地址伪装
-|--add-port=<端口号/协议>					         	|设置默认区域允许该端口的流量
-|--add-rich-rule                        	|设置富规则(自定义规则)
-|--add-service=<服务名>					         	|设置默认区域允许该服务的流量
-|--add-source=								            |将源自此IP或子网的流量导向指定的区域
-|--change-interface=<网卡名称>			       	|将某个网卡与区域进行关联
-|--change-source=                       	|改变source地址所绑定的zone，如果原来没有绑定则进行绑定，这样就跟--add-source的作用一样了
-|--change-zone=                         	|改变临时区域
-|--complete-reload                      	|完全刷新永久配置（终端修改后不符合的操作将会中断）
-|--direct                               	|firewall直接接口
-|--get-active-zones							          |显示当前正在使用的区域与网卡名称
-|--get-default-zone							          |查询默认的区域名称
-|--get-icmptypes                        	|查询 icmp 类型
-|--get-services								            |显示预先定义的服务
-|--get-zone-of-interface=网卡名 			     	|查询网卡所在区域|	
-|--get-zones								              |显示可用的区域
-|--help                                 	|帮助
-|--list-all									              |显示当前区域的网卡配置参数、资源、端口以及服务等信息
-|--list-all-zones							            |显示所有区域的网卡配置参数、资源、端口以及服务等信息
-|--list-forward-ports                   	|列出当前区域的端口转发信息
-|--list-icmp-blocks                     	|列出当前区域 icmp 阻塞信息
-|--list-interfaces                      	|列出网卡接口
-|--list-lockdown-whitelist-commands     	|列出所有白名单中配置了的command
-|--list-lockdown-whitelist-contexts     	|列出所有白名单中配置了的selinux contenxt
-|--list-lockdown-whitelist-uids         	|列出一个具体指定的用户开放配置权限
-|--list-lockdown-whitelist-users        	|列出一个具体指定的用户开放配置权限
-|--list-ports                           	|列出默认区域端口配置信息
-|--list-rich-rules                      	|显示当前区域的富规则配置情况
-|--list-services                        	|显示当前区域可用的服务
-|--list-sources    						           	|列出指定区域的所有绑定的source地址
-|--lockdown-on 						              	|开启白名单
-|--lockdown-off 					              	|关闭白名单
+|--add-icmp-block=                          |按icmp类型 设置阻塞
+|--add-interface=<网卡名称>                  |将源自该网卡的所有流量都导向某个指定区域
+|--add-lockdown-whitelist-command=          |添加一个具体的command
+|--add-lockdown-whitelist-context=          |添加一个具体的selinux contenxt
+|--add-lockdown-whitelist-uid=              |添加一个具体指定的用户开放配置权限
+|--add-lockdown-whitelist-user=             |添加一个具体指定的用户开放配置权限
+|--add-masquerade                           |设置 ip地址伪装
+|--add-port=<端口号/协议>                     |设置默认区域允许该端口的流量
+|--add-rich-rule                            |设置富规则(自定义规则)
+|--add-service=<服务名>                      |设置默认区域允许该服务的流量
+|--add-source=                              |将源自此IP或子网的流量导向指定的区域
+|--change-interface=<网卡名称>               |将某个网卡与区域进行关联
+|--change-source=                           |改变source地址所绑定的zone，如果原来没有绑定则进行绑定，这样就跟--add-source的作用一样了
+|--change-zone=                             |改变临时区域
+|--complete-reload                          |完全刷新永久配置（终端修改后不符合的操作将会中断）
+|--direct                                   |firewall直接接口
+|--get-active-zones                         |显示当前正在使用的区域与网卡名称
+|--get-default-zone                         |查询默认的区域名称
+|--get-icmptypes                            |查询 icmp 类型
+|--get-services                             |显示预先定义的服务
+|--get-zone-of-interface=网卡名              |查询网卡所在区域|
+|--get-zones                                |显示可用的区域
+|--help                                     |帮助
+|--list-all                                 |显示当前区域的网卡配置参数、资源、端口以及服务等信息
+|--list-all-zones                           |显示所有区域的网卡配置参数、资源、端口以及服务等信息
+|--list-forward-ports                       |列出当前区域的端口转发信息
+|--list-icmp-blocks                         |列出当前区域 icmp 阻塞信息
+|--list-interfaces                          |列出网卡接口
+|--list-lockdown-whitelist-commands         |列出所有白名单中配置了的command
+|--list-lockdown-whitelist-contexts         |列出所有白名单中配置了的selinux contenxt
+|--list-lockdown-whitelist-uids             |列出一个具体指定的用户开放配置权限
+|--list-lockdown-whitelist-users            |列出一个具体指定的用户开放配置权限
+|--list-ports                               |列出默认区域端口配置信息
+|--list-rich-rules                          |显示当前区域的富规则配置情况
+|--list-services                            |显示当前区域可用的服务
+|--list-sources                                 |列出指定区域的所有绑定的source地址
+|--lockdown-on 						        |开启白名单
+|--lockdown-off                             |关闭白名单
 |--panic-off 								              |关闭应急状况模式
 |--panic-on 								              |开启应急状况模式
 |--permanent 								              |全局设置(重启后生效)
@@ -98,14 +98,14 @@ firewalld中常见的区域名称（默认为public）以及相应的策略规�
 
 |模块|功能|查询|添加|删除|
 |-|-|-|-|-|
-|-forward-port= |端口转发			  |--list-forward-port= 	|--add-forward-port= 	|--remove-forward-port= |
-|-icmp-block= 	|icmp报文阻塞		|--list-icmp-block= 	  |--add-icmp-block= 		|--remove-icmp-block= 	|
-|-interface= 	  |网卡接口			  |--list-interface= 		  |--add-interface= 		|--remove-interface= 	  |
-|-masquerade 	  |ip地址伪装		  |--list-masquerade  	  |--add-masquerade		  |--remove-masquerade	  |
-|-port= 		    |端口 			    |--list-port= 			    |--add-port= 			    |--remove-port= 		    |
-|-rich-rule 	  |自定义规则		  |--list-rich-rule 		  |--add-rich-rule 		  |--remove-rich-rule 	  |
-|-service= 		  |服务			    |--list-service= 	     	|--add-service= 		  |--remove-service= 		  |
-|-source= 		  |源地址			  |--list-source= 	    	|--add-source= 			  |--remove-source= 		  |
+|-forward-port= |端口转发      |--list-forward-port=     |--add-forward-port=   |--remove-forward-port=     |
+|-icmp-block=   |icmp报文阻塞  |--list-icmp-block=       |--add-icmp-block=     |--remove-icmp-block=       |
+|-interface=    |网卡接口      |--list-interface=        |--add-interface=      |--remove-interface=        |
+|-masquerade    |ip地址伪装    |--list-masquerade        |--add-masquerade      |--remove-masquerade        |
+|-port=         |端口         |--list-port=             |--add-port=           |--remove-port=             |
+|-rich-rule     |自定义规则    |--list-rich-rule         |--add-rich-rule       |--remove-rich-rule         |
+|-service=      |服务         |--list-service=          |--add-service=        |--remove-service=          |
+|-source=       |源地址       |--list-source=           |--add-source=         |--remove-source=           |
 
 ## 模块详解
 
@@ -143,6 +143,7 @@ icmp-block是按照icmp的类型进行设置阻塞，比如不想接受ping报�
 ```bash
 firewall-cmd --add-icmp-block=echo-request
 ```
+
 当然，如果需要长久保存就需要加--permanent选项，不过那样就需要reload才能生效。
 
 icmp-block在zone配置文件中的节点为:
@@ -211,11 +212,13 @@ firewall-cmd [--permanent] [--zone=zone] --remove-interface=interface
 ```bash
 ZONE=public
 ```
+
 这行配置就相当于下面的命令
 
 ```bash
 firewall-cmd --zone=public --change-interface=em1
 ```
+
 这样配置之后来自em1的连接就会使用public这个zone进行管理（如果source匹配了其他的zone除外）。
 
 ### masquerad
@@ -282,6 +285,7 @@ rich-rule可以用来定义一条复杂的规则，其在zone配置文件中的�
      </rule>
 </zone>
 ```
+
 可以看到这里一条rule的配置的配置项非常多，比zone本身还多出了destination、log、audit等配置项。
 
 其实这里的rule就相当于使用iptables时的一条规则。rule的操作命令如下
@@ -357,7 +361,6 @@ firewall-cmd [--permanent] [--zone=zone] --remove-source=source[/mask]
 - `--change-source`：用于改变source地址所绑定的zone，如果原来没有绑定则进行绑定，这样就跟`--add-source`的作用一样了
 
 - `--remove-source`：用于删除source地址跟zone的绑定
- 
 
 命令中有两个可选参数：`--permanent`和`--zone`:
 
@@ -420,14 +423,14 @@ firewall-cmd [--permanent] --direct --get-chains { ipv4 | ipv6 | eb } table
 firewall-cmd [--permanent] --direct --add-chain { ipv4 | ipv6 | eb } table chain
 firewall-cmd [--permanent] --direct --remove-chain { ipv4 | ipv6 | eb } table chain
 firewall-cmd [--permanent] --direct --query-chain { ipv4 | ipv6 | eb } table chain
- 
+
 firewall-cmd [--permanent] --direct --get-all-rules
 firewall-cmd [--permanent] --direct --get-rules { ipv4 | ipv6 | eb } table chain
 firewall-cmd [--permanent] --direct --add-rule { ipv4 | ipv6 | eb } table chain priority args
 firewall-cmd [--permanent] --direct --remove-rule { ipv4 | ipv6 | eb } table chain priority args
 firewall-cmd [--permanent] --direct --remove-rules { ipv4 | ipv6 | eb } table chain
 firewall-cmd [--permanent] --direct --query-rule { ipv4 | ipv6 | eb } table chain priority args
- 
+
 firewall-cmd --direct --passthrough { ipv4 | ipv6 | eb } args
 firewall-cmd --permanent --direct --get-all-passthroughs
 firewall-cmd --permanent --direct --get-passthroughs { ipv4 | ipv6 | eb }
@@ -517,7 +520,7 @@ firewall-cmd [--permanent] --list-lockdown-whitelist-contexts
 </whitelist>
 ```
 
-另外，command还可以使用通配符` * `，所以上面的配置还可以简化为
+另外，command还可以使用通配符 `*`，所以上面的配置还可以简化为
 
 ```xml
 <whitelist>
@@ -554,7 +557,7 @@ firewall-cmd [--permanent] --add-lockdown-whitelist-uid=uid
 firewall-cmd [--permanent] --remove-lockdown-whitelist-uid=uid
 firewall-cmd [--permanent] --query-lockdown-whitelist-uid=uid
 firewall-cmd [--permanent] --list-lockdown-whitelist-uids
- 
+
 firewall-cmd [--permanent] --add-lockdown-whitelist-user=user
 firewall-cmd [--permanent] --remove-lockdown-whitelist-user=user
 firewall-cmd [--permanent] --query-lockdown-whitelist-user=user
@@ -600,7 +603,7 @@ ll /usr/bin/firewall-cmd
 chmod 750 /usr/bin/firewall-cmd
 ```
 
-## 参考:
+## 参考
 
 - [Excelib](http://www.excelib.com/article/293/show/)
 - [RedHat](https://access.redhat.com/documentation/zh-cn/red_hat_enterprise_linux/7/html/security_guide/sec-using_firewalls#sec-Choosing_a_Network_Zone)

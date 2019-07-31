@@ -78,7 +78,7 @@ COPY hom?.txt /mydir/
 
 使用 COPY 指令，源文件的各种元数据都会保留。比如读、写、执行权限、文件变更时间等。
 
-在使用该指令的时候还可以加上 --chown=<user>:<group> 选项来改变文件的所属用户及所属组。
+在使用该指令的时候还可以加上 --chown=user:group 选项来改变文件的所属用户及所属组。
 
 ```bash
 COPY --chown=55:mygroup files* /mydir/
@@ -151,7 +151,8 @@ ENTRYPOINT 在运行时也可以替代，不过比 CMD 要略显繁琐，需要�
 ```bash
 <ENTRYPOINT> "<CMD>"
 ```
-那么有了 CMD 后，为什么还要有 ENTRYPOINT 呢？这种 <ENTRYPOINT> "<CMD>" 有什么好处么？让我们来看几个场景。
+
+那么有了 CMD 后，为什么还要有 ENTRYPOINT 呢？这种 ENTRYPOINT "CMD" 有什么好处么？让我们来看几个场景。
 
 场景一：让镜像变成像命令一样使用
 
@@ -179,12 +180,12 @@ $ docker run myip -i
 docker: Error response from daemon: invalid header field value "oci runtime error: container_linux.go:247: starting container process caused \"exec: \\\"-i\\\": executable file not found in $PATH\"\n".
 ```
 
-我们可以看到可执行文件找不到的报错，executable file not found。之前我们说过，跟在镜像名后面的是 command，运行时会替换 CMD 的默认值。因此这里的 -i 替换了原来的 CMD，而不是添加在原来的 curl -s https://ip.cn 后面。而 -i 根本不是命令，所以自然找不到。
+我们可以看到可执行文件找不到的报错，executable file not found。之前我们说过，跟在镜像名后面的是 command，运行时会替换 CMD 的默认值。因此这里的 -i 替换了原来的 CMD，而不是添加在原来的 curl -s <https://ip.cn> 后面。而 -i 根本不是命令，所以自然找不到。
 
 那么如果我们希望加入 -i 这参数，我们就必须重新完整的输入这个命令：
 
 ```bash
-$ docker run myip curl -s https://ip.cn -i
+docker run myip curl -s https://ip.cn -i
 ```
 
 这显然不是很好的解决方案，而使用 ENTRYPOINT 就可以解决这个问题。现在我们重新用 ENTRYPOINT 来实现这个镜像：
@@ -229,7 +230,7 @@ Connection: keep-alive
 
 此外，可能希望避免使用 root 用户去启动服务，从而提高安全性，而在启动服务前还需要以 root 身份执行一些必要的准备工作，最后切换到服务用户身份启动服务。或者除了服务外，其它命令依旧可以使用 root 身份执行，方便调试等。
 
-这些准备工作是和容器 CMD 无关的，无论 CMD 为什么，都需要事先进行一个预处理的工作。这种情况下，可以写一个脚本，然后放入 ENTRYPOINT 中去执行，而这个脚本会将接到的参数（也就是 <CMD>）作为命令，在脚本最后执行。比如官方镜像 redis 中就是这么做的：
+这些准备工作是和容器 CMD 无关的，无论 CMD 为什么，都需要事先进行一个预处理的工作。这种情况下，可以写一个脚本，然后放入 ENTRYPOINT 中去执行，而这个脚本会将接到的参数（也就是 CMD）作为命令，在脚本最后执行。比如官方镜像 redis 中就是这么做的：
 
 ```bash
 FROM alpine:3.4
@@ -262,7 +263,6 @@ exec "$@"
 $ docker run -it redis id
 uid=0(root) gid=0(root) groups=0(root)
 ```
-
 
 ## ENV
 
@@ -424,13 +424,13 @@ HEALTHCHECK --interval=5s --timeout=3s \
 使用 docker build 来构建这个镜像：
 
 ```bash
-$ docker build -t myweb:v1 .
+docker build -t myweb:v1 .
 ```
 
 构建好了后，我们启动一个容器：
 
 ```bash
-$ docker run -d --name web -p 80:80 myweb:v1
+docker run -d --name web -p 80:80 myweb:v1
 ```
 
 当运行该镜像后，可以通过 `docker container ls` 看到最初的状态为 (health: starting)：
@@ -448,6 +448,7 @@ $ docker container ls
 CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                    PORTS               NAMES
 03e28eb00bd0        myweb:v1            "nginx -g 'daemon off"   18 seconds ago      Up 16 seconds (healthy)   80/tcp, 443/tcp     web
 ```
+
 如果健康检查连续失败超过了重试次数，状态就会变为 (unhealthy)。
 
 为了帮助排障，健康检查命令的输出（包括 stdout 以及 stderr）都会被存储于健康状态里，可以用 `docker inspect` 来查看。
@@ -536,8 +537,8 @@ FROM my-node
 
 ## references
 
->- Dockerfie 官方文档：https://docs.docker.com/engine/reference/builder/
+>- Dockerfie 官方文档：<https://docs.docker.com/engine/reference/builder/>
 >
->- Dockerfile 最佳实践文档：https://docs.docker.com/develop/develop-images/dockerfile_best-practices/
+>- Dockerfile 最佳实践文档：<https://docs.docker.com/develop/develop-images/dockerfile_best-practices/>
 >
->- Docker 官方镜像 Dockerfile：https://github.com/docker-library/docs
+>- Docker 官方镜像 Dockerfile：<https://github.com/docker-library/docs>

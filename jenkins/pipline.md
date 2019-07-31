@@ -8,22 +8,21 @@
 - `junit` 是另一个聚合测试报告的流水线 step (由 JUnit plugin提供)。
 - `node` 是脚本化流水线的一种特定语法，它指示 Jenkins 在任何可用的代理/节点上执行流水线 (和包含在其中的任何阶段)这实际上等效于 声明式流水线特定语法的`agent`。
 
-
 Jenkinsfile (Declarative Pipeline):
 
 ```bash
-pipeline { 
-    agent any 
+pipeline {
+    agent any
     stages {
-        stage('Build') { 
-            steps { 
-                sh 'make' 
+        stage('Build') {
+            steps {
+                sh 'make'
             }
         }
         stage('Test'){
             steps {
                 sh 'make check'
-                junit 'reports/**/*.xml' 
+                junit 'reports/**/*.xml'
             }
         }
         stage('Deploy') {

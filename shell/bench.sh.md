@@ -2,7 +2,7 @@
 
 BY : [秋水逸冰](https://teddysun.com/444.html)
 
-## 用法:
+## 用法
 
 ```bash
 wget -qO- bench.sh | bash
@@ -22,7 +22,7 @@ curl -so- 86.re/bench.sh | bash
 
 [bench.sh 的 github 仓库](https://raw.githubusercontent.com/teddysun/across/master/bench.sh)
 
-## 脚本内容:
+## 脚本内容
 
 ```bash
 #!/usr/bin/env bash

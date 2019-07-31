@@ -8,19 +8,19 @@
 
 ## 打包部署后端项目
 
-1. 进入人人开源后端项目，执行打包（修改配置文件，更改端口，打包三次生成三个不同端口的JAR文件）
+- 进入人人开源后端项目，执行打包（修改配置文件，更改端口，打包三次生成三个不同端口的JAR文件）
 
 ```bash
 mvn clean install -Dmaven.test.skip=true
 ```
 
-2. 安装Java镜像
+- 安装Java镜像
 
 ```bash
 docker pull java
 ```
 
-3. 创建3节点Java容器
+- 创建3节点Java容器
 
 ```bash
 #创建数据卷，上传JAR文件
@@ -51,13 +51,13 @@ docker exec -it j3 bash
 nohup java -jar /home/soft/renren-fast.jar
 ```
 
-4. 安装Nginx镜像
+- 安装Nginx镜像
 
 ```bash
 docker pull nginx
 ```
 
-5. 创建Nginx容器，配置负载均衡
+- 创建Nginx容器，配置负载均衡
 
 宿主机上/home/n1/nginx.conf配置文件内容如下：
 
@@ -87,29 +87,29 @@ http {
     keepalive_timeout  65;
 
     #gzip  on;
-   	
-	proxy_redirect          off;
-	proxy_set_header        Host $host;
-	proxy_set_header        X-Real-IP $remote_addr;
-	proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
-	client_max_body_size    10m;
-	client_body_buffer_size   128k;
-	proxy_connect_timeout   5s;
-	proxy_send_timeout      5s;
-	proxy_read_timeout      5s;
-	proxy_buffer_size        4k;
-	proxy_buffers           4 32k;
-	proxy_busy_buffers_size  64k;
-	proxy_temp_file_write_size 64k;
-	
-	upstream tomcat {
-		server localhost:6001;
-		server localhost:6002;
-		server localhost:6003;
-	}
-	server {
+
+    proxy_redirect          off;
+    proxy_set_header        Host $host;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    client_max_body_size    10m;
+    client_body_buffer_size   128k;
+    proxy_connect_timeout   5s;
+    proxy_send_timeout      5s;
+    proxy_read_timeout      5s;
+    proxy_buffer_size        4k;
+    proxy_buffers           4 32k;
+    proxy_busy_buffers_size  64k;
+    proxy_temp_file_write_size 64k;
+
+    upstream tomcat {
+        server localhost:6001;
+        server localhost:6002;
+        server localhost:6003;
+    }
+    server {
         listen       6101;
-        server_name  localhost; 
+        server_name  localhost;
         location / {  
             proxy_pass   http://tomcat;
             index  index.html index.htm;  
@@ -163,7 +163,7 @@ pid        /var/run/nginx.pid;
 
 events {
     worker_connections  1024;
-	}
+    }
 
 http {
     include       /etc/nginx/mime.types;
@@ -181,29 +181,29 @@ http {
     keepalive_timeout  65;
 
     #gzip  on;
-   	
-	proxy_redirect          off;
-	proxy_set_header        Host $host;
-	proxy_set_header        X-Real-IP $remote_addr;
-	proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
-	client_max_body_size    10m;
-	client_body_buffer_size   128k;
-	proxy_connect_timeout   5s;
-	proxy_send_timeout      5s;
-	proxy_read_timeout      5s;
-	proxy_buffer_size        4k;
-	proxy_buffers           4 32k;
-	proxy_busy_buffers_size  64k;
-	proxy_temp_file_write_size 64k;
-	
-	upstream tomcat {
-		server 192.168.99.104:6001;
-		server 192.168.99.104:6002;
-		server 192.168.99.104:6003;
-	}
-	server {
+
+    proxy_redirect          off;
+    proxy_set_header        Host $host;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    client_max_body_size    10m;
+    client_body_buffer_size   128k;
+    proxy_connect_timeout   5s;
+    proxy_send_timeout      5s;
+    proxy_read_timeout      5s;
+    proxy_buffer_size        4k;
+    proxy_buffers           4 32k;
+    proxy_busy_buffers_size  64k;
+    proxy_temp_file_write_size 64k;
+
+    upstream tomcat {
+        server 192.168.99.104:6001;
+        server 192.168.99.104:6002;
+        server 192.168.99.104:6003;
+    }
+    server {
         listen       6102;
-        server_name  192.168.99.104; 
+        server_name  192.168.99.104;
         location / {  
             proxy_pass   http://tomcat;
             index  index.html index.htm;  
@@ -247,7 +247,7 @@ virtual_server 192.168.99.151 6201 {
 docker run -it -d --name n2 -v /home/n2/nginx.conf:/etc/nginx/nginx.conf -v /home/n2/keepalived.conf:/etc/keepalived/keepalived.conf --net=host --privileged nginx
 ```
 
-6. 在Nginx容器安装Keepalived
+- 在Nginx容器安装Keepalived
 
 ```bash
 #进入n1节点
@@ -309,7 +309,7 @@ http {
     keepalive_timeout  65;
 
     #gzip  on;
-    
+
     proxy_redirect          off;
     proxy_set_header        Host $host;
     proxy_set_header        X-Real-IP $remote_addr;
@@ -323,7 +323,7 @@ http {
     proxy_buffers           4 32k;
     proxy_busy_buffers_size  64k;
     proxy_temp_file_write_size 64k;
-    
+
     server {
         listen 6501;
         server_name  192.168.99.104;
@@ -368,7 +368,7 @@ http {
     keepalive_timeout  65;
 
     #gzip  on;
-    
+
     proxy_redirect          off;
     proxy_set_header        Host $host;
     proxy_set_header        X-Real-IP $remote_addr;
@@ -382,7 +382,7 @@ http {
     proxy_buffers           4 32k;
     proxy_busy_buffers_size  64k;
     proxy_temp_file_write_size 64k;
-    
+
     server {
         listen 6502;
         server_name  192.168.99.104;
@@ -427,7 +427,7 @@ http {
     keepalive_timeout  65;
 
     #gzip  on;
-    
+
     proxy_redirect          off;
     proxy_set_header        Host $host;
     proxy_set_header        X-Real-IP $remote_addr;
@@ -441,7 +441,7 @@ http {
     proxy_buffers           4 32k;
     proxy_busy_buffers_size  64k;
     proxy_temp_file_write_size 64k;
-    
+
     server {
         listen 6503;
         server_name  192.168.99.104;
@@ -490,7 +490,7 @@ http {
     keepalive_timeout  65;
 
     #gzip  on;
-    
+
     proxy_redirect          off;
     proxy_set_header        Host $host;
     proxy_set_header        X-Real-IP $remote_addr;
@@ -504,7 +504,7 @@ http {
     proxy_buffers           4 32k;
     proxy_busy_buffers_size  64k;
     proxy_temp_file_write_size 64k;
-    
+
     upstream renren-vue-node {
         server 192.168.99.104:6501;
         server 192.168.99.104:6502;
@@ -512,7 +512,7 @@ http {
     }
     server {
         listen       6601;
-        server_name  192.168.99.104; 
+        server_name  192.168.99.104;
         location / {  
             proxy_pass   http://renren-vue-node;
             index  index.html index.htm;  
@@ -583,7 +583,7 @@ http {
     keepalive_timeout  65;
 
     #gzip  on;
-    
+
     proxy_redirect          off;
     proxy_set_header        Host $host;
     proxy_set_header        X-Real-IP $remote_addr;
@@ -597,7 +597,7 @@ http {
     proxy_buffers           4 32k;
     proxy_busy_buffers_size  64k;
     proxy_temp_file_write_size 64k;
-    
+
  upstream renren-vue-node {
      server 192.168.99.104:6501;
      server 192.168.99.104:6502;
@@ -605,7 +605,7 @@ http {
  }
  server {
         listen       6602;
-        server_name  192.168.99.104; 
+        server_name  192.168.99.104;
         location / {  
             proxy_pass   http://renren-vue-node;
             index  index.html index.htm;  
@@ -615,7 +615,6 @@ http {
 ```
 
 宿主机/home/renren-vue-fz2/keepalived.conf配置文件
-
 
 ```bash
 vrrp_instance VI_1 {

@@ -15,7 +15,7 @@ reboot
 curl -sS https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.rpm.sh | sudo bash
 ```
 
-## 安装 gitlab-ce 
+## 安装 gitlab-ce
 
 ```bash
 yum install -y gitlab-ce
@@ -64,7 +64,8 @@ gitlab_rails['smtp_authentication'] = "login"
 gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['gitlab_email_enabled'] = true
 gitlab_rails['gitlab_email_from'] = "xxxx@qq.com"
-gitlab_rails['backup_keep_time'] = 604800	# 设置只保存最近7天的备份
+# 设置只保存最近7天的备份
+gitlab_rails['backup_keep_time'] = 604800
 user["git_user_email"] = "xxxx@qq.com"
 END
 docker exec -it gitlab gitlab-ctl reconfigure

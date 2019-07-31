@@ -6,7 +6,7 @@ find 命令用于查找目录下的文件，同时也可以调用其它命令执
 
 ```bash
 find [-H] [-L] [-P] [-D debugopts] [-O level] [pathname] [expression]
-find [选项]								    [路径] 	[操作语句]
+find [选项]                                    [路径]     [操作语句]
 ```
 
 ![find命令语法](./find.png)
@@ -42,7 +42,7 @@ find [选项]								    [路径] 	[操作语句]
 - `-user` 按照文件属主来查找文件
 - `-type` 查找某一类型的文件：`b`（块设备文件）;`c`（字符设备文件）;`d`（目录）;`p`（管道文件）;`l`（符号链接文件）;`f`（普通文件）;`s`（socket文件）;`D`（door）。
 
-### Actions 模块 
+### Actions 模块
 
 - `-delete` 将查找出的文件删除
 - `-exec` 对配的文件执行该参数所给出的shell命令
@@ -58,7 +58,7 @@ find [选项]								    [路径] 	[操作语句]
 
 ### 基础范例
 
-1. 查找指定时间内修改过的文件
+- 查找指定时间内修改过的文件
 
 查找两天内受到访问的文件，使用atime，-2代表两天内。
 
@@ -82,7 +82,7 @@ find [选项]								    [路径] 	[操作语句]
 /data/dir3
 ```
 
-2. 用 `-name` 指定关键字查找
+- 用 `-name` 指定关键字查找
 
 在 /var/log 目录下查找5天前以 `.log` 结尾的文件
 
@@ -91,17 +91,17 @@ find [选项]								    [路径] 	[操作语句]
 /var/log/openvpn.log
 ```
 
-3. 用 `!` 反向查找
+- 用 `!` 反向查找
 
 按类型查找，查找当前目录下的所有非目录
 
 ```bash
-[root@localhost data]# find . ! -type d 
+[root@localhost data]# find . ! -type d
 ./file1.txt
 ./file2.txt
 ```
 
-4. 用权限来查找文件
+- 用权限来查找文件
 
 查找 `/data` 目录下权限是755的所有文件
 
@@ -112,18 +112,18 @@ find [选项]								    [路径] 	[操作语句]
 /data/dir3
 ```
 
-5. 按大小查找文件
+- 按大小查找文件
 
 查找当前目录下文件大小大于1000字节的文件
 
 ```bash
-[root@localhost data]# find . -size +1000c 
+[root@localhost data]# find . -size +1000c
 .
 ./dir2
 ./dir3
 ```
 
-6. 查找文件时希望忽略某个目录
+- 查找文件时希望忽略某个目录
 
 指定路径样式，配合 `-prune` 参数用于排除指定目录
 
@@ -135,9 +135,9 @@ find [选项]								    [路径] 	[操作语句]
 /data/dir2
 ```
 
->  `-path "./dir3" -prune -o -print` 是 `-path "./dir3" -a -prune -o -print` 的简写。其中-a 和 -o 类似 shell 中的 `&&` 和 `||`，当 `-paht "./dir3"` 为真时，执行 `-prune`；为假时，执行 `-print`。
+> `-path "./dir3" -prune -o -print` 是 `-path "./dir3" -a -prune -o -print` 的简写。其中-a 和 -o 类似 shell 中的 `&&` 和 `||`，当 `-paht "./dir3"` 为真时，执行 `-prune`；为假时，执行 `-print`。
 
-7. 忽略多个目录
+- 忽略多个目录
 
 ```bash
 [root@localhost data]# find . \( -path ./dir2 -o -path ./dir3 \ ) -prune -o -print
@@ -150,7 +150,7 @@ find [选项]								    [路径] 	[操作语句]
 >
 > `\( -path ./dir2 -o -path ./dir3 \ )` 中括号与表达式之间有空格，这是语法要求。
 
-8. 使用 `-user` 和 `-nouser` 选项
+- 使用 `-user` 和 `-nouser` 选项
 
 ```bash
 [root@localhost data]# chown -R nobody:nobody test
@@ -176,26 +176,26 @@ drwxr-xr-x  3 999 root      16 2月  23 02:29 wnnn
 
 这个例子的用途是为了查找那些属主账户已经被删除的文件，使用 `-nouser` 选项，不必给出用户名。
 
-9. 使用 `-group` 和 `-nogroup` 选项
+- 使用 `-group` 和 `-nogroup` 选项
 
 ```bash
-[root@localhost data]# find . -group nobody 
+[root@localhost data]# find . -group nobody
 ./test
 ./test/log2019.log
 ./test/ln2019
 ./test/link2019
 ./test/123
-[root@localhost data]# find . -nogroup 
+[root@localhost data]# find . -nogroup
 [root@localhost data]# chown -R 999:999 wnnn/
 [root@localhost data]# ll
 总用量 8
 drwxr-xr-x  2 nobody  nobody      62 2月  22 23:35 test
 drwxr-xr-x  3 999 999    16 2月  23 02:29 wnnn
-[root@localhost data]# find . -nogroup 
+[root@localhost data]# find . -nogroup
 ./wnnn/222
 ```
 
-10. 查找比某个文件新或旧的文件
+- 查找比某个文件新或旧的文件
 
 如果希望查找更改时间比某个文件(file1)新,但比另一个文件(file2)旧的所有文件,可以使用 `-newer` 选项。它的一般形式为：`-newer file1 ! -newer file2` ，其中 `!` 是逻辑非符号，取反的意思。
 
@@ -218,7 +218,7 @@ total 0
 ./file3
 ```
 
-11. 逻辑操作符的使用
+- 逻辑操作符的使用
 
 ```bash
 [root@localhost data]# ll
@@ -231,7 +231,7 @@ drwxrwxr-x 2 root root 4096 2月  23 19:32 456
 -rw-rw-r-- 1 root root    0 2月  23 19:32 file2
 -rw-rw-r-- 1 root root    0 2月  23 19:32 file3
 -rw-rw-r-- 1 root root    0 2月  23 19:32 file4
-[root@localhost data]# find . -maxdepth 1 -type d 
+[root@localhost data]# find . -maxdepth 1 -type d
 .
 ./123
 ./345
@@ -260,7 +260,7 @@ drwxrwxr-x 2 root root 4096 2月  23 19:32 456
 > `-o` 逻辑或的意思
 > `-a` 逻辑并的意思
 
-12. 正规则表达式 (实际工作比较少用)
+- 正规则表达式 (实际工作比较少用)
 
 由于 `-name` 参数只支持 `*` 、`?` 、`[]` 这三种通配符，因此在碰到复杂的匹配需求时，就需要用到正则表达式。
 
@@ -273,7 +273,7 @@ find pathname -regextype "type" -regex "pattern"
 实例：
 
 ```bash
-[root@localhost data]# find / -regex "find"		#<<< 给出的正则表达式必须匹配完整的文件路径
+[root@localhost data]# find / -regex "find"        #<<< 给出的正则表达式必须匹配完整的文件路径
 [root@localhost data]# find / -regex ".*find"
 /usr/src/kernels/4.17.13-1.el7.elrepo.x86_64/include/config/generic/find
 /usr/src/kernels/4.20.11-1.el7.elrepo.x86_64/include/config/generic/find
@@ -284,6 +284,7 @@ find pathname -regextype "type" -regex "pattern"
 /usr/bin/find
 /usr/bin/oldfind
 ```
+
 正则表达式的类型默认为emacs, 还有posix-awk、posix-basic、pos1x­egrep和posix-extended等。
 
 下面是posix-extended的示例代码：
@@ -304,7 +305,7 @@ find pathname -regextype "type" -regex "pattern"
 ./456
 ```
 
-13. `-exec` 选项
+- `-exec` 选项
 
 ```bash
 [root@localhost data]# find . -type f -exec  ls -l {} \;
@@ -324,13 +325,13 @@ find pathname -regextype "type" -regex "pattern"
 >
 > `{}` 的作用： 指代替前面的 *命令* 查找到的内容。
 
-14. 在目录中查找更改时间在 n 天以前的文件，并删除
+- 在目录中查找更改时间在 n 天以前的文件，并删除
 
 ```bash
 [root@localhost data]# find . -type f -mtime +14 -exec rm {} \;
 ```
 
-15. 使用 `-exec` 选项的安全模式 `-ok`
+- 使用 `-exec` 选项的安全模式 `-ok`
 
 ```bash
 [root@localhost data]# find . -type f -mmin +5 -name "*txt" -ok rm {} \;
@@ -340,10 +341,10 @@ find pathname -regextype "type" -regex "pattern"
 < rm ... ./1txt > ? n
 ```
 
-16. find 结合 xargs 使用
+- find 结合 xargs 使用
 
 ```bash
-[root@localhost data]# find . -type f 
+[root@localhost data]# find . -type f
 ./3txt
 ./file4
 ./file1
@@ -368,40 +369,41 @@ find pathname -regextype "type" -regex "pattern"
 123  234  345  456
 [root@localhost data]$ ls 123
 1txt  2txt  3txt  4txt  file1  file2  file3  file4
-[root@localhost data]$ find . -type f |xargs -p rm -f 		#<<< xargs 的 `-p` 选项会提示让你确认是否执行后面的操作
+[root@localhost data]$ find . -type f |xargs -p rm -f         #<<< xargs 的 `-p` 选项会提示让你确认是否执行后面的操作
 rm -f ./123/3txt ./123/file4 ./123/file1 ./123/2txt ./123/file3 ./123/file2 ./123/4txt ./123/1txt ?...n
 ```
 
-17. 进入 /root/data 目录删除以txt结尾的文件
+- 进入 /root/data 目录删除以txt结尾的文件
 
 ```bash
 [root@localhost data]# ls
 123  1txt  234  2txt  345  3txt  456  4txt  file1  file2  file3  file4
-[root@localhost data]# find /root/data/ -type f |xargs rm -f 
+[root@localhost data]# find /root/data/ -type f |xargs rm -f
 [root@localhost data]# ls
 123  234  345  456
 ```
 
-18. 结合 sed 命令
+- 结合 sed 命令
 
 把/data 目录及其子目录下的所有以扩展名为 `txt` 结尾的文件中，把包含 `2txt` 的字符串全部替换为 `root_word`。
 
 `-exec` 方法
 
 ```bash
-[root@localhost data]# cat 1txt 
+[root@localhost data]# cat 1txt
 txttxtxtxtttttt
 [root@localhost data]# find /data -name "*txt" -exec sed -i 's/2txt/root_word/g' {} \;
-[root@localhost data]# cat 1txt 
+[root@localhost data]# cat 1txt
 wordwordxwordttttt
 ```
+
 `find` + `xargs` 方法
 
 ```bash
-[root@localhost data]# cat 1txt 
+[root@localhost data]# cat 1txt
 txttxtxtxtttttt
 [root@localhost data]# find ./ -name "*txt" |xargs sed -i 's/txt/word/g'
-[root@localhost data]# cat 1txt 
+[root@localhost data]# cat 1txt
 wordwordxwordttttt
 ```
 
@@ -413,7 +415,7 @@ sed -i 's/2txt/root_word/g' `find /data -name "*txt"`
 
 > sed 的 `-i` 选项用于直接操作文件
 
-18. 将 `/etc` 下所有普通文件打包成压缩文件
+- 将 `/etc` 下所有普通文件打包成压缩文件
 
 - 反引号法
 
@@ -424,10 +426,10 @@ tar zcvf file.tar.gz `find /etc -type f`
 - xargs 方法
 
 ```bash
-find /etc -type f |xargs tar czvf file.tar.gz 
+find /etc -type f |xargs tar czvf file.tar.gz
 ```
 
-19. 删除一个目录下的所有文件，但保留一个指定文件
+- 删除一个目录下的所有文件，但保留一个指定文件
 
 删除所有文件，保留文件 file1
 
@@ -447,16 +449,16 @@ find /etc -type f |xargs tar czvf file.tar.gz
 [root@localhost data]# find . -type f ! -name "file1" -exec rm -rf {} \;
 ```
 
-20. 已知 apache 服务的访问日志按天记录在服务器本地目录 /data/logs 下，由于磁盘空间紧张，现要求只保留最近7天的访问日志（仅从日志着手解决）
+- 已知 apache 服务的访问日志按天记录在服务器本地目录 /data/logs 下，由于磁盘空间紧张，现要求只保留最近7天的访问日志（仅从日志着手解决）
 
 测试日志文件生成脚本：
 
 ```bash
-[root@localhost log]# cat test_log.sh 
+[root@localhost log]# cat test_log.sh
 for n in `seq 14`
 do
-	date -s "2019/01/$n"
-	touch access_www_`(date+%F)`.log
+    date -s "2019/01/$n"
+    touch access_www_`(date+%F)`.log
 done
 date -s "2019/01/15"
 ```
@@ -465,7 +467,7 @@ date -s "2019/01/15"
 
 ```bash
 sh test_log.sh
-[root@localhost log]# sh test_log.sh 
+[root@localhost log]# sh test_log.sh
 2019年 01月 01日 星期二 00:00:00 CST
 2019年 01月 02日 星期三 00:00:00 CST
 2019年 01月 03日 星期四 00:00:00 CST
@@ -506,7 +508,7 @@ CustomLog “/usr/loacl/sbin/cronolog /data/logs /access_www_%w.log" combined
 
 总共生成7天日志1-7，下周又覆盖1-7的日志。
 
-21. 将找到的文件移动到指定位置的集中方法
+- 将找到的文件移动到指定位置的集中方法
 
 ```bash
 find . -name "*.txt" |xargs -i mv {} dir2/

@@ -29,7 +29,7 @@ lrwxrwxrwx 1 root root 11 2月  22 23:30 link2019 -> log2019.log
 link2019
 [root@dvm test]# cat 123
 12312312323
-[root@dvm test]# cat link2019 
+[root@dvm test]# cat link2019
 12312312323
 ```
 
@@ -38,7 +38,7 @@ link2019
 ```bash
 [root@dvm test]# readlink -f 123
 /root/test/log2019.log
-[root@dvm test]# cat log2019.log 
+[root@dvm test]# cat log2019.log
 12312312323
-[root@dvm test]# 
+[root@dvm test]#
 ```

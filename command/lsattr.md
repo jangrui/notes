@@ -16,7 +16,7 @@ lsattr [选项] [文件或目录]
 
 ## 实例
 
-1. 查看文件的扩展属性
+- 查看文件的扩展属性
 
 ```bash
 [root@localhost data]# lsattr -R log/
@@ -38,7 +38,7 @@ lsattr [选项] [文件或目录]
 -------------e-- log/access_www_2019-01-01.log
 ```
 
-2. 查看目录的扩展属性
+- 查看目录的扩展属性
 
 ```bash
 [root@localhost data]# lsattr -d log/

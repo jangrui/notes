@@ -14,7 +14,7 @@
 实现 ansible 服务端到目标主机的文件传送
 
 ```bash
-- name: 
+- name:
   copy: 'remote_src=no src=roles/testbox/file/foo.sh dest=/root/foo.sh mode=0644 force=yes'
 ```
 
@@ -162,7 +162,7 @@
     name: httpd
     enabled: yes
 
-- name: 基于进程启动, 启动 /usr/bin/foo 
+- name: 基于进程启动, 启动 /usr/bin/foo
   service:
     name: foo
     pattern: /usr/bin/foo
@@ -219,4 +219,3 @@
   systemd:
     daemon_reload: yes
 ```
-

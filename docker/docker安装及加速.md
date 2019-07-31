@@ -5,6 +5,7 @@ Docker 分为 CE 和 EE 两大版本。CE 即社区版（免费，支持周期 7
 Docker CE 分为 stable, test, 和 nightly 三个更新频道。每六个月发布一个 stable 版本 (18.09, 19.03, 19.09...)。
 
 ## 安装
+
 内核需3.10以上
 
 ## ubuntu
@@ -36,19 +37,12 @@ sudo yum install -y yum-utils \
 
 ```bash
 # aliyun
-sudo yum-config-manager \ 
-	--add-repo \
-	https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
-# 中国科技大学
-sudo yum-config-manager \
-    --add-repo \
-    https://mirrors.ustc.edu.cn/docker-ce/linux/centos/docker-ce.repo
-# 官方
-sudo yum-config-manager \
-	--add-repo \
-	https://download.docker.com/linux/centos/docker-ce.repo
+sudo yum-config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
 sudo yum makecache fast
 ```
+
+> 中国科技大学: <https://mirrors.ustc.edu.cn/docker-ce/linux/centos/docker-ce.repo>
+> 官方: <https://download.docker.com/linux/centos/docker-ce.repo>
 
 安装 docker-ce ：
 
@@ -75,14 +69,7 @@ sudo systemctl restart docker
 
 ### 加速地址:
 
-> 163:
-> http://hub-mirror.c.163.com
->
-> aliyun:
-> https://u4kqosl2.mirror.aliyuncs.com
->
-> docker中国:
-> https://registry.docker-cn.com
->
-> daocloud.io:
-> http://f1361db2.m.daocloud.io
+> 163: <http://hub-mirror.c.163.com>
+> aliyun: <https://u4kqosl2.mirror.aliyuncs.com>
+> docker中国: <https://registry.docker-cn.com>
+> daocloud.io: <http://f1361db2.m.daocloud.io>

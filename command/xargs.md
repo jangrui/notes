@@ -14,24 +14,24 @@ find /sbin -user root |xargs
 
 xargs 一般是和管道一起使用。
 
-## 命令格式：
+## 命令格式
 
 ```bash
 somecommand |xargs -item  command
 ```
 
-## 参数：
+## 参数
 
-- `-a`		file 从文件中读入作为 sdtin（标准输入）
-- `-d`		自定义分隔符。
-- `-i`		以 `{}` 代替前面的结果。
-- `-I`		制定一个符号代替前面的结果，而不用 `-i` 参数默认的 `{}`。
-- `-lnum` 	同 -L。(-l与数字间无空格）
-- `-L num` 	从标准输入一次读取 num 行。
-- `-n` 		指定每行的最大参数量 n ，可以将标准输入的文本划分为多行，每行 n 个参数，默认空格分割。
-- `-p` 		提示让用户确认是否执行后面操作，y 执行，n 不执行。
-- `-t` 		表示先打印命令，然后再执行。
-- `-0` 		用 null 代替空格作为分割符，配合 find 命令的 `-print0` 选项的输出使用。
+- `-a`        file 从文件中读入作为 sdtin（标准输入）
+- `-d`        自定义分隔符。
+- `-i`        以 `{}` 代替前面的结果。
+- `-I`        制定一个符号代替前面的结果，而不用 `-i` 参数默认的 `{}`。
+- `-lnum`     同 -L。(-l与数字间无空格）
+- `-L num`    从标准输入一次读取 num 行。
+- `-n`        指定每行的最大参数量 n ，可以将标准输入的文本划分为多行，每行 n 个参数，默认空格分割。
+- `-p`        提示让用户确认是否执行后面操作，y 执行，n 不执行。
+- `-t`        表示先打印命令，然后再执行。
+- `-0`        用 null 代替空格作为分割符，配合 find 命令的 `-print0` 选项的输出使用。
 
 ## 实例
 
@@ -41,7 +41,6 @@ xargs 用作替换工具，读取输入数据重新格式化后输出。
 
 ```bash
 # cat test.txt
-
 a b c d e f g
 h i j k l m n
 o p q
@@ -49,19 +48,17 @@ r s t
 u v w x y z
 ```
 
-1. 多行输入单行输出：
-
+- 多行输入单行输出：
 
 ```bash
 # cat test.txt | xargs
 a b c d e f g h i j k l m n o p q r s t u v w x y z
 ```
 
-2. -n 选项多行输出：
+- -n 选项多行输出：
 
 ```bash
 # cat test.txt | xargs -n3
-
 a b c
 d e f
 g h i
@@ -73,24 +70,22 @@ v w x
 y z
 ```
 
-3. -d 选项可以自定义一个定界符：
+- -d 选项可以自定义一个定界符：
 
 ```bash
 # echo "nameXnameXnameXname" | xargs -dX
-
 name name name name
 ```
 
-4. 结合 -n 选项使用：
+- 结合 -n 选项使用：
 
 ```bash
 # echo "nameXnameXnameXname" | xargs -dX -n2
-
 name name
 name name
 ```
 
-5. 参数 -I 可以指定一个替换的字符
+- 参数 -I 可以指定一个替换的字符
 
 读取 stdin，将格式化后的参数传递给命令
 
@@ -119,7 +114,7 @@ hello-sk.sh-word
 [root@localhost data]#
 ```
 
-6. 复制所有图片文件到 /data/images 目录下：
+- 复制所有图片文件到 /data/images 目录下：
 
 ```bash
 ls *.jpg | xargs -n1 -I cp {} /data/images

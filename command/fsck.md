@@ -8,7 +8,7 @@ Linux fsck命令用于 检查与修复 Linux 档案系统，可以同时检查�
 fsck [-sACVRP] [-t fstype] [--] [fsck-options] filesys [...]
 ```
 
-### 参数 ：
+### 参数
 
 > filesys ： device 名称(eg./dev/sda1)，mount 点 (eg. / 或 /usr)
 > -t : 给定档案系统的型式，若在 /etc/fstab 中已有定义或 kernel 本身已支援的则不需加上此参数
@@ -30,4 +30,4 @@ fsck [-sACVRP] [-t fstype] [--] [fsck-options] filesys [...]
 fsck -t msdos -a /dev/hda5
 ```
 
-> 注意 此指令可与 /etc/fstab 相互参考操作来加以了解。
+> 注意：此指令可与 /etc/fstab 相互参考操作来加以了解。

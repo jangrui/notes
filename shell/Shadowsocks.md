@@ -28,11 +28,11 @@ BY : [秋水逸冰](https://teddysun.com/486.html)
 
 - 常规版 Windows 客户端
 
-https://github.com/shadowsocks/shadowsocks-windows/releases
+<https://github.com/shadowsocks/shadowsocks-windows/releases>
 
 - ShadowsocksR 版 Windows 客户端
 
-https://github.com/shadowsocksrr/shadowsocksr-csharp/releases
+<https://github.com/shadowsocksrr/shadowsocksr-csharp/releases>
 
 ## 使用方法
 

@@ -2,7 +2,7 @@
 
 ## 安装 zsh
 
-- Mac 
+- Mac
 
 ```bash
 brew install -y zsh

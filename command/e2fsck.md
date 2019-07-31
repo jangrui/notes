@@ -8,7 +8,7 @@ e2fsck命令用于检查使用 Linux ext2 档案系统的 partition 是否正常
 e2fsck [-pacnydfvFV] [-b superblock] [-B blocksize] [-l|-L bad_blocks_file] [-C fd] device
 ```
 
-### 参数说明：
+### 参数说明
 
 > device ： 预备检查的硬盘 partition，例如：/dev/sda1
 > -a : 对 partition 做检查，若有问题便自动修复，等同 -p 的功能

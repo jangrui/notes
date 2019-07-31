@@ -16,17 +16,17 @@ rename old new file
 
 ## 实例
 
-1. 批量修改文件名
+- 批量修改文件名
 
 ```bash
-[root@localhost data]# find . -maxdepth 1 -type f |xargs 
+[root@localhost data]# find . -maxdepth 1 -type f |xargs
 ./file4 ./file1 ./2word ./file3 ./1word ./file2 ./arg.word ./sk.sh ./4word ./3word
 [root@localhost data]# find . -maxdepth 1 -type f |xargs rename "word" "txt"
-[root@localhost data]# find . -maxdepth 1 -type f |xargs 
+[root@localhost data]# find . -maxdepth 1 -type f |xargs
 ./3txt ./file4 ./file1 ./2txt ./file3 ./arg.txt ./file2 ./4txt ./1txt ./sk.sh
 ```
 
-2. 批量修改扩展名
+- 批量修改扩展名
 
 ```bash
 [root@localhost data]# ls

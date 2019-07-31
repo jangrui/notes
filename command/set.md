@@ -21,9 +21,9 @@ set -o pipefail
 另一种办法是在执行 Bash 脚本的时候，从命令行传入这些参数。
 
 ```bash
-$ bash -euxo pipefail script.sh
+bash -euxo pipefail script.sh
 ```
 
-## 参考：
+## 参考
 
 > [Bash 脚本 set 命令教程](http://www.ruanyifeng.com/blog/2017/11/bash-set.html)

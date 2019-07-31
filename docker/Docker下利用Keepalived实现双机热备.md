@@ -69,15 +69,15 @@ vrrp_instance VI_1 {
         auth_pass 1111
     }
     virtual_ipaddress {
-       	192.168.41.170
-       	# 指定一个虚拟 ip
+        192.168.41.170
+        # 指定一个虚拟 ip
     }
 }
 
 
 virtual_server 192.168.41.170 8888 {
     delay_loop 3
-    lb_algo rr 
+    lb_algo rr
     lb_kind NAT
     persistence_timeout 50
     protocol TCP
@@ -90,7 +90,7 @@ virtual_server 192.168.41.170 8888 {
 
 virtual_server 192.168.41.170 3306 {
     delay_loop 3
-    lb_algo rr 
+    lb_algo rr
     lb_kind NAT
     persistence_timeout 50
     protocol TCP
@@ -106,7 +106,7 @@ virtual_server 192.168.41.170 3306 {
 
 ```bash
 systemctl restart keepalived
-systemctl enable keepalived	
+systemctl enable keepalived
 ```
 
 ## 检测

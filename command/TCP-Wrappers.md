@@ -6,14 +6,14 @@ TCP Wrappers服务的防火墙策略由两个控制列表文件所控制，用�
 
 TCP Wrappers服务的控制列表文件配置起来并不复杂，常用的参数如下表所示。
 
-|客户端类型 		|示例 							|满足示例的客户端列表|
+|客户端类型      |示例                         |满足示例的客户端列表|
 |-|-|-|
-|单一主机 		|192.168.10.128					|IP地址为192.168.10.10的主机
-|指定网段	 		|192.168.10. 					|IP段为192.168.10.0/24的主机
-|指定网段	 		|192.168.10.0/255.255.255.0 	|IP段为192.168.10.0/24的主机
-|指定DNS后缀 		|.jangrui.com 					|所有DNS后缀为.jangrui.com的主机
-|指定主机名称 	|www.jangrui.com 				|主机名称为www.jagnrui.com的主机
-|指定所有客户端 	|ALL 							|所有主机全部包括在内
+|单一主机        |192.168.10.128              |IP地址为192.168.10.10的主机
+|指定网段        |192.168.10.                 |IP段为192.168.10.0/24的主机
+|指定网段        |192.168.10.0/255.255.255.0  |IP段为192.168.10.0/24的主机
+|指定DNS后缀     |.jangrui.com                |所有DNS后缀为.jangrui.com的主机
+|指定主机名称     |www.jangrui.com             |主机名称为www.jagnrui.com的主机
+|指定所有客户端   |ALL                         |所有主机全部包括在内
 
 在配置TCP Wrappers服务时需要遵循两个原则：
 
@@ -35,7 +35,7 @@ ssh_exchange_identification: read: Connection reset by peer
 [root@localhost ~]# systemctl list-unit-files |grep "ssh"
 anaconda-sshd.service                       static  
 sshd-keygen.service                         static  
-sshd.service                                enabled 
+sshd.service                                enabled
 sshd@.service                               static  
 sshd.socket                                 disabled
 ```
@@ -45,12 +45,12 @@ sshd.socket                                 disabled
 接下来,再允许策略规则文件中加入一条规则,使其放行源自192.168.10.0/24网段，访问本机sshd服务的所有流量。可以看到，服务器立刻就放行了访问sshd服务的流量，效果非常直观：
 
 ```bash
-[root@localhost ~]# echo 'sshd:192.168.10.' >> /etc/hosts.allow 
+[root@localhost ~]# echo 'sshd:192.168.10.' >> /etc/hosts.allow
 [root@localhost ~]# ssh 192.168.10.128
 The authenticity of host '192.168.10.128 (192.168.10.128)' can't be established.
 ECDSA key fingerprint is 47:b8:a9:92:67:d3:87:64:12:9f:ea:9c:e7:55:07:82.
 Are you sure you want to continue connecting (yes/no)? yes
 Warning: Permanently added '192.168.10.128' (ECDSA) to the list of known hosts.
-root@192.168.10.128's password: 
+root@192.168.10.128's password:
 Last login: Wed Nov  7 09:35:27 2018 from 192.168.10.1
 ```
