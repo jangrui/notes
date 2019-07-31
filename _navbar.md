@@ -1,7 +1,7 @@
-- **Menu**
-	- [Home](/)
-	- [Command](command/)
-	- [Shell](shell/)
-	- [Docker](docker/)
-	- [Git](git/)
-	- [RHCE](rhce/)
+- Menu
+  - [Home](/)
+  - [Command](command/)
+  - [Shell](shell/)
+  - [Docker](docker/)
+  - [Git](git/)
+  - [RHCE](rhce/)

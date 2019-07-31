@@ -87,6 +87,3 @@
 - RHCE
   - [RHCSA](rhce/rhcsa)
   - [RHCE](rhce/rhce)
-
-- WordPress
-  - [REST-API](wordpress/REST-API)
