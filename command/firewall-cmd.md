@@ -4,7 +4,7 @@
 
 |参数    |作用|
 |-|-|
-|--add-forward-port=                      |指定端口接收到的请求转发到另一指定端口
+|--add-forward-port=                        |指定端口接收到的请求转发到另一指定端口
 |--add-icmp-block=                          |按icmp类型 设置阻塞
 |--add-interface=<网卡名称>                  |将源自该网卡的所有流量都导向某个指定区域
 |--add-lockdown-whitelist-command=          |添加一个具体的command
@@ -40,43 +40,43 @@
 |--list-ports                               |列出默认区域端口配置信息
 |--list-rich-rules                          |显示当前区域的富规则配置情况
 |--list-services                            |显示当前区域可用的服务
-|--list-sources                                 |列出指定区域的所有绑定的source地址
-|--lockdown-on 						        |开启白名单
+|--list-sources                             |列出指定区域的所有绑定的source地址
+|--lockdown-on                              |开启白名单
 |--lockdown-off                             |关闭白名单
-|--panic-off 								              |关闭应急状况模式
-|--panic-on 								              |开启应急状况模式
-|--permanent 								              |全局设置(重启后生效)
-|--query-forward-port= 						        |查询指定端口接收到的请求转发到另一指定端口
-|--query-icmp-block= 						          |查询指定 icmp 报文阻塞配置规则
-|--query-interface= 						          |查询网卡规则
-|--query-lockdown 							          |查询白名单开启状态
-|--query-lockdown-whitelist-command= 		  |查询一个具体的command
-|--query-lockdown-whitelist-context= 		  |查询一个具体的selinux contenxt
-|--query-lockdown-whitelist-uid= 			    |查询一个具体指定的用户开放配置权限
-|--query-lockdown-whitelist-user= 			  |查询一个具体指定的用户开放配置权限
-|--query-masquerade 						          |查询 ip 伪装状态
-|--query-panic 								            |查询应急模式是状态
-|--query-port=<端口号/协议> 					      |查看默认区域该端口配置规则情况
-|--query-rich-rule 							          |查看默认区域指定富规则配置情况
-|--query-service= 							          |查询默认区域该服务的配置规则情况
-|--query-source= 							            |查询指定zone是否跟指定source地址进行了绑定
-|--reload 								               	|让“永久生效”的配置规则立即生效，并覆盖当前的配置规则
-|--remove-forward-port= 					        |设置默认区域不再转发该端口的流量
-|--remove-icmp-block= 					         	|取消 icmp 类型阻塞
-|--remove-interface= 						          |删除默认网卡配置规则
-|--remove-lockdown-whitelist-command= 		|删除一个具体的command
-|--remove-lockdown-whitelist-context= 		|删除一个具体的selinux contenxt
-|--remove-lockdown-whitelist-uid= 			  |删除一个具体的指定的用户开放配置权限
-|--remove-lockdown-whitelist-user= 			  |删除一个具体的指定的用户开放配置权限
-|--remove-masquerade 						          |删除 ip 伪装
-|--remove-port=<端口号/协议>					      |设置默认区域不再允许该端口的流量
-|--remove-rich-rule= 						          |删除默认区域富规则配置规则
-|--remove-service=<服务名>					        |设置默认区域不再允许该服务的流量
-|--remove-source=							            |不再将源自此IP或子网的流量导向某个指定区域
-|--set-default-zone=<区域名称>				      |设置默认的区域，使其永久生效
-|--state 									                |查看 firewall 状态
-|--version 									              |查看 firewall 版本
-|--zone= 								                 	|指定临时区域
+|--panic-off                                |关闭应急状况模式
+|--panic-on                                 |开启应急状况模式
+|--permanent                                |全局设置(重启后生效)
+|--query-forward-port=                      |查询指定端口接收到的请求转发到另一指定端口
+|--query-icmp-block=                        |查询指定 icmp 报文阻塞配置规则
+|--query-interface=                         |查询网卡规则
+|--query-lockdown                           |查询白名单开启状态
+|--query-lockdown-whitelist-command=        |查询一个具体的command
+|--query-lockdown-whitelist-context=        |查询一个具体的selinux contenxt
+|--query-lockdown-whitelist-uid=            |查询一个具体指定的用户开放配置权限
+|--query-lockdown-whitelist-user=           |查询一个具体指定的用户开放配置权限
+|--query-masquerade                         |查询 ip 伪装状态
+|--query-panic                              |查询应急模式是状态
+|--query-port=<端口号/协议>                   |查看默认区域该端口配置规则情况
+|--query-rich-rule                          |查看默认区域指定富规则配置情况
+|--query-service=                           |查询默认区域该服务的配置规则情况
+|--query-source=                            |查询指定zone是否跟指定source地址进行了绑定
+|--reload                                   |让“永久生效”的配置规则立即生效，并覆盖当前的配置规则
+|--remove-forward-port=                     |设置默认区域不再转发该端口的流量
+|--remove-icmp-block=                       |取消 icmp 类型阻塞
+|--remove-interface=                        |删除默认网卡配置规则
+|--remove-lockdown-whitelist-command=       |删除一个具体的command
+|--remove-lockdown-whitelist-context=       |删除一个具体的selinux contenxt
+|--remove-lockdown-whitelist-uid=           |删除一个具体的指定的用户开放配置权限
+|--remove-lockdown-whitelist-user=          |删除一个具体的指定的用户开放配置权限
+|--remove-masquerade                        |删除 ip 伪装
+|--remove-port=<端口号/协议>                  |设置默认区域不再允许该端口的流量
+|--remove-rich-rule=                        |删除默认区域富规则配置规则
+|--remove-service=<服务名>                   |设置默认区域不再允许该服务的流量
+|--remove-source=                           |不再将源自此IP或子网的流量导向某个指定区域
+|--set-default-zone=<区域名称>               |设置默认的区域，使其永久生效
+|--state                                    |查看 firewall 状态
+|--version                                  |查看 firewall 版本
+|--zone=                                    |指定临时区域
 
 ## 策略规则
 
