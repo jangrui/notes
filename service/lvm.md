@@ -8,8 +8,6 @@ LVM技术是在硬盘分区和文件系统之间添加了一个逻辑层，它�
 
 ![LVM 抽象模型](../_media/lvm.png)
 
-## 部署
-
 - 命令
 
 |功能|物理卷 PV |卷组 VG   |逻辑卷 LV |
@@ -21,7 +19,7 @@ LVM技术是在硬盘分区和文件系统之间添加了一个逻辑层，它�
 |扩展|         |vgextend |lvextend |
 |缩小|         |vgreduce |lvreduce |
 
-### 创建物理卷
+## 创建物理卷
 
 准备几块磁盘
 
@@ -43,7 +41,7 @@ brw-rw----. 1 root disk 8, 32 7月  31 07:41 /dev/sdc
 [root@localhost ~]#
 ```
 
-### 创建卷组
+## 创建卷组
 
 创建一个卷组，并把 `/dev/sdb`、`/dev/sdc` 加入到卷组
 
@@ -107,7 +105,7 @@ PE 默认大小 4m
 1. 创建卷组时调整默认 PE 大小: `vgcreate -s 16m vg1 /dev/sdb /dev/sdc`
 2. vgchange 命令调整: `vgchange vg1 -s 4m`
 
-### 切割逻辑卷
+## 切割逻辑卷
 
 在对逻辑卷进行切割时有两种计量单位。
 
@@ -180,7 +178,7 @@ PE 默认大小 4m
 [root@localhost ~]#
 ```
 
-### 格式化逻辑卷
+## 格式化逻辑卷
 
 ```bash
 [root@localhost ~]# mkfs.xfs /dev/vg1/lv1
