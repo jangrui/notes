@@ -42,6 +42,7 @@ sudo yum makecache fast
 ```
 
 > 中国科技大学: <https://mirrors.ustc.edu.cn/docker-ce/linux/centos/docker-ce.repo>
+>
 > 官方: <https://download.docker.com/linux/centos/docker-ce.repo>
 
 安装 docker-ce ：
@@ -67,9 +68,12 @@ sudo systemctl daemon-reload
 sudo systemctl restart docker
 ```
 
-### 加速地址:
+### 加速地址
 
 > 163: <http://hub-mirror.c.163.com>
+>
 > aliyun: <https://u4kqosl2.mirror.aliyuncs.com>
+>
 > docker中国: <https://registry.docker-cn.com>
+>
 > daocloud.io: <http://f1361db2.m.daocloud.io>
