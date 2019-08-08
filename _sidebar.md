@@ -82,6 +82,7 @@
   - [vim](tools/vim)
   - [zsh](tools/zsh)
   - [pam](tools/pam)
+  - [sudo](tools/sudo)
   - [brew 国内源](tools/brew)
 
 - RHCE
