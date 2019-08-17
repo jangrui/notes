@@ -15,12 +15,11 @@
 - Service
   - [RAID](service/raid)
   - [LVM](service/lvm)
-  - [FTP](service/ftp)
-  - [NFS](service/nfs)
   - [SSH](service/ssh)
-  - [SSHFS](service/sshfs)
-  - [OXFS](service/oxfs)
+  - [FTP](service/ftp)
   - [Samba](service/samba)
+  - [NFS](service/nfs)
+  - [AutoFs](service/autofs)
   - [Bind](service/bind)
   - [DHCP](service/dhcp)
   - [Postfix](service/postfix)
@@ -29,6 +28,8 @@
   - [PXE](service/pxe)
   - [LDAP](service/ldap)
   - [Rsync](service/rsync)
+  <!-- - [SSHFS](service/sshfs) -->
+  <!-- - [OXFS](service/oxfs) -->
 
 - Nginx
   - [模块](/nginx/模块)
