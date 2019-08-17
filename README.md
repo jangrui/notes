@@ -16,6 +16,7 @@
   - [FTP](service/ftp)
   - [Samba](service/samba)
   - [NFS](service/nfs)
+  - [AutoFs](service/autofs)
   - [Bind](service/bind)
   - [DHCP](service/dhcp)
   - [Postfix](service/postfix)
