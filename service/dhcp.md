@@ -5,11 +5,12 @@
  * @LastEditTime: 2019-08-19 16:39:08
  * @Description:  
  -->
+ 
 # DHCP
 
 DHCP: (Dynamic Host Configuration Protocol) 动态分配IP
 
-## 主要用途：
+## 主要用途
 
 - 用于内部网络和网络服务供应商自动分配IP地址给用户
 - 用于内部网络管理员作为对所有电脑作集中管理的手段
