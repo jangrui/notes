@@ -60,6 +60,8 @@ options {
     # 执行 rndc stats将服务器的统计信息写入文件,默认为named.stats
     memstatistics-file "/var/named/data/named_mem_stats.txt";
     # 默认为 named.memestats,当退出的服务的时候将服务器的统计信息写到文件中
+    masterfile-format text;
+    # 同步的文件格式，防止乱码
     recursing-file  "/var/named/data/named.recursing";
     secroots-file   "/var/named/data/named.secroots";
     allow-query     { localhost; };
@@ -260,7 +262,7 @@ nslookup www.linuxprobe.com
 
 > 考虑范围：应由本机提供 DNS 查询服务
 >
-> `nslookup`: 用于检测能否从 DNS 服务器中查询到域名与IP地址的解析记录，进而更准确地检验DNS服务器是否已经能够为用户提供服务。
+> `nslookup`: 用于检测能否从 DNS 服务器中查询到域名与IP地址的解析记录。
 
 ## 反向解析
 
@@ -308,18 +310,23 @@ nslookup 192.168.10.10 127.0.0.1
 |主服务器|192.168.10.10|
 |从服务器|192.168.10.20|
 
-1. 主服务器的区域配置应允许从服务器的更新请求。
+1. 主服务器的区域配置
+
+> 应允许从服务器的更新请求。
 
 ```bash
 cat <<EOF> /etc/named.rfc1912.zones
 zone "linuxprobe.com" IN {
     type master;
     file "linuxprobe.com.zone";
+    masterfile-format text;
+    # 同步的文件格式，不然会乱码
     allow-update { 192.168.10.20; };
 };
 zone "10.168.192.in-addr.arpa" IN {
     type master;
     file "192.168.10.arpa";
+    masterfile-format text;
     allow-update { 192.168.10.20; };
 };
 EOF
@@ -327,20 +334,33 @@ EOF
 systemctl restart named
 ```
 
-2. 从服务器中填写主服务器的IP地址与要抓取的区域信息，服务类型应是 `slave`。
+2. 从服务器主配置
+
+```bash
+sed -i 's,127.0.0.1,localhost,' /etc/named.conf
+```
+
+> 127.0.0.1 是 ipv4 地址；localhost 是域名，同时还指向 ipv6 的 `::1`；
+
+3. 从服务器的区域配置
+
+> 服务类型应是 `slave`；配置主服务器的 `IP地址`、要抓取的`区域信息`以及`存放位置`。
 
 ```bash
 cat <<EOF> /etc/named.rfc1912.zones
 zone "linuxprobe.com" IN {
     type slave;
     masters { 192.168.10.10; };
+    masterfile-format text;
     file "slaves/linuxprobe.com.zone";
 };
 zone "10.168.192.in-addr.arpa" IN {
     type slave;
     masters { 192.168.10.10; };
+    masterfile-format text;
     file "slaves/192.168.10.arpa";
 };
+EOF
 
 nmcli con show
 nmcli con mod ens32 ipv4.dns "192.168.10.20"
@@ -406,16 +426,16 @@ key "master-slave" {                    # 主从服务定义应相同
 EOF
 
 chown root.named /var/named/chroot/etc/transfer.key
-chmod 600 /var/named/chroot/etc/transfer.key
+chmod 640 /var/named/chroot/etc/transfer.key
 ```
 
-> 考虑范围：密钥属性应为只读
+> 密钥权限应很小。
 
 3. 开启 bind 服务密钥验证。
 
 ```bash
-sed -i '/options/i\include  "/var/named/chroot/etc/transfer.key";' /etc/named.conf
-sed -i '/allow-query/a\        allow-transfer { key master-slave; };' /etc/named.conf
+sed -i '/options/i\include "/var/named/chroot/etc/transfer.key";' /etc/named.conf
+sed -i '/allow-query/a\\tallow-transfer { key master-slave; };' /etc/named.conf
 
 rm -rf /var/named/slaves/*
 named-checkconf
@@ -426,14 +446,14 @@ ls /var/named/slaves/
 4. 从服务器开启密钥验证。
 
 ```bash
-scp /var/named/chroot/etc/transfer.key root@192.168.10.10:/var/named/chroot/etc/
+scp root@192.168.10.10:/var/named/chroot/etc/transfer.key /var/named/chroot/etc/
 
 chown root.named /var/named/chroot/etc/transfer.key
-chmod 600 /var/named/chroot/etc/transfer.key
+chmod 640 /var/named/chroot/etc/transfer.key
 
-sed -i '/options/i\include  "/var/named/chroot/etc/transfer.key";' /etc/named.conf
-sed -i '/dnssec-validation/a\dnssec-lookaside auto;' /etc/named.conf
-sed -i '/logging/i\server 192.168.10.10{{ key master-slave; };};' /etc/named.conf
+sed -i '/options/i\include "/var/named/chroot/etc/transfer.key";' /etc/named.conf
+sed -i '/dnssec-validation/a\\tdnssec-lookaside auto;' /etc/named.conf
+sed -i '/logging/i\server 192.168.10.10{ keys { master-slave; }; };' /etc/named.conf
 
 rm -rf /var/named/slaves/*
 named-checkconf
@@ -451,7 +471,7 @@ DNS缓存服务器（Caching DNS Server）是一种不负责域名数据维护�
 
 ```bash
 ping -c4 114.114.114.114
-sed -i '/recursion/a\forworders { 114.114.114.114; 8.8.8.8; };' /etc/named.conf
+sed -i '/recursion yes/a\\tforwarders { 114.114.114.114; 8.8.8.8; };' /etc/named.conf
 
 nmcli con show
 nmcli con show ens32 |grep ipv4.dns:
@@ -465,3 +485,117 @@ nslookup 8.8.8.8
 
 ## 分离解析
 
+可让位于不同地理位置的用户通过访问相同的域名，从不同的服务器获取到相同的数据。
+
+虚拟机模拟不同位置的服务器和不同位置的用户：
+
+|网卡名|主机名称|ip 地址|
+|-|-|-|
+|ens32|DNS 服务器   |192.168.10.10|
+|     |大陆 DNS 记录 |122.71.115.15|
+|     |美国 DNS 记录 |106.185.25.15|
+|ens33|大陆用户      |192.168.11.130|
+|ens34|美国用户      |192.168.22.140|
+
+1. 主配置文件
+
+```bash
+cat <<EOF> /etc/named.conf
+options {
+	listen-on port 53 { localhost; };
+	listen-on-v6 port 53 { ::1; };
+	directory 	"/var/named";
+	dump-file 	"/var/named/data/cache_dump.db";
+	statistics-file "/var/named/data/named_stats.txt";
+	memstatistics-file "/var/named/data/named_mem_stats.txt";
+	recursing-file  "/var/named/data/named.recursing";
+	secroots-file   "/var/named/data/named.secroots";
+	allow-query     { localhost; };
+	recursion yes;
+	dnssec-enable yes;
+	dnssec-validation yes;
+	bindkeys-file "/etc/named.iscdlv.key";
+	managed-keys-directory "/var/named/dynamic";
+	pid-file "/run/named/named.pid";
+	session-keyfile "/run/named/session.key";
+};
+logging {
+        channel default_debug {
+                file "data/named.run";
+                severity dynamic;
+        };
+};
+include "/etc/named.rfc1912.zones";
+include "/etc/named.root.key";
+EOF
+```
+
+2. 区域配置文件
+
+```bash
+cat <<EOF> /etc/named.rfc1912.zones
+acl "china" { 192.168.11.0/24; };
+acl "american" { 192.168.22.0/24; };
+view "china" {
+    match-clients { "china"; };
+    zone "linuxprobe.com" {
+        type master;
+        file "linuxprobe.com.china";
+    };
+};
+view "american" {
+    match-clients { "american"; };
+    zone "linuxprobe.com" {
+        type master;
+        file "linuxprobe.com.american";
+    };
+};
+EOF
+```
+
+3. 数据配置文件
+
+```bash
+cat <<EOF> /var/named/linuxprobe.com.china
+\$TTL 1D
+@       IN SOA     linuxprobe.com.      root.linuxprobe.com.    (
+                                                                    0    ; serial
+                                                                    1D   ; refresh
+                                                                    1H   ; retry
+                                                                    1W   ; expire
+                                                                    3H)  ; minimum
+        NS         ns.linuxprobe.com.
+ns      IN A       122.71.115.10
+www     IN A       122.71.115.15
+EOF
+
+cat <<EOF> /var/named/linuxprobe.com.american
+\$TTL 1D
+@       IN SOA     linuxprobe.com.      root.linuxprobe.com.    (
+                                                                    0    ; serial
+                                                                    1D   ; refresh
+                                                                    1H   ; retry
+                                                                    1W   ; expire
+                                                                    3H)  ; minimum
+        NS         ns.linuxprobe.com.
+ns      IN A       106.185.25.10
+www     IN A       106.185.25.15
+EOF
+
+systemctl restart named
+```
+
+4. 模拟用户访问
+
+虚拟机再添加两块网卡，自定义分配网络段分别为 `192.168.11.0/24` 和 `192.168.22.0/24`。
+
+```bash
+nmcli con show
+nmcli con mod ens34 ipv4.method manual ipv4.addr 192.168.11.130/24 gw4 192.168.11.2 ipv4.dns 192.168.11.2
+nmcli con mod ens35 ipv4.method manual ipv4.addr 192.168.22.140/24 gw4 192.168.22.2 ipv4.dns 192.168.22.2
+nmcli con up ens34
+nmcli con up ens35
+
+nslookup www.linuxprobe.com 192.168.11.130
+nslookup www.linuxprobe.com 192.168.22.140
+```
