@@ -2,10 +2,11 @@
  * @Author: jangrui
  * @Date: 2019-07-02 21:40:50
  * @LastEditors: jangrui
- * @LastEditTime: 2019-08-22 20:18:09
+ * @LastEditTime: 2019-08-22 20:19:12
  * @version: 
- * @Descripttion: 
+ * @Descripttion: iptables
  -->
+ 
 # iptables
 
 linux 的防火墙由 netfilter 和 iptables 组成。用户空间的 iptables 制定防火墙规则，内核空间的 netfilter 实现防火墙功能。
