@@ -1,3 +1,12 @@
+<!--
+ * @Author: jangrui
+ * @Date: 2019-07-02 21:40:50
+ * @LastEditors: jangrui
+ * @LastEditTime: 2019-08-22 20:20:46
+ * @version: 
+ * @Descripttion: find
+ -->
+
 # find
 
 find 命令用于查找目录下的文件，同时也可以调用其它命令执行相应的操作。
@@ -9,7 +18,7 @@ find [-H] [-L] [-P] [-D debugopts] [-O level] [pathname] [expression]
 find [选项]                                    [路径]     [操作语句]
 ```
 
-![find命令语法](./find.png)
+![find命令语法](../_media/command/find.png)
 
 ## 参数说明
 
