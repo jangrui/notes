@@ -2,7 +2,7 @@
  * @Author: jangrui
  * @Date: 2019-07-31 07:47:05
  * @LastEditors: jangrui
- * @LastEditTime: 2019-08-22 20:01:20
+ * @LastEditTime: 2019-08-23 00:43:56
  * @version: 
  * @Descripttion: Bind
  -->
@@ -176,6 +176,20 @@ mail    IN A	    192.168.10.10           #地址记录(mail.linuxprobe.com.)
 www     IN A	    192.168.10.10           #地址记录(www.linuxprobe.com.)
 bbs     IN A	    192.168.10.20           #地址记录(bbs.linuxprobe.com.)
 ```
+
+> 第六列使用括号将几个值包围起来。
+>
+> `0;serial`: 区域数据文件的序列编号 serial，每次修改此区域数据文件都需要修改该编号值以便让 slave dns 服务器同步该区域数据文件。
+>
+> `1D;refresh`: 刷新 refresh 时间间隔，表示 slave dns 服务器找 master dns 服务器更新区域数据文件的时间间隔。
+>
+> `1H;retry`: 第三个值是重试 retry 时间间隔，表示 slave dns 服务器找 master dns 服务器更新区域数据文件时，如果联系不上master，则等待多久再重试联系，该值一般比 refresh 时间短，否则该值表示的重试就失去了意义。
+>
+> `1W;expire`: 过期 expire 时间值，表示 slave dns 服务器上的区域数据文件多久过期。
+>
+> `3H;minimum`: negative ttl，表示客户端找 dns 服务器解析时，否定答案的缓存时间长度。
+>
+> 这几个值可以分行写，也可以直接写在同一行中使用空格分开，`(0 1D 1H 1W 3H);`。
 
 - 反向解析
 
