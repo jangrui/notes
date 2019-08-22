@@ -1,3 +1,11 @@
+<!--
+ * @Author: jangrui
+ * @Date: 2019-07-02 21:40:50
+ * @LastEditors: jangrui
+ * @LastEditTime: 2019-08-22 20:18:09
+ * @version: 
+ * @Descripttion: 
+ -->
 # iptables
 
 linux 的防火墙由 netfilter 和 iptables 组成。用户空间的 iptables 制定防火墙规则，内核空间的 netfilter 实现防火墙功能。
@@ -38,7 +46,7 @@ iptables (用户空间)位于 `/sbin/iptables`，是用来管理防火墙的命�
 
 ### 处理优先级
 
-![数据包在四表五链中的匹配流程](../_media/iptables.png)
+![数据包在四表五链中的匹配流程](../_media/command/iptables.png)
 
 表之间的优先顺序：
 
@@ -98,7 +106,7 @@ iptables (用户空间)位于 `/sbin/iptables`，是用来管理防火墙的命�
 
 四张表 + 五条链（Hook point）+ 规则
 
-![规则组成](../_media/iptables-cmd.png)
+![规则组成](../_media/command/iptables-cmd.png)
 
 #### command
 
