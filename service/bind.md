@@ -1,3 +1,12 @@
+<!--
+ * @Author: jangrui
+ * @Date: 2019-07-31 07:47:05
+ * @LastEditors: jangrui
+ * @LastEditTime: 2019-08-22 20:01:20
+ * @version: 
+ * @Descripttion: Bind
+ -->
+
 # BIND
 
 ## DNS 域名解析服务
@@ -20,7 +29,7 @@ DNS域名解析服务采用分布式的数据结构来存放海量的“区域�
 
 DNS 域名解析过程，例如在访问网站：www.linuxprobe.com 时，其大致查询流程如下图：
 
-![DNS 解析流程](../_media/bind-dns.png)
+![DNS 解析流程](../_media/service/bind-dns.png)
 
 ## 安装 Bind 服务
 

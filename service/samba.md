@@ -1,3 +1,12 @@
+<!--
+ * @Author: jangrui
+ * @Date: 2019-07-31 07:46:47
+ * @LastEditors: jangrui
+ * @LastEditTime: 2019-08-22 19:59:35
+ * @version: 
+ * @Descripttion: Samba
+ -->
+
 # SAMBA
 
 Samba 是 SMB/CIFS 网络协议的重新实现, 局域网下可以在 Linux 和 Windows 系统间进行文件、打印机共享，和 NFS 的功能类似。
@@ -187,9 +196,9 @@ cat /home/samba/hello.txt
 
 打开 Finder （或在桌面），按快捷键 `CMD + k` 进入网络邻居，在服务器地址输入 `smb://samba服务器ip` 连接登录即可。
 
-![连接 samba 服务](../_media/samba-mac-smb.png)
+![连接 samba 服务](../_media/service/samba-mac-smb.png)
 
-![samba 用户登录](../_media/samba-mac-login.png)
+![samba 用户登录](../_media/service/samba-mac-login.png)
 
 ### windows 系统挂载
 

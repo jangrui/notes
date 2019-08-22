@@ -1,3 +1,11 @@
+<!--
+ * @Author: jangrui
+ * @Date: 2019-07-31 07:44:38
+ * @LastEditors: jangrui
+ * @LastEditTime: 2019-08-22 19:57:32
+ * @version: 
+ * @Descripttion: 
+ -->
 # LVM 逻辑卷管理器
 
 LVM(Logical Volume Manager)逻辑卷管理是在Linux2.4内核以上实现的磁盘管理技术。它是Linux环境下对磁盘分区进行管理的一种机制。
@@ -6,7 +14,7 @@ LVM(Logical Volume Manager)逻辑卷管理是在Linux2.4内核以上实现的磁
 
 LVM技术是在硬盘分区和文件系统之间添加了一个逻辑层，它提供了一个抽象的卷组，可以把多块硬盘进行卷组合并。这样一来，用户不必关心物理硬盘设备的底层架构和布局，就可以实现对硬盘分区的动态调整。
 
-![LVM 抽象模型](../_media/lvm.png)
+![LVM 抽象模型](../_media/service/lvm.png)
 
 - 命令
 
