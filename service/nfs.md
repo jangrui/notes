@@ -1,3 +1,12 @@
+<!--
+ * @Author: jangrui
+ * @Date: 2019-07-31 07:45:23
+ * @LastEditors: jangrui
+ * @LastEditTime: 2019-08-22 20:00:19
+ * @version: 
+ * @Descripttion: NFS
+ -->
+
 # NFS
 
 NFS（Network File System）即网络文件系统，允许网络中的计算机之间共享资源。可以透明地读写远端 NFS 服务器上的文件，就像访问本地文件一样。

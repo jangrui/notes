@@ -1,3 +1,12 @@
+<!--
+ * @Author: jangrui
+ * @Date: 2019-08-18 05:34:02
+ * @LastEditors: jangrui
+ * @LastEditTime: 2019-08-22 20:00:43
+ * @version: 
+ * @Descripttion: AutoFs
+ -->
+
 # AutoFs 自动挂载服务
 
 Autofs 与 Mount/Umount 的不同之处在于，它是一种看守程序。
