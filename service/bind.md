@@ -2,7 +2,7 @@
  * @Author: jangrui
  * @Date: 2019-07-31 07:47:05
  * @LastEditors: jangrui
- * @LastEditTime: 2019-08-23 00:43:56
+ * @LastEditTime: 2019-08-23 05:58:36
  * @version: 
  * @Descripttion: Bind
  -->
@@ -81,7 +81,7 @@ options {
 
     recursion yes;
     # 是否开启递归查询请求，设置为 no 的话，不去寻根
-    forworders { 114.114.114.114; 8.8.8.8; };
+    forwarders { 114.114.114.114; 8.8.8.8; };
     #开启转发，启用 forwarders 查询会减少本地流量的浪费，直接从转发的服务器上查询的结果返回；
 
     dnssec-enable yes;
