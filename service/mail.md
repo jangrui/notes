@@ -2,7 +2,7 @@
  * @Author: jangrui
  * @Date: 2019-07-31 07:47:41
  * @LastEditors: jangrui
- * @LastEditTime: 2019-08-23 07:01:27
+ * @LastEditTime: 2019-08-23 07:14:57
  * @version: 
  * @Descripttion: Mail Server
  -->
@@ -288,3 +288,98 @@ cat /var/spool/mail/boss
 > centos 7: `-r xxx@xxx.com`
 >
 > centos 6: `-- -f xxx@xxx.com`
+
+### 设置用户别名邮箱
+
+用户别名可以是Linux系统内的本地用户，也可以是完全虚构的用户名字。
+
+```bash
+cat /etc/aliases|grep -Ev '^$|#'
+mailer-daemon:	postmaster
+postmaster:	root
+bin:		root
+daemon:		root
+adm:		root
+lp:		    root
+sync:		root
+shutdown:	root
+halt:		root
+mail:		root
+news:		root
+uucp:		root
+operator:	root
+games:		root
+gopher:		root
+ftp:		root
+nobody:		root
+radiusd:	root
+nut:		root
+dbus:		root
+vcsa:		root
+canna:		root
+wnn:		root
+rpm:		root
+nscd:		root
+pcap:		root
+apache:		root
+webalizer:	root
+dovecot:	root
+fax:		root
+quagga:		root
+radvd:		root
+pvm:		root
+amandabackup:		root
+privoxy:	root
+ident:		root
+named:		root
+xfs:		root
+gdm:		root
+mailnull:	root
+postgres:	root
+sshd:		root
+smmsp:		root
+postfix:	root
+netdump:	root
+ldap:		root
+squid:		root
+ntp:		root
+mysql:		root
+desktop:	root
+rpcuser:	root
+rpc:		root
+nfsnobody:	root
+ingres:		root
+system:		root
+toor:		root
+manager:	root
+dumper:		root
+abuse:		root
+newsadm:	news
+newsadmin:	news
+usenet:		news
+ftpadm:		ftp
+ftpadmin:	ftp
+ftp-adm:	ftp
+ftp-admin:	ftp
+www:		webmaster
+webmaster:	root
+noc:		root
+security:	root
+hostmaster:	root
+info:		postmaster
+marketing:	postmaster
+sales:		postmaster
+support:	postmaster
+decode:		root
+```
+
+添加新别名：
+
+```bash
+echo "zhangsan: root" >> /etc/aliases
+newaliases
+tail -n 4 /etc/aliases
+
+echo "我是张三，测试邮件" | mail -s "张三" -r zhangsan@linuxprobe.com postmaster@linuxprobe.com
+cat /var/spool/mail/root
+```
