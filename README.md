@@ -2,7 +2,7 @@
  * @Author: jangrui
  * @Date: 2019-07-02 21:40:50
  * @LastEditors: jangrui
- * @LastEditTime: 2019-08-22 23:29:35
+ * @LastEditTime: 2019-08-24 09:15:51
  * @version: 
  * @Descripttion: Linux 运维学习路径
  -->
@@ -29,7 +29,7 @@
   - [Bind](service/bind)
   - [DHCP](service/dhcp)
   - [Mail Server](service/mail)
-  - [Squid](service/squid)
+  - [Proxy Server](service/Proxy)
   - [ISCSI](service/iscsi)
   - [PXE](service/pxe)
   - [LDAP](service/ldap)
