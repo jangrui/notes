@@ -2,7 +2,7 @@
  * @Author: jangrui
  * @Date: 2019-07-31 07:48:02
  * @LastEditors: jangrui
- * @LastEditTime: 2019-08-24 09:14:46
+ * @LastEditTime: 2019-08-24 22:07:10
  * @version: 
  * @Descripttion: Proxy Server
  -->
@@ -186,26 +186,6 @@ curl www.linuxprobe.com/linux.png
 curl www.linuxprobe.com/linux.png -x localhost:3128
 ```
 
-### 透明正向代理
-
-> 虚拟机模拟测试：
-
-```bash
-cat /etc/squid/squid.conf.default > /etc/squid/squid.conf
-sed -i 's,http_port 3128,& transparent,' /etc/squid/squid.conf
-sed -i '/http_port/a\cache_dir ufs \/var\/spool\/squid 100 16 256' /etc/squid/squid.conf
-
-systemctl restart squid
-
-nmcli con show ens32|grep ipv4.addr
-nmcli con mod ens32 +ipv4.addr 192.168.10.20/24
-nmcli con up ens32
-
-iptables -t nat -A POSTROUTING -s 192.168.10.20 -j SNAT --to 192.168.10.10
-
-curl www.linuxprobe.com -x 192.168.10.20:3128
-```
-
 ### 反向代理
 
 ```bash
@@ -228,4 +208,62 @@ sed -i '/http_port/a\cache_peer 192.168.10.50 parent 80 0 originserver' /etc/squ
 systemctl restart squid
 
 curl www.example.com -x 192.168.10.10:8080
+```
+
+### 匿名代理
+
+- 透明代理(Transparent Proxy)
+  - `REMOTE_ADDR` = Proxy IP
+  - `HTTP_VIA` = Proxy IP
+  - `HTTP_X_FORWARDED_FOR` = Your IP
+  - 透明代理虽然可以直接“隐藏”你的IP地址，但是还是可以从HTTP_X_FORWARDED_FOR来查到你是谁。
+
+- 匿名代理(Anonymous Proxy)
+  - `REMOTE_ADDR` = Proxy IP
+  - `HTTP_VIA` = Proxy IP
+  - `HTTP_X_FORWARDED_FOR` = proxy IP
+  - 匿名代理比透明代理进步了一点：别人只能知道你用了代理，无法知道你是谁。
+
+- 混淆代理(Distorting Proxies)
+  - `REMOTE_ADDR` = Proxy IP
+  - `HTTP_VIA` = Proxy IP
+  - `HTTP_X_FORWARDED_FOR` = Random IP address
+  - 与匿名代理相同，如果使用了混淆代理，别人还是能知道你在用代理，但是会得到一个假的IP地址，伪装的更逼真
+
+- 高匿代理(Elite proxy或High Anonymity Proxy)
+  - `REMOTE_ADDR` = Proxy IP
+  - `HTTP_VIA` = not determined
+  - `HTTP_X_FORWARDED_FOR` = not determined
+  - 高匿代理让别人根本无法发现你是在用代理，所以是最好的选择。
+
+> 虚拟机模拟测试：
+
+```bash
+nmcli con show ens32|grep ipv4.addr
+nmcli con mod ens32 +ipv4.addr 192.168.10.20/24
+nmcli con up ens32
+
+yum install -y nginx
+systemctl start nginx
+echo "192.168.10.10 www.example.com" >> /etc/hosts
+
+cat /etc/squid/squid.conf.default > /etc/squid/squid.conf
+sed -i 's,http_port 3128,http_port 192.168.10.20:3128,' /etc/squid/squid.conf
+sed -i '/http_port/i\forwarded_for delete' /etc/squid/squid.conf
+sed -i '/http_port/i\follow_x_forwarded_for deny all' /etc/squid/squid.conf
+sed -i '/http_port/i\request_header_access Via deny all' /etc/squid/squid.conf
+sed -i '/http_port/i\request_header_access X-Forwarded-For deny all' /etc/squid/squid.conf
+sed -i '/http_port/i\request_header_access From deny all' /etc/squid/squid.conf
+# 禁用缓存
+sed -i '/#cache_dir/i\acl NCACHE method GET' /etc/squid/squid.conf
+sed -i '/#cache_dir/i\no_cache deny NCACHE' /etc/squid/squid.conf
+
+systemctl restart squid
+
+curl -I www.example.com
+curl -I www.example.com -x 192.168.10.20:3128
+curl -I www.example.com -x 192.168.10.20:3128
+curl -I www.example.com -x 192.168.10.20:3128
+
+cat /var/log/nginx/access.log
 ```
