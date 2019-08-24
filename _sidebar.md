@@ -2,7 +2,7 @@
  * @Author: jangrui
  * @Date: 2019-07-02 21:40:50
  * @LastEditors: jangrui
- * @LastEditTime: 2019-08-24 09:16:06
+ * @LastEditTime: 2019-08-24 09:18:06
  * @version: 
  * @Descripttion: Siderbar
  -->
@@ -32,7 +32,7 @@
   - [Bind](service/bind)
   - [DHCP](service/dhcp)
   - [Mail Server](service/mail)
-  - [Proxy Server](service/Proxy)
+  - [Proxy Server](service/proxy)
   - [ISCSI](service/iscsi)
   - [PXE](service/pxe)
   - [LDAP](service/ldap)
