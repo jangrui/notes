@@ -2,7 +2,7 @@
  * @Author: jangrui
  * @Date: 2019-07-31 07:48:02
  * @LastEditors: jangrui
- * @LastEditTime: 2019-08-24 22:07:10
+ * @LastEditTime: 2019-08-25 01:00:36
  * @version: 
  * @Descripttion: Proxy Server
  -->
@@ -243,27 +243,35 @@ nmcli con show ens32|grep ipv4.addr
 nmcli con mod ens32 +ipv4.addr 192.168.10.20/24
 nmcli con up ens32
 
+echo "192.168.10.20 www.example.com" >> /etc/hosts
+
 yum install -y nginx
 systemctl start nginx
-echo "192.168.10.10 www.example.com" >> /etc/hosts
 
 cat /etc/squid/squid.conf.default > /etc/squid/squid.conf
-sed -i 's,http_port 3128,http_port 192.168.10.20:3128,' /etc/squid/squid.conf
+
+systemctl restart squid
+squid -k parse
+squid -z
+curl -I www.example.com
+curl -I www.example.com -x 192.168.10.20:3128
+
+# 高匿名
 sed -i '/http_port/i\forwarded_for delete' /etc/squid/squid.conf
 sed -i '/http_port/i\follow_x_forwarded_for deny all' /etc/squid/squid.conf
 sed -i '/http_port/i\request_header_access Via deny all' /etc/squid/squid.conf
 sed -i '/http_port/i\request_header_access X-Forwarded-For deny all' /etc/squid/squid.conf
 sed -i '/http_port/i\request_header_access From deny all' /etc/squid/squid.conf
 # 禁用缓存
+sed -i '/#cache_dir/a\cache_dir ufs \/var\/spool\/squid 100 16 256 no-store' /etc/squid/squid.conf
 sed -i '/#cache_dir/i\acl NCACHE method GET' /etc/squid/squid.conf
 sed -i '/#cache_dir/i\no_cache deny NCACHE' /etc/squid/squid.conf
 
 systemctl restart squid
+squid -k parse
+squid -z
 
-curl -I www.example.com
-curl -I www.example.com -x 192.168.10.20:3128
-curl -I www.example.com -x 192.168.10.20:3128
-curl -I www.example.com -x 192.168.10.20:3128
-
+curl -I www.example.com  -H "X-Forwarded-For: 1.1.1.1" -H "Host: www.linuxprobe.com"
+curl -I www.example.com  -H "X-Forwarded-For: 1.1.1.1" -H "Host: www.linuxprobe.com" -x 192.168.10.20:3128
 cat /var/log/nginx/access.log
 ```
