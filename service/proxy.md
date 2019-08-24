@@ -2,7 +2,7 @@
  * @Author: jangrui
  * @Date: 2019-07-31 07:48:02
  * @LastEditors: jangrui
- * @LastEditTime: 2019-08-25 01:02:18
+ * @LastEditTime: 2019-08-25 01:05:55
  * @version: 
  * @Descripttion: Proxy Server
  -->
@@ -249,6 +249,7 @@ yum install -y nginx
 systemctl start nginx
 
 cat /etc/squid/squid.conf.default > /etc/squid/squid.conf
+sed -i 's,http_port 3128,http_port 192.168.10.20:3128,' /etc/squid/squid.conf
 
 systemctl restart squid
 squid -k parse
@@ -257,7 +258,6 @@ curl -I www.example.com
 curl -I www.example.com -x 192.168.10.20:3128
 
 # 高匿名
-sed -i 's,http_port 3128,http_port 192.168.10.20:3128,' /etc/squid/squid.conf
 sed -i '/http_port/i\forwarded_for delete' /etc/squid/squid.conf
 sed -i '/http_port/i\follow_x_forwarded_for deny all' /etc/squid/squid.conf
 sed -i '/http_port/i\request_header_access Via deny all' /etc/squid/squid.conf
