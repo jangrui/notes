@@ -2,7 +2,7 @@
  * @Author: jangrui
  * @Date: 2019-07-02 21:40:50
  * @LastEditors: jangrui
- * @LastEditTime: 2019-08-26 21:29:53
+ * @LastEditTime: 2019-08-26 21:33:13
  * @version: 
  * @Descripttion: Linux 运维学习路径
  -->
@@ -107,12 +107,6 @@
   - Jumpserver
     - [Jumpserver 跳板机](http://docs.jumpserver.org/zh/docs/index.html)
 
-- Tools
-  - [vim](tools/vim)
-  - [zsh](tools/zsh)
-  - [sudo](tools/sudo)
-  - [brew 国内源](tools/brew)
-
 - Python
   - [判断字符串类型](python/判断字符串类型)
   - [格式化输出](python/格式化输出字符串)
@@ -122,3 +116,9 @@
 - RHCE
   - [RHCSA](rhce/rhcsa)
   - [RHCE](rhce/rhce)
+
+- Tools
+  - [vim](tools/vim)
+  - [zsh](tools/zsh)
+  - [sudo](tools/sudo)
+  - [brew 国内源](tools/brew)
