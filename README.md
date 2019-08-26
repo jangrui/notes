@@ -2,7 +2,7 @@
  * @Author: jangrui
  * @Date: 2019-07-02 21:40:50
  * @LastEditors: jangrui
- * @LastEditTime: 2019-08-24 09:18:16
+ * @LastEditTime: 2019-08-26 20:43:36
  * @version: 
  * @Descripttion: Linux 运维学习路径
  -->
@@ -19,21 +19,21 @@
     - [字符串处理](shell/字符串处理)
 
 - Service
-  - [RAID](service/raid)
-  - [LVM](service/lvm)
-  - [SSH](service/ssh)
-  - [FTP](service/ftp)
-  - [Samba](service/samba)
-  - [NFS](service/nfs)
-  - [AutoFs](service/autofs)
-  - [Bind](service/bind)
-  - [DHCP](service/dhcp)
-  - [Mail Server](service/mail)
-  - [Proxy Server](service/proxy)
-  - [ISCSI](service/iscsi)
-  - [PXE](service/pxe)
-  - [LDAP](service/ldap)
-  - [Rsync](service/rsync)
+  - [RAID 磁盘阵列技术](service/raid)
+  - [LVM 逻辑卷管理器](service/lvm)
+  - [SSH 远程管理主机服务](service/ssh)
+  - [FTP 部署文件传输服务](service/ftp)
+  - [Samba 部署文件共享服务](service/samba)
+  - [NFS 部署文件共享服务](service/nfs)
+  - [AutoFs 部署自动挂载服务](service/autofs)
+  - [Bind 部署域名解析服务](service/bind)
+  - [DHCP 部署动态分配主机地址](service/dhcp)
+  - [Postfix + dovecot 部署邮件服务](service/mail)
+  - [Squid 部署代理服务](service/proxy)
+  - [ISCSI 部署网络存储服务](service/iscsi)
+  - [PXE + Kickstart 部署无人值守安装服务](service/unattended)
+  - [LDAP 部署轻量级目录服务](service/ldap)
+  - [Rsync 部署同步服务](service/rsync)
   <!-- - [SSHFS](service/sshfs) -->
   <!-- - [OXFS](service/oxfs) -->
 
