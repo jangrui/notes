@@ -2,7 +2,7 @@
  * @Author: jangrui
  * @Date: 2019-08-19 14:52:07
  * @LastEditors: jangrui
- * @LastEditTime: 2019-08-22 20:01:47
+ * @LastEditTime: 2019-08-26 22:17:14
  * @Description: DHCP
  -->
  
@@ -129,10 +129,12 @@ shared-network 224-29 {
   }
   pool {
     allow members of "foo";
+    # 允许范围
     range 10.17.224.10 10.17.224.250;
   }
   pool {
     deny members of "foo";
+    # 拒绝范围
     range 10.0.29.10 10.0.29.230;
   }
 }
