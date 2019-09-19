@@ -2,7 +2,7 @@
  * @Author: jangrui
  * @Date: 2019-07-02 21:40:50
  * @LastEditors: jangrui
- * @LastEditTime: 2019-08-26 21:32:59
+ * @LastEditTime: 2019-09-19 21:23:58
  * @version: 
  * @Descripttion: Siderbar
  -->
@@ -59,6 +59,7 @@
     - [gitlab 添加 SMTP](git/给gitlab添加SMTP)
     - [gitlab 备份与恢复](git/gitlab备份与恢复)
     - [gitlab 常用命令](git/gitlab常用命令)
+    - [git 飞行规则](git/git飞行规则.md)
 
   - Jenkins
     - [安装](jenkins/install)
@@ -119,4 +120,4 @@
   - [vim](tools/vim)
   - [zsh](tools/zsh)
   - [sudo](tools/sudo)
-  - [brew 国内源](tools/brew)
+  - [brew](tools/brew)
