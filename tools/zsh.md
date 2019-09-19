@@ -1,3 +1,11 @@
+<!--
+ * @Author: jangrui
+ * @Date: 2019-07-02 21:40:50
+ * @LastEditors: jangrui
+ * @LastEditTime: 2019-09-19 20:58:21
+ * @Version: 
+ * @Description: zsh
+ -->
 # zsh + oh-my-zsh + agnoster
 
 ## 安装 zsh
@@ -41,12 +49,6 @@ sed -i 's/^ZSH.*/ZSH_THEME="agnoster"/' ~/.zshrc
 source ~/.zshrc
 ```
 
-> MacOS sed 报错
-
-```bash
-sed -i '' 's/^plugins.*/plugins=(zsh-completions git)/' ~/.zshrc
-```
-
 ## 命令补全插件
 
 ```bash
@@ -54,6 +56,12 @@ git clone https://github.com/zsh-users/zsh-completions.git ${ZSH_CUSTOM:-~/.oh-m
 sed -i 's/^plugins.*/plugins=(zsh-completions git)/' ~/.zshrc
 echo 'autoload -U compinit && compinit' >> ~/.zshrc
 source ~/.zshrc
+```
+
+> MacOS sed 报错
+
+```bash
+sed -i '' 's/^plugins.*/plugins=(zsh-completions git)/' ~/.zshrc
 ```
 
 ## 自动补全插件
