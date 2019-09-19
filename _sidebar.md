@@ -2,7 +2,7 @@
  * @Author: jangrui
  * @Date: 2019-07-02 21:40:50
  * @LastEditors: jangrui
- * @LastEditTime: 2019-09-19 21:23:58
+ * @LastEditTime: 2019-09-19 22:38:22
  * @version: 
  * @Descripttion: Siderbar
  -->
@@ -121,3 +121,5 @@
   - [zsh](tools/zsh)
   - [sudo](tools/sudo)
   - [brew](tools/brew)
+  - [npm](tools/npm)
+  - [公共 dns](tools/dns)
