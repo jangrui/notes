@@ -2,7 +2,7 @@
  * @Author: jangrui
  * @Date: 2019-09-19 21:41:04
  * @LastEditors: jangrui
- * @LastEditTime: 2019-09-19 22:00:16
+ * @LastEditTime: 2019-10-16 23:31:45
  * @Version: 
  * @Description: npm
  -->
@@ -45,4 +45,19 @@ npm config set registry http://registry.npm.taobao.org/
 
 ```bash
 npm config set registry https://registry.npmjs.org/
+```
+
+## 更新
+
+- npm 更新
+
+```bash
+npm i -g npm
+```
+
+- node 更新
+
+```bash
+npm i -g n
+n latest
 ```
