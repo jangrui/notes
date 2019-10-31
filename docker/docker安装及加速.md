@@ -8,14 +8,14 @@ Docker CE 分为 stable, test, 和 nightly 三个更新频道。每六个月发�
 
 内核需3.10以上
 
-## ubuntu
+### ubuntu
 
 ```bash
 sudo apt-get update
 sudo apt-get install docker-ce
 ```
 
-## CentOS
+### CentOS
 
 - 卸载旧版:
 
@@ -51,15 +51,26 @@ sudo yum makecache fast
 sudo yum install -y docker-ce
 ```
 
-## 国内镜像加速
+### MacOS
+
+```bash
+brew cask install docker
+```
+
+## 配置
 
 ```bash
 tee /etc/docker/daemon.json <<-'end'
 {
-  "registry-mirrors": ["http://hub-mirror.c.163.com"]
+  "registry-mirrors": ["http://hub-mirror.c.163.com"],
+  "exec-opts": ["native.cgroupdriver=systemd"]
 }
 end
 ```
+
+> registry-mirrors: 指定镜像源；
+>
+> exec-opts: 指定 Cgroup Driver；
 
 重启 docker：
 
@@ -77,3 +88,10 @@ sudo systemctl restart docker
 > docker中国: <https://registry.docker-cn.com>
 >
 > daocloud.io: <http://f1361db2.m.daocloud.io>
+
+## 普通用户添加 docker 权限
+
+```bash
+sudo gpasswd -a $USER docker
+newgrp docker
+```
