@@ -6,7 +6,13 @@ Docker CE 分为 stable, test, 和 nightly 三个更新频道。每六个月发�
 
 ## 安装
 
-内核需3.10以上
+Linux 内核需3.10以上
+
+### MacOS
+
+```bash
+brew cask install docker
+```
 
 ### ubuntu
 
@@ -20,64 +26,59 @@ sudo apt-get install docker-ce
 - 卸载旧版:
 
 ```bash
+sudo rpm -qa|grep ^docker
 sudo yum remove -y docker docker-*
 ```
 
 - yum源安装
 
-```bash
-sudo yum install -y yum-utils \
-                    device-mapper-persistent-data \
-                    lvm2
-```
-
-执行下面的命令添加 yum 软件源:
-
 鉴于国内网络问题，强烈建议使用国内源。
 
 ```bash
 # aliyun
-sudo yum-config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+sudo curl -o /etc/yum.repo.d/docker-ce.repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
 sudo yum makecache fast
+sudo yum install -y device-mapper-persistent-data lvm2 docker-ce
 ```
 
 > 中国科技大学: <https://mirrors.ustc.edu.cn/docker-ce/linux/centos/docker-ce.repo>
 >
 > 官方: <https://download.docker.com/linux/centos/docker-ce.repo>
 
-安装 docker-ce ：
-
-```bash
-sudo yum install -y docker-ce
-```
-
-### MacOS
-
-```bash
-brew cask install docker
-```
-
 ## 配置
 
+- 开启 ipv4 和 iptables 内核转发功能
+
 ```bash
-tee /etc/docker/daemon.json <<-'end'
+tee /etc/sysctl.conf <<EOF
+net.ipv4.ip_forward = 1
+net.bridge.bridge-nf-call-iptables = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+
+EOF
+
+sysctl -p
+```
+
+- 启动 docker 并配置国内镜像
+
+```bash
+systemctl start docker
+systemctl enable docker
+
+tee /etc/docker/daemon.json <EOF
 {
   "registry-mirrors": ["http://hub-mirror.c.163.com"],
   "exec-opts": ["native.cgroupdriver=systemd"]
 }
-end
+EOF
+
+systemctl restart docker
 ```
 
 > registry-mirrors: 指定镜像源；
 >
 > exec-opts: 指定 Cgroup Driver；
-
-重启 docker：
-
-```bash
-sudo systemctl daemon-reload
-sudo systemctl restart docker
-```
 
 ### 加速地址
 
@@ -94,4 +95,14 @@ sudo systemctl restart docker
 ```bash
 sudo gpasswd -a $USER docker
 newgrp docker
+```
+
+## 安装 docker-compose
+
+```bash
+sudo yum install -y python3-pip
+# sudo apt-get install -y python3-pip
+sudo pip3 install -U pip -i https://pypi.douban.com/simple
+sudo pip install -U docker-compose -i https://pypi.douban.com/simple
+docker-compose --version
 ```
