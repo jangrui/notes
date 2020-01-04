@@ -100,9 +100,10 @@
   - [Firewalld](command/firewall-cmd)
   - [iptables](command/iptables)
   - SELinux
-  - [pam](tools/pam)
-  - Kerberos
   - ACL
+  - [sudo](security/sudo)
+  - [pam](security/pam)
+  - [FreeIPA](security/freeipa)
   - Jumpserver
     - [Jumpserver 跳板机](http://docs.jumpserver.org/zh/docs/index.html)
 
@@ -119,7 +120,6 @@
 - Tools
   - [vim](tools/vim)
   - [zsh](tools/zsh)
-  - [sudo](tools/sudo)
   - [brew](tools/brew)
   - [npm](tools/npm)
   - [公共 dns](tools/dns)
