@@ -31,11 +31,10 @@
 ## 1. 修改 selinux
 
 ```bash
-[root@server0 Desktop]# grep SELINUX= /etc/selinux/config 
-# SELINUX= can take one of these three values:
+[root@server0 Desktop]# grep ^SELINUX= /etc/selinux/config
 SELINUX=permissive
-[root@server0 Desktop]# sed -i "s/permissive/enforcing/g" `grep "SELINUX=permissive" -rl /etc/selinux/config`
-[root@server0 Desktop]# grep SELINUX= /etc/selinux/config # SELINUX= can take one of these three values:
+[root@server0 Desktop]# sed -i "/SELINUX/s/permissive/enforcing/g" /etc/selinux/config`
+[root@server0 Desktop]# grep ^SELINUX= /etc/selinux/config
 SELINUX=enforcing
 [root@server0 Desktop]# setenforce 1
 [root@server0 Desktop]# 

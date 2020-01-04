@@ -52,8 +52,7 @@ yum -y groupinstall "Server with GUI"
 
 ```bash
 hostnamectl set-hostname server0.example.com
-nmcli connection add autoconnect yes con-name eth0 ifname eth0 type ethernet ip4 172.25.0.11/24 gw4 172.25.254.254
-nmcli connection add modify eht0 ipv4.dns 172.25.254.254
+nmcli connection add autoconnect yes con-name eth0 ifname eth0 type ethernet ip4 172.25.0.11/24 gw4 172.25.254.254 ipv4.dns 172.25.254.254
 nmcli connection up eth0
 systemctl restart network
 ```
@@ -67,11 +66,10 @@ echo root_password |passwd --stdin root
 ## 2. 设置 selinux
 
 ```bash
-[root@server0 Desktop]# grep SELINUX= /etc/selinux/config 
-# SELINUX= can take one of these three values:
+[root@server0 Desktop]# grep ^SELINUX= /etc/selinux/config 
 SELINUX=permissive
-[root@server0 Desktop]# sed -i "s/permissive/enforcing/g" `grep "SELINUX=permissive" -rl /etc/selinux/config`
-[root@server0 Desktop]# grep SELINUX= /etc/selinux/config # SELINUX= can take one of these three values:
+[root@server0 Desktop]# sed -i "/^SELINUX/s/permissive/enforcing/g" /etc/selinux/config`
+[root@server0 Desktop]# grep ^SELINUX= /etc/selinux/config
 SELINUX=enforcing
 [root@server0 Desktop]# setenforce 1
 [root@server0 Desktop]# 
