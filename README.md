@@ -91,6 +91,8 @@
 
 - Monitor
   - Zabbix
+    - [钉钉报警](zabbix/dingding)
+    - [微信报警](zabbix/wechat)
 
 - Virtualization
   - KVM
