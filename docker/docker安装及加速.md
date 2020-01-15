@@ -68,7 +68,7 @@ systemctl enable docker
 
 tee /etc/docker/daemon.json <EOF
 {
-  "registry-mirrors": ["http://hub-mirror.c.163.com"],
+  "registry-mirrors": ["https://dockerhub.azk8s.cn"],
   "exec-opts": ["native.cgroupdriver=systemd"]
 }
 EOF
@@ -82,6 +82,8 @@ systemctl restart docker
 
 ### 加速地址
 
+> Azure: <https://dockerhub.azk8s.cn>
+>
 > 163: <http://hub-mirror.c.163.com>
 >
 > aliyun: <https://u4kqosl2.mirror.aliyuncs.com>
