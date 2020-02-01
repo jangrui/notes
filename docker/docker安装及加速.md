@@ -107,3 +107,37 @@ sudo pip3 install -U pip -i https://pypi.douban.com/simple
 sudo pip install -U docker-compose -i https://pypi.douban.com/simple
 docker-compose --version
 ```
+
+## docker-compose 命令补全
+
+- Linux
+
+```bash
+sudo curl -L https://raw.githubusercontent.com/docker/compose/1.25.3/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose
+```
+
+- MacOS
+
+```bash
+brew install bash-completion
+
+sudo curl -L https://raw.githubusercontent.com/docker/compose/1.25.3/contrib/completion/bash/docker-compose -o /usr/local/etc/bash_completion.d/docker-compose
+
+tee >> ~/.bash_profile <<EOF
+if [ -f \$(brew --prefix)/etc/bash_completion ]; then
+. \$(brew --prefix)/etc/bash_completion
+fi
+EOF
+```
+
+- Oh My Zsh
+
+```bash
+sed '/^plugins=*/s,), docker-compose&,g' ~/.zshrc
+
+curl -L https://raw.githubusercontent.com/docker/compose/1.25.3/contrib/completion/zsh/_docker-compose > ${ZSH_CUSTOM:=~/.oh-my-zsh/custom}/plugins/zsh-docker-compose/_docker-compose
+
+echo 'fpath=(${ZSH_CUSTOM:=~/.oh-my-zsh/custom}/plugins/zsh-docker-compose $fpath)' >> ~/.zshrc
+echo 'autoload -Uz compinit && compinit -i' >> ~/.zshrc
+exec $SHELL -l
+```
