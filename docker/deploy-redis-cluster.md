@@ -1,4 +1,4 @@
-# Docker下部署RedisCluster集群
+# Docker 下部署 RedisCluster 集群
 
 > RedisCluster 无中心节点，客户端与redis节点直连，不需要中间代理层；
 >

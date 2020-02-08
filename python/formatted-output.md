@@ -84,4 +84,4 @@ format(0.0026,'.2e')
 |%p	|指针(用十六进制打印值的内存地址)
 |%n	|存储输出字符的数量放进参数列表的下一个变量中
 
-> 出自：[Python3 格式化输出 %s & %d 等](https://www.cnblogs.com/alfred0311/p/7735539.html)
+> [Python3 格式化输出 %s & %d 等](https://www.cnblogs.com/alfred0311/p/7735539.html)

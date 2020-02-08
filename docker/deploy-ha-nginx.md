@@ -1,4 +1,4 @@
-# Docker下部署Nginx高可用负载均衡集群
+# Docker 下部署 Nginx 高可用负载均衡集群
 
 下面以 [人人开源](https://www.renren.io) 前后端项目为例，创建 Nginx 高可用负载均衡集群
 

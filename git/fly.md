@@ -1,13 +1,4 @@
-<!--
- * @Author: jangrui
- * @Date: 2019-09-18 19:02:07
- * @LastEditors: jangrui
- * @LastEditTime: 2019-09-18 19:25:01
- * @version: 
- * @Descripttion: Git飞行规则
- -->
-
-# Git飞行规则(Flight Rules)
+# Git 飞行规则 (Flight Rules)
 
 ## 这篇文章的约定
 
