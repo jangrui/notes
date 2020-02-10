@@ -121,7 +121,6 @@
   - [npm](tools/npm)
   - [公共 DNS](tools/dns)
   - [Linux 内核优化](tools/sysctl)
-  - [VPS 一键测试脚本 bench.sh](shell/bench.sh)
-  - [Shadowsocks 一键安装脚本（四合一）](shell/shadowsocks)
-  - [一键安装最新内核并开启 BBR 脚本](shell/bbr)
+  - [VPS 一键测试脚本 bench.sh](tools/bench.sh)
+  - [安装最新内核并开启 BBR 加速](tools/bbr)
   
