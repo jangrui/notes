@@ -50,11 +50,11 @@ sudo yum install -y device-mapper-persistent-data lvm2 docker-ce
 - 开启 ipv4 和 iptables 内核转发功能
 
 ```bash
-tee /etc/sysctl.conf <<EOF
+sudo sh -c 'cat <<EOF>> /etc/sysctl.conf
 net.ipv4.ip_forward = 1
 net.bridge.bridge-nf-call-iptables = 1
 net.bridge.bridge-nf-call-ip6tables = 1
-EOF
+EOF'
 
 sysctl -p
 ```
@@ -62,34 +62,28 @@ sysctl -p
 - 启动 docker 并配置国内镜像
 
 ```bash
-systemctl start docker
-systemctl enable docker
+sudo systemctl start docker
+sudo systemctl enable docker
 
-tee /etc/docker/daemon.json <EOF
+sudo sh -c 'cat <<EOF> /etc/docker/daemon.json
 {
   "registry-mirrors": ["https://dockerhub.azk8s.cn"],
   "exec-opts": ["native.cgroupdriver=systemd"]
 }
-EOF
+EOF'
 
-systemctl restart docker
+sudo systemctl restart docker
 ```
 
 > registry-mirrors: 指定镜像源；
 >
-> exec-opts: 指定 Cgroup Driver；
-
-### 加速地址
-
+> 国内镜像源
+>
 > Azure: <https://dockerhub.azk8s.cn>
 >
 > 163: <http://hub-mirror.c.163.com>
 >
-> aliyun: <https://u4kqosl2.mirror.aliyuncs.com>
->
-> docker中国: <https://registry.docker-cn.com>
->
-> daocloud.io: <http://f1361db2.m.daocloud.io>
+> exec-opts: 指定 Cgroup Driver；
 
 ## 普通用户添加 docker 权限
 
