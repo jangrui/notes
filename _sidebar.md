@@ -73,6 +73,7 @@
     - [docker 安装及加速](docker/install)
     - [docker 的常用指令](docker/cmd)
     - [Dockerfile](docker/dockerfile)
+    - [Docker Compose 模板文件](docker/compose)
     - [Docker 下实现 PXC 集群负载均衡](docker/deploy-pxc)
     - [Docker 下利用 Keepalived 实现双机热备](docker/deploy-ha-keepalived)
     - [Docker 下利用 XtraBackup 进行数据库备份还原](docker/deploy-xtrabackup)
