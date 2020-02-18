@@ -1,115 +1,165 @@
-<!--
- * @Author: jangrui
- * @Date: 2019-07-02 21:40:50
- * @LastEditors: jangrui
- * @LastEditTime: 2019-09-18 19:12:34
- * @version: 
- * @Descripttion: Linux 运维学习路径
- -->
+# CentOS 7 自用初始化
 
-# Linux 运维学习路径
+![Linux](./_media/linux.png "linux.png")
 
-<!-- ![Linux](./_media/linux.png "linux.png") -->
+- 只允许 wheel 组用户切换 root
 
-- Command
-  - [常用命令](/command/cmd)
-  - [分类](command/)
+```bash
+sudo sh -c 'echo "auth required pam_wheel.so use_uid" >> /etc/pam.d/su'
+sudo sh -c 'echo "SU_WHEEL_ONLY yes" >> /etc/login.defs
+sudo usermod -G wheel $USER
+```
 
-- Shell
-  - [特殊变量](shell/special-var)
-  - [变量替换](shell/var-replace)
-  - [字符串处理](shell/string-processing)
+- 普通用户无密码验证
 
-- Service
-  - [RAID 磁盘阵列技术](service/raid)
-  - [LVM 逻辑卷管理器](service/lvm)
-  - [SSH 远程管理主机服务](service/ssh)
-  - [FTP 部署文件传输服务](service/ftp)
-  - [Samba 部署文件共享服务](service/samba)
-  - [NFS 部署文件共享服务](service/nfs)
-  - [AutoFs 部署自动挂载服务](service/autofs)
-  - [Bind 部署域名解析服务](service/bind)
-  - [DHCP 部署动态分配主机地址](service/dhcp)
-  - [Postfix + dovecot 部署邮件服务](service/mail)
-  - [Squid 部署代理服务](service/proxy)
-  - [ISCSI 部署网络存储服务](service/iscsi)
-  - [PXE + Kickstart 部署无人值守安装服务](service/unattended)
-  - [LDAP 部署轻量级目录服务](service/ldap)
-  - [Rsync 部署同步服务](service/rsync)
-  <!-- - [SSHFS](service/sshfs) -->
-  <!-- - [OXFS](service/oxfs) -->
+```bash
+sudo sh -c 'echo "%wheel ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers'
+```
 
-- Web
-  - Nginx
-    - [模块](/nginx/module)
-    - [基本配置与参数说明](nginx/config)
-    - [负载均衡](nginx/upstream)
+- sudo 提示找不到命令
 
-- DB
-  - Mysql
-  - Oracle
-  - Mangodb
+```bash
+sudo sed -i 's,env_reset,!&,' /etc/sudoers
+echo "alias sudo='sudo env PATH=$PATH'" >> ~/.bashrc
+source ~/.bashrc
+```
 
-- DevOps
-  - Git
-    - [git 常用命令](git/git-cmd)
-    - [gitlab 安装](git/gitlab-install)
-    - [gitlab 添加 SMTP](git/gitlab-smtp)
-    - [gitlab 备份与恢复](git/gitlab-backup-recovery)
-    - [gitlab 常用命令](git/gitlab-cmd)
-    - [git 飞行规则](git/git-fly.md)
+- 关闭防火墙
 
-  - Jenkins
-    - [安装](jenkins/install)
-    - [pipline](jenkins/pipline)
-    - [中文文档](https://jenkins.io/zh/doc/)
-    - [Pipeline 详解](https://jenkins.io/zh/doc/book/pipeline/syntax/)
+```bash
+sudo systemctl stop firewalld
+sudo systemctl disable firewalld
+```
 
-  - Ansible
-    - [安装](ansible/install)
-    - [模块](ansible/module)
-    - [中文文档](http://www.ansible.com.cn/)
-    - [Playbook 详解](http://www.ansible.com.cn/docs/playbooks.html)
+- 关闭 SELINUX
 
-  - Docker
-    - [docker 安装及加速](docker/install)
-    - [docker 的常用指令](docker/cmd)
-    - [Dockerfile](docker/dockerfile)
-    - [Docker Compose 模板文件](docker/compose)
-    - [Docker 下实现 PXC 集群负载均衡](docker/deploy-pxc)
-    - [Docker 下利用 Keepalived 实现双机热备](docker/deploy-ha-keepalived)
-    - [Docker 下利用 XtraBackup 进行数据库备份还原](docker/deploy-xtrabackup)
-    - [Docker 下部署 RedisCluster 集群](docker/deploy-redis-cluster)
-    - [Docker 下部署 Nginx 高可用负载均衡集群](docker/deploy-ha-nginx)
+```bash
+sudo sed -i "/SELINUX/ s,enforcing,disabled,g" /etc/selinux/config
+sudo setenforce 0
+```
 
-  - Kubernetes
-    - [Kubernetes 高可用集群部署](k8s/kubernetes-ha-kubeadm)
-    - [Master 节点也做 Worker 节点](k8s/master-worker)
+- 更换国内镜像
 
-- Monitor
-  - Zabbix
-    - [钉钉报警](zabbix/dingding)
-    - [微信报警](zabbix/wechat)
+```bash
+sudo curl -So /etc/yum.repos.d/Centos-Base.repo https://mirrors.aliyun.com/repo/Centos-7.repo
+sudo yum makecache fast
+```
 
-- Virtualization
-  - KVM
-  - Xen
-  - Openstack
-  - VMware
+- 安装 epel 源
 
-- Security
-  - [Firewalld](command/firewall-cmd)
-  - [iptables](command/iptables)
-  - SELinux
-  - ACL
-  - [sudo](security/sudo)
-  - [pam](security/pam)
-  - [FreeIPA](security/freeipa)
-  - Jumpserver
-    - [Jumpserver 跳板机](http://docs.jumpserver.org/zh/docs/index.html)
+```bash
+sudo curl -So /etc/yum.repos.d/epel.repo https://mirrors.aliyun.com/repo/epel-7.repo
+sudo yum makecache fast
+```
 
-- Python
-  - [判断字符串类型](python/str-is-type)
-  - [格式化输出](python/formatted-output)
-  - [pipenv](python/pipenv)
-  - [python 基础](python/basic)
+- 更新系统
+
+```bash
+sudo yum update -y
+```
+
+- 安装命令补全
+
+```bash
+sudo yum install -y bash-completion
+source /etc/profile.d/bash_completion.sh
+```
+
+- 安装新版内核
+
+```bash
+sudo yum install -y screen
+screen -S kernel
+sudo sh -c '
+rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
+rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-4.el7.elrepo.noarch.rpm
+yum makecache fast
+if [ `rpm -qa|grep ^kernel-headers|wc -l` -ge 1 ];then
+    yum remove -y kernel-headers
+fi
+yum --enablerepo elrepo-kernel install -y kernel-ml kernel-ml-devel kernel-ml-headers
+yum group remove -y "Development Tools"
+yum group install -y "Development Tools"
+grub2-set-default 0
+'
+```
+
+> 删除 kernel-headers 会自动删除 gcc gcc-c++ 等依赖
+
+- 调整 swap 分区
+
+> [对于 Red Hat 平台，推荐设置的 SWAP 交换空间大小为多少？](https://access.redhat.com/zh_CN/solutions/881023)
+
+|RAM 大小|SWAP 大小|如果允许休眠 SWAP 大小|
+|:-:|:-:|:-:|
+|2GB 或更少|2倍的 RAM 大小|3倍的 RAM 大小|
+|2GB - 8GB	|与 RAM 大小相同|2倍的 RAM 大小|
+|8GB - 64GB |至少 4GB|1.5倍的 RAM 大小|
+|64GB 或更多 |至少 4GB|不推荐休眠|
+
+- 4G RAM 配 4G SWAP
+
+```bash
+# 创建 swap 文件
+dd if=/dev/zero of=/tmp/swap bs=1G count=4
+sudo chown 0:0 /tmp/swap
+sudo chmod 0600 /tmp/swap
+# 格式化 swap 文件
+sudo mkswap /tmp/swap
+# 开机自动挂载
+sudo sh -c 'echo "/tmp/swap swap swap defaults 0 0" >> /etc/fstab'
+sudo swapon -a
+
+# 调整 sysctl.conf
+sudo sh -c 'cat <<EOF>> /etc/sysctl.conf
+vm.swappiness = 30          # 内存使用大于 70% 时开始使用 swap
+kernel.shmmax = 3865470566  # 单个共享内存段的最大值 eg. 4G RAM: 4*1024*1024*1024*0.9=3865470566
+kernel.shmall = 943718      # 共享内存总量 eg. 4G RAM: 3865470566/4/1024=943718
+kernel.msgmax = 65535       # 
+kernel.msgmnb = 65535       # 
+EOF'
+
+sudo sysctl -p
+```
+
+> [调整虚拟内存](https://access.redhat.com/documentation/zh-cn/red_hat_enterprise_linux/6/html/performance_tuning_guide/s-memory-tunables)
+> 
+> [调整虚拟内存](https://access.redhat.com/documentation/zh-cn/red_hat_enterprise_linux/7/html/performance_tuning_guide/sect-red_hat_enterprise_linux-performance_tuning_guide-memory-configuration_tools#sect-Red_Hat_Enterprise_Linux-Performance_Tuning_Guide-Configuration_tools-Configuring_system_memory_capacity)
+
+- 安装 docker
+
+```bash
+sudo yum remove -y docker*
+sudo curl -So /etc/yum.repos.d/docker-ce.repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+sudo yum makecache fast
+sudo yum install -y lvm2 device-mapper-persistent-data docker-ce
+sudo systemctl start docker
+sudo systemctl enable docker
+sudo sh -c 'cat <<EOF> /etc/docker/daemon.json
+{
+  "registry-mirrors": ["https://dockerhub.azk8s.cn"],
+  "exec-opts": ["native.cgroupdriver=systemd"]
+}
+EOF'
+sudo sh -c 'cat <<EOF>> /etc/sysctl.conf
+net.ipv4.ip_forward = 1
+net.bridge.bridge-nf-call-iptables = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+'
+sudo systemctl restart docker
+sudo gpasswd -a $USER docker
+newgrp docker
+docker info
+```
+
+- 安装 docker-compose
+
+```bash
+sudo yum install -y python3-pip
+sudo pip3 install -U pip -i https://pypi.douban.com/simple
+sudo pip install docker-compose
+docker-compose -v
+# docker-compose 命令补全
+sudo curl -L https://raw.githubusercontent.com/docker/compose/1.25.3/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose
+source /etc/bash_completion.d/docker-compose
+```

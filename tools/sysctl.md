@@ -14,7 +14,7 @@ net.ipv4.tcp_retries2 = 5
 net.ipv4.tcp_orphan_retries = 3
 net.ipv4.tcp_fin_timeout = 2
 net.ipv4.tcp_max_tw_buckets = 36000
-net.ipv4.tcp_tw_recycle = 1
+# net.ipv4.tcp_tw_recycle = 1
 net.ipv4.tcp_tw_reuse = 1
 net.ipv4.tcp_max_orphans = 32768
 net.ipv4.tcp_syncookies = 1
@@ -29,11 +29,11 @@ net.ipv4.ip_forward = 1
 net.ipv4.ip_local_port_range = 10000 65000
 
 # netfilter
-net.ipv4.ip_conntrack_max = 65536
-net.netfilter.nf_conntrack_tcp_timeout_fin_wait = 120
-net.netfilter.nf_conntrack_tcp_timeout_time_wait = 120
-net.netfilter.nf_conntrack_tcp_timeout_close_wait = 60
-net.netfilter.ip_conntrack_tcp_timeout_established = 180
+# net.ipv4.ip_conntrack_max = 65536
+# net.netfilter.nf_conntrack_tcp_timeout_fin_wait = 120
+# net.netfilter.nf_conntrack_tcp_timeout_time_wait = 120
+# net.netfilter.nf_conntrack_tcp_timeout_close_wait = 60
+# net.netfilter.ip_conntrack_tcp_timeout_established = 180
 
 # core
 net.core.netdev_max_backlog = 16384
@@ -47,10 +47,20 @@ net.bridge.bridge-nf-call-iptables = 1
 net.bridge.bridge-nf-call-ip6tables = 1
 
 # vm
-vm.swappiness = 0
+vm.swappiness = 30
 
 # fs
 fs.file-max = 6553560
+
+# kernel
+kernel.msgmax = 65535
+kernel.msgmnb = 65535
+# kernel.shmmax = 3865470566 # 4G RAM
+# kernel.shmall = 943718     # 4G RAM
+
+# bbr
+net.core.default_qdisc = fq
+net.ipv4.tcp_congestion_control = bbr
 
 EOF'
 
@@ -63,6 +73,28 @@ EOF'
 ```
 
 ## 内核参数详解
+
+### core
+
+> /proc/sys/net/core/
+
+|名称|默认值|建议值|描述|
+|:-:|:-:|:-:|:-:|
+|netdev_max_backlog                     |1024       |16384      |每个网络接口接收数据包的速率比内核处理这些包的速率快时，允许送到队列的数据包的最大数目，对重负载服务器而言，该值需要调高一点。|
+|somaxconn                              |128        |16384      |用来限制监听(LISTEN)队列最大数据包的数量，超过这个数量就会导致链接超时或者触发重传机制。web应用中listen函数的backlog默认会给我们内核参数的net.core.somaxconn限制到128，而nginx定义的NGX_LISTEN_BACKLOG默认为511，所以有必要调整这个值。对繁忙的服务器,增加该值有助于网络性能|
+|wmem_default                           |129024     |129024     |默认的发送窗口大小（以字节为单位）|
+|rmem_default                           |129024     |129024     |默认的接收窗口大小（以字节为单位）|
+|rmem_max                               |129024     |873200     |最大的TCP数据接收缓冲|
+|wmem_max                               |129024     |873200     |最大的TCP数据发送缓冲|
+
+### fs
+
+> /proc/sys/fs/
+
+|名称|默认值|建议值|描述|
+|:-:|:-:|:-:|:-:|
+|file-max                               |196385     |6553560    |内核支持的最大 file handle 数量|
+|nr_open                                |1048576    |65535      |一个进程最多使用的 file handle 数|
 
 ### ipv4
 
@@ -114,7 +146,7 @@ EOF'
 |                              max      |61000      |65000      ||
 |net.ipv4.ip_conntrack_max              |65535      |65535      |系统支持的最大ipv4连接数，默认65536（事实上这也是理论最大值），同时这个值和你的内存大小有关，如果内存128M，这个值最大8192，1G以上内存这个值都是默认65536|
 
-## netfilter
+### netfilter
 
 > /proc/sys/net/ipv4/netfilter/
 
@@ -126,29 +158,22 @@ EOF'
 |ip_conntrack_tcp_timeout_close_wait    |60         |60         |close_wait 状态超时时间，超过该时间就清除该连接|
 |ip_conntrack_tcp_timeout_fin_wait      |120        |120        |fin_wait 状态超时时间，超过该时间就清除该连接|
 
-## core
+### kernel
 
-> /proc/sys/net/core/
-
-|名称|默认值|建议值|描述|
-|:-:|:-:|:-:|:-:|
-|netdev_max_backlog                     |1024       |16384      |每个网络接口接收数据包的速率比内核处理这些包的速率快时，允许送到队列的数据包的最大数目，对重负载服务器而言，该值需要调高一点。|
-|somaxconn                              |128        |16384      |用来限制监听(LISTEN)队列最大数据包的数量，超过这个数量就会导致链接超时或者触发重传机制。web应用中listen函数的backlog默认会给我们内核参数的net.core.somaxconn限制到128，而nginx定义的NGX_LISTEN_BACKLOG默认为511，所以有必要调整这个值。对繁忙的服务器,增加该值有助于网络性能|
-|wmem_default                           |129024     |129024     |默认的发送窗口大小（以字节为单位）|
-|rmem_default                           |129024     |129024     |默认的接收窗口大小（以字节为单位）|
-|rmem_max                               |129024     |873200     |最大的TCP数据接收缓冲|
-|wmem_max                               |129024     |873200     |最大的TCP数据发送缓冲|
-
-## fs
-
-> /proc/sys/fs/
+> /proc/sys/kernel/
 
 |名称|默认值|建议值|描述|
 |:-:|:-:|:-:|:-:|
-|file-max                               |196385     |6553560    |内核支持的最大 file handle 数量|
-|nr_open                                |1048576    |65535      |一个进程最多使用的 file handle 数|
+|msgmax|8192                |65535                                                |定义任何一个在信息队列中的信息可能的最大值。该值不能超过队列的大 `msgmnb`。|
+|msgmnb|16384               |65535                                                |定义每一个信息队列的最大值。|
+|msgmni|32000               |                                                     |定义信息队列标识符的最大数量。|
+|shmall|18446744073692774399|4G RAM: 3865470566 / 4 / 1024 = 943718               |定义页面上共享内存的总量，这些内存是系统可以同时使用的。|
+|shmmax|18446744073692774399|4G RAM: 4 * 1024 * 1024 * 1024 * 0.9 = 3865470566    |定义页面上内核允许的单个共享内存片段的最大值。|
+|shmmni|4096                |                                                     |定义系统范围内最大的共享内存片段数量。|
 
-## vm
+> [配置系统内存容量](https://access.redhat.com/documentation/zh-cn/red_hat_enterprise_linux/7/html/performance_tuning_guide/sect-red_hat_enterprise_linux-performance_tuning_guide-memory-configuration_tools#sect-Red_Hat_Enterprise_Linux-Performance_Tuning_Guide-Configuration_tools-Configuring_system_memory_capacity)
+
+### vm
 
 > /proc/sys/vm/
 
