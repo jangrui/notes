@@ -2,6 +2,10 @@
 
 ![Linux](./_media/linux.png "linux.png")
 
+<!-- tabs:start -->
+
+## ** 手动初始化 **
+
 - 只允许 wheel 组用户切换 root
 
 ```bash
@@ -97,11 +101,16 @@ grub2-set-default 0
 |8GB - 64GB |至少 4GB|1.5倍的 RAM 大小|
 |64GB 或更多 |至少 4GB|不推荐休眠|
 
-- 4G RAM 配 4G SWAP
-
 ```bash
+mem=$(free -m|sed '1d'|awk '/Mem/{print $2}')
 # 创建 swap 文件
-dd if=/dev/zero of=/tmp/swap bs=1G count=4
+if [ $mem -le 2048 ];then
+    dd if=/dev/zero of=/tmp/swap bs=${mem}M count=2
+elif [ $mem -gt 2048 && $mem -le 8192 ];then
+    dd if=/dev/zero of=/tmp/swap bs=${mem}M count=1
+else
+    dd if=/dev/zero of=/tmp/swap bs=4G count=4
+fi
 sudo chown 0:0 /tmp/swap
 sudo chmod 0600 /tmp/swap
 # 格式化 swap 文件
@@ -109,46 +118,64 @@ sudo mkswap /tmp/swap
 # 开机自动挂载
 sudo sh -c 'echo "/tmp/swap swap swap defaults 0 0" >> /etc/fstab'
 sudo swapon -a
+```
 
-# 调整 sysctl.conf
-sudo sh -c 'cat <<EOF>> /etc/sysctl.conf
-vm.swappiness = 30          # 内存使用大于 70% 时开始使用 swap
-kernel.shmmax = 3865470566  # 单个共享内存段的最大值 eg. 4G RAM: 4*1024*1024*1024*0.9=3865470566
-kernel.shmall = 943718      # 共享内存总量 eg. 4G RAM: 3865470566/4/1024=943718
-kernel.msgmax = 65535       # 
-kernel.msgmnb = 65535       # 
-EOF'
+- 调整内核
+
+```bash
+mem=$(free -m|sed '1d'|awk '/Mem/{print $2}')
+shmmax=$(awk -v m=$mem 'BEGIN{printf("%.f\n",m*1024*1024*0.9)}')
+shmall=$(awk -v m=$mem 'BEGIN{printf("%.f\n",m*1024*0.9/4)}')
+grep -q "^kernel.shmall" /etc/sysctl.conf && sed -i "s,^kernel.shmmax.*,kernel.shmmax = $shmmax," /etc/sysctl.conf || echo "kernel.shmmax = $shmmax" >> /etc/sysctl.conf
+grep -q "^kernel.shmall" /etc/sysctl.conf && sed -i "s,^kernel.shmall.*,kernel.shmall = $shmall," /etc/sysctl.conf || echo "kernel.shmall = $shmall" >> /etc/sysctl.conf
+grep -q "^kernel.msgmax" /etc/sysctl.conf && sed -i "s,^kernel.msgmax.*,kernel.msgmax = 65535," /etc/sysctl.conf || echo "kernel.msgmax = 65535" >> /etc/sysctl.conf
+grep -q "^kernel.msgmnb" /etc/sysctl.conf && sed -i "s,^kernel.msgmnb.*,kernel.msgmnb = 65535," /etc/sysctl.conf || echo "kernel.msgmnb = 65535" >> /etc/sysctl.conf
+grep -q "^vm.swappiness" /etc/sysctl.conf && sed -i "s,^vm.swappiness.*,vm.swappiness = 30," /etc/sysctl.conf || echo "vm.swappiness = 30" >> /etc/sysctl.conf
+grep -q "^fs.file-max" /etc/sysctl.conf && sed -i "s,^fs.file-max.*,fs.file-max = 6553560," /etc/sysctl.conf || echo "fs.file-max = 6553560" >> /etc/sysctl.conf
+sysctl -p
 
 sudo sysctl -p
 ```
 
-> [调整虚拟内存](https://access.redhat.com/documentation/zh-cn/red_hat_enterprise_linux/6/html/performance_tuning_guide/s-memory-tunables)
+> kernel.shmmax: 单个共享内存段的最大值；例如 4G RAM: `4*1024*1024*1024*0.9=3865470566`
+>
+> kernel.shmall: 共享内存总量；例如 4G RAM: `4*1024*1024*1024*0.9/4/1024=943718`
 > 
-> [调整虚拟内存](https://access.redhat.com/documentation/zh-cn/red_hat_enterprise_linux/7/html/performance_tuning_guide/sect-red_hat_enterprise_linux-performance_tuning_guide-memory-configuration_tools#sect-Red_Hat_Enterprise_Linux-Performance_Tuning_Guide-Configuration_tools-Configuring_system_memory_capacity)
+> [参考：调整虚拟内存](https://access.redhat.com/documentation/zh-cn/red_hat_enterprise_linux/6/html/performance_tuning_guide/s-memory-tunables)
+> 
+> [参考：配置系统内存容量](https://access.redhat.com/documentation/zh-cn/red_hat_enterprise_linux/7/html/performance_tuning_guide/sect-red_hat_enterprise_linux-performance_tuning_guide-memory-configuration_tools#sect-Red_Hat_Enterprise_Linux-Performance_Tuning_Guide-Configuration_tools-Configuring_system_memory_capacity)
 
 - 安装 docker
 
 ```bash
 sudo yum remove -y docker*
+
 sudo curl -So /etc/yum.repos.d/docker-ce.repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
 sudo yum makecache fast
+
 sudo yum install -y lvm2 device-mapper-persistent-data docker-ce
+
 sudo systemctl start docker
 sudo systemctl enable docker
+
 sudo sh -c 'cat <<EOF> /etc/docker/daemon.json
 {
   "registry-mirrors": ["https://dockerhub.azk8s.cn"],
   "exec-opts": ["native.cgroupdriver=systemd"]
 }
 EOF'
-sudo sh -c 'cat <<EOF>> /etc/sysctl.conf
-net.ipv4.ip_forward = 1
-net.bridge.bridge-nf-call-iptables = 1
-net.bridge.bridge-nf-call-ip6tables = 1
-EOF'
+
+sudo sh -c '
+grep -q "^net.ipv4.ip_forward" /etc/sysctl.conf || echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf
+grep -q "^net.bridge.bridge-nf-call-iptables" /etc/sysctl.conf || echo "net.bridge.bridge-nf-call-iptables = 1" >> /etc/sysctl.conf
+grep -q "^net.bridge.bridge-nf-call-ip6tables" /etc/sysctl.conf || echo "net.bridge.bridge-nf-call-ip6tables = 1" >> /etc/sysctl.conf
+'
+
 sudo systemctl restart docker
+
 sudo gpasswd -a $USER docker
 newgrp docker
+
 docker info
 ```
 
@@ -156,10 +183,24 @@ docker info
 
 ```bash
 sudo yum install -y python3-pip
+
 sudo pip3 install -U pip -i https://pypi.douban.com/simple
 sudo pip install docker-compose
+
 docker-compose -v
-# docker-compose 命令补全
+```
+
+- docker-compose 命令补全
+
+```
 sudo curl -L https://raw.githubusercontent.com/docker/compose/1.25.3/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose
 source /etc/bash_completion.d/docker-compose
 ```
+
+## ** 快速初始化 **
+
+```bash
+sudo sh -c 'curl -L https://www.jangrui.com/centos_init.sh|bash'
+```
+
+<!-- tabs:end -->
