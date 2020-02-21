@@ -24,7 +24,7 @@ echo "SU_WHEEL_ONLY yes" >> /etc/login.defs
 加入用户到 wheel 组
 
 ```bash
-usermod -G wheel jangrui
+usermod -aG wheel jangrui
 ```
 
 - 效果

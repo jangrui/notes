@@ -6,8 +6,8 @@
 
 ```bash
 sudo sh -c 'echo "auth required pam_wheel.so use_uid" >> /etc/pam.d/su'
-sudo sh -c 'echo "SU_WHEEL_ONLY yes" >> /etc/login.defs
-sudo usermod -G wheel $USER
+sudo sh -c 'echo "SU_WHEEL_ONLY yes" >> /etc/login.defs'
+sudo usermod -aG wheel $USER
 ```
 
 - 普通用户无密码验证
@@ -145,7 +145,7 @@ sudo sh -c 'cat <<EOF>> /etc/sysctl.conf
 net.ipv4.ip_forward = 1
 net.bridge.bridge-nf-call-iptables = 1
 net.bridge.bridge-nf-call-ip6tables = 1
-'
+EOF'
 sudo systemctl restart docker
 sudo gpasswd -a $USER docker
 newgrp docker
