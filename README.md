@@ -1,4 +1,4 @@
-# CentOS 7 自用初始化
+# CentOS 7 初始化
 
 ![Linux](./_media/linux.png "linux.png")
 
