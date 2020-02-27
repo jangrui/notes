@@ -59,7 +59,8 @@ docker run -dit --rm --net host \
 -v dbdata:/var/lib/mysql \
 -v dblogs:/var/log/mysql \
 --name pxc \
-jangrui/pxc
+jangrui/pxc \
+--character-set-server=utf8mb4
 ```
 
 - node2
@@ -73,7 +74,8 @@ docker run -dit --rm --net host \
 -v dbdata:/var/lib/mysql \
 -v dblogs:/var/log/mysql \
 --name pxc \
-jangrui/pxc
+jangrui/pxc \
+--character-set-server=utf8mb4
 ```
 
 - node3
@@ -87,7 +89,8 @@ docker run -dit --rm --net host \
 -v dbdata:/var/lib/mysql \
 -v dblogs:/var/log/mysql \
 --name pxc \
-jangrui/pxc
+jangrui/pxc \
+--character-set-server=utf8mb4
 ```
 
 ## 状态信息
@@ -184,7 +187,8 @@ docker run -dit --rm -net host \
 -v dbdata:/var/lib/mysql \
 -v dblogs:/var/log/mysql \
 --name pxc \
-jangrui/pxc
+jangrui/pxc \
+--character-set-server=utf8mb4
 ```
 
 > 以最后一个退出节点作为为主节点启动
@@ -203,7 +207,8 @@ docker run -dit --rm -net host \
 -v dbdata:/var/lib/mysql \
 -v dblogs:/var/log/mysql \
 --name pxc \
-jangrui/pxc
+jangrui/pxc \
+--character-set-server=utf8mb4
 ```
 
 
@@ -217,7 +222,8 @@ docker run -dit --rm --net host \
 -v dbdata:/var/lib/mysql \
 -v dblogs:/var/log/mysql \
 --name pxc \
-jangrui/pxc
+jangrui/pxc \
+--character-set-server=utf8mb4
 ```
 
 > 修改任意节点配置文件，作为主节点启动，其它节点正常上线。
