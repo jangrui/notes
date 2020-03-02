@@ -45,6 +45,7 @@
 
 - DB
   - Mysql
+    - [MySQL 数据类型](db/mysql-data-types)
     - [MySQL Galera Cluster](db/mysql-galera-cluster)
   - Oracle
   - Mangodb
