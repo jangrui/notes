@@ -783,12 +783,6 @@ MariaDB [jangrui]> select name from author where name regexp '^[a-m]|g$';
 3 rows in set (0.00 sec)
 ```
 
-## 事务
-
-```bash
-
-```
-
 ## ALTER 命令
 
 alter 命令用来修改数据表名或者修改数据表字段。
