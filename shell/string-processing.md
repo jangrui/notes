@@ -2,5 +2,5 @@
 
 ## 计算字符串长度
 
-- ${#string}
-- expr length "$string" string有空格，则必须加双引号
+- `${#string}`
+- `expr length "$string"` string 有空格，则必须加双引号

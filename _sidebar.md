@@ -47,6 +47,7 @@
   - Mysql
     - [MySQL 增删改查](db/mysql)
     - [MySQL 数据类型](db/mysql-data-types)
+    - [MySQL Innodb Cluster](db/mysql-innodb-cluster)
     - [MySQL Galera Cluster](db/mysql-galera-cluster)
   - Oracle
   - Mangodb
