@@ -268,10 +268,11 @@ setenforce 0
 # 更换国内镜像
 cp -a /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak
 centos_version=$(cat /etc/redhat-release|sed -r 's/.* ([0-9]+)\..*/\1/')
-curl -SLo /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-$centos_version.repo
+curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-$centos_version.repo
 
 # 安装 epel 源
-curl -SLo /etc/yum.repos.d/epel.repo https://mirrors.aliyun.com/repo/epel-$centos_version.repo
+curl -o /etc/yum.repos.d/epel.repo https://mirrors.aliyun.com/repo/epel-7.repo
+sed -i "s|7|$centos_version|g" /etc/yum.repo.d/epel.repo
 yum makecache
 
 # 更新系统
@@ -386,7 +387,7 @@ chmod 755 /etc/sysconfig/modules/ipvs.modules && bash /etc/sysconfig/modules/ipv
 if [ `rpm -qa|grep ^docker|wc -l` -ge 1 ];then
     yum remove -y docker*
 fi
-curl -So /etc/yum.repos.d/docker-ce.repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+curl -o /etc/yum.repos.d/docker-ce.repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
 yum makecache fast
 containerd_rpm=http://mirrors.aliyun.com/docker-ce/linux/centos/7/x86_64/stable/Packages/containerd.io-1.2.6-3.3.el7.x86_64.rpm
 yum install -y lvm2 device-mapper-persistent-data $containerd_rpm docker-ce
@@ -410,6 +411,10 @@ grep -q "^net.ipv4.tcp_tw_recycle" /etc/sysctl.conf || echo "net.ipv4.tcp_tw_rec
 grep -q "^net.netfilter.nf_conntrack_max" /etc/sysctl.conf || echo "net.netfilter.nf_conntrack_max = 2310720" >> /etc/sysctl.conf
 grep -q "^net.bridge.bridge-nf-call-iptables" /etc/sysctl.conf || echo "net.bridge.bridge-nf-call-iptables = 1" >> /etc/sysctl.conf
 grep -q "^net.bridge.bridge-nf-call-ip6tables" /etc/sysctl.conf || echo "net.bridge.bridge-nf-call-ip6tables = 1" >> /etc/sysctl.conf
+sed -i '/net.core.default_qdisc/d' /etc/sysctl.conf
+sed -i '/net.ipv4.tcp_congestion_control/d' /etc/sysctl.conf
+echo "net.core.default_qdisc = fq" >> /etc/sysctl.conf
+echo "net.ipv4.tcp_congestion_control = bbr" >> /etc/sysctl.conf
 
 systemctl restart docker
 usermod -aG docker $username
