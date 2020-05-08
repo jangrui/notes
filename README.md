@@ -214,7 +214,7 @@ sudo sh -c 'curl -L https://www.jangrui.com/centos-init.sh|bash'
 
 ```bash
 #!/usr/bin/env bash
-# CentOS 7 初始化
+# CentOS 6/7/8 初始化
 # jangrui <admin@jangrui.com>
 
 # set -euxo pipefail
@@ -267,10 +267,11 @@ setenforce 0
 
 # 更换国内镜像
 cp -a /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak
-curl -SLo /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-7.repo
+centos_version=$(cat /etc/redhat-release|sed -r 's/.* ([0-9]+)\..*/\1/')
+curl -SLo /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-$centos_version.repo
 
 # 安装 epel 源
-curl -SLo /etc/yum.repos.d/epel.repo https://mirrors.aliyun.com/repo/epel-7.repo
+curl -SLo /etc/yum.repos.d/epel.repo https://mirrors.aliyun.com/repo/epel-$centos_version.repo
 yum makecache
 
 # 更新系统
@@ -293,7 +294,8 @@ timedatectl set-ntp true
 
 # 安装新版内核
 rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
-yum install -y http://www.elrepo.org/elrepo-release-7.0-4.el7.elrepo.noarch.rpm
+yum install -y http://www.elrepo.org/elrepo-release-$centos_version.el$centos_version.elrepo.noarch.rpm
+
 yum makecache fast
 if [ `rpm -qa|grep ^kernel-headers|wc -l` -ge 1 ];then
     yum remove -y kernel-headers
@@ -386,7 +388,8 @@ if [ `rpm -qa|grep ^docker|wc -l` -ge 1 ];then
 fi
 curl -So /etc/yum.repos.d/docker-ce.repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
 yum makecache fast
-yum install -y lvm2 device-mapper-persistent-data docker-ce
+containerd_rpm=http://mirrors.aliyun.com/docker-ce/linux/centos/7/x86_64/stable/Packages/containerd.io-1.2.6-3.3.el7.x86_64.rpm
+yum install -y lvm2 device-mapper-persistent-data $containerd_rpm docker-ce
 systemctl start docker
 systemctl enable docker
 
