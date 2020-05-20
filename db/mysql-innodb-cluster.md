@@ -542,6 +542,7 @@ WARNING: Using a password on the command line interface can be insecure.
 ### ** 三节点单主模式 Shell 脚本 **
 
 ```bash
+#!/usr/bin/env bash
 set -euxo pipefail
 
 red='\033[0;31m'
@@ -602,6 +603,7 @@ for i in `seq 1 3`;do
     check_mysql=$(ssh root@node$i.example.com 'yum list installed|grep ^mysql|wc -l')
     if [ $check_mysql -ge "1" ];then
         ssh root@node$i.example.com yum remove -y mysql-* --skip-broken
+        find / -name "mysql*" | xargs rm -rf {}
     fi
     echo -e "${green}node$i.example.com install mysql server...${plain}"
     ssh root@node$i.example.com yum install -y \
@@ -618,16 +620,15 @@ for i in `seq 1 3`;do
 done
 
 # MySQL 添加远程用户
-read -p "Please Set mysql password...": passwd
 cat > ~/init_mysql_root_passwd.sh <<EOF
-dpasswd=\$(grep "temporary password" /var/log/mysqld.log | awk '{print \$NF}')
+passwd=MyNewPass4!
+dpasswd=`grep "temporary password" /var/log/mysqld.log | awk '{print \$NF}'`
 mysqlsh -p"\$dpasswd" --sql -e "set password='\$passwd';create user root@'%' identified by '\$passwd';grant all on *.* to root@'%' with grant option;flush privileges;"
 EOF
 
 for i in `seq 1 3`;do
-    scp ~/init_mysql_root_passwd.sh root@node$i.example.com:~/init_mysql_root_passwd.sh 
-    # ssh root@node$i.example.com sh ~/init_mysql_root_passwd.sh && echo -e "${green}MySQL default password is changed successfully !${plain}" || read -p "MySQL there is a password,please enter the password...:" passwd
-    # ssh root@node$i.example.com sh ~/init_mysql_root_passwd.sh
+    scp ~/init_mysql_root_passwd.sh root@node$i.example.com:~/init_mysql_root_passwd.sh
+    ssh root@node$i.example.com sh ~/init_mysql_root_passwd.sh
     if [ $? = 0 ];then
         echo -e "${green}MySQL default password is changed successfully !${plain}"
     else

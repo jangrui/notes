@@ -49,6 +49,7 @@
     - [MySQL 数据类型](db/mysql-data-types)
     - [MySQL Innodb Cluster](db/mysql-innodb-cluster)
     - [MySQL Galera Cluster](db/mysql-galera-cluster)
+    - [Mycat](db/mycat)
   - Oracle
   - Mangodb
 
@@ -91,6 +92,9 @@
 - Zabbix
   - [钉钉报警](zabbix/dingding)
   - [微信报警](zabbix/wechat)
+
+- ELK
+  - [Elasticsearch 安装](elk/es-install)
 
 - Virtualization
   - KVM
