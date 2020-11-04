@@ -4,7 +4,9 @@ Docker 分为 CE 和 EE 两大版本。CE 即社区版（免费，支持周期 7
 
 Docker CE 分为 stable, test, 和 nightly 三个更新频道。每六个月发布一个 stable 版本 (18.09, 19.03, 19.09...)。
 
-## 安装
+<!-- tabs:start -->
+
+## ** 在线安装 **
 
 Linux 内核需3.10以上
 
@@ -30,7 +32,7 @@ sudo rpm -qa|grep ^docker
 sudo yum remove -y docker docker-*
 ```
 
-- yum源安装
+- yum 源安装
 
 鉴于国内网络问题，强烈建议使用国内源。
 
@@ -50,12 +52,14 @@ sudo yum install -y device-mapper-persistent-data lvm2 docker-ce
 - 开启 ipv4 和 iptables 内核转发功能
 
 ```bash
-sudo sh -c 'cat <<EOF>> /etc/sysctl.conf
-net.ipv4.ip_forward = 1
-net.bridge.bridge-nf-call-iptables = 1
-net.bridge.bridge-nf-call-ip6tables = 1
-EOF'
-
+sed -i '/net.ipv4.ip_forward/d' /etc/sysctl.conf
+sed -i '/net.ipv4.tcp_tw_reuse/d' /etc/sysctl.conf
+sed -i '/net.bridge.bridge-nf-call-iptables/d' /etc/sysctl.conf
+sed -i '/net.bridge.bridge-nf-call-ip6tables/d' /etc/sysctl.conf
+echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf
+echo "net.ipv4.tcp_tw_reuse = 1" >> /etc/sysctl.conf
+echo "net.bridge.bridge-nf-call-iptables = 1" >> /etc/sysctl.conf
+echo "net.bridge.bridge-nf-call-ip6tables = 1" >> /etc/sysctl.conf
 sysctl -p
 ```
 
@@ -65,10 +69,18 @@ sysctl -p
 sudo systemctl start docker
 sudo systemctl enable docker
 
-sudo sh -c 'cat <<EOF> /etc/docker/daemon.json
+sudo sh -c 'cat > /etc/docker/daemon.json <<EOF
 {
-  "registry-mirrors": ["https://dockerhub.azk8s.cn"],
-  "exec-opts": ["native.cgroupdriver=systemd"]
+  "registry-mirrors": [
+      "https://u4kqosl2.mirror.aliyuncs.com",
+      "https://dockerhub.azk8s.cn",
+      "http://hub-mirror.c.163.com"
+    ],
+  "exec-opts": ["native.cgroupdriver=systemd"],
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "100m"
+  }
 }
 EOF'
 
@@ -107,7 +119,7 @@ docker-compose --version
 - Linux
 
 ```bash
-sudo curl -L https://raw.githubusercontent.com/docker/compose/1.25.3/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose
+sudo curl -L https://raw.githubusercontent.com/docker/compose/$(docker-compose -v|awk -F ',| ' '{print $3}')/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose
 ```
 
 - MacOS
@@ -115,7 +127,7 @@ sudo curl -L https://raw.githubusercontent.com/docker/compose/1.25.3/contrib/com
 ```bash
 brew install bash-completion
 
-sudo curl -L https://raw.githubusercontent.com/docker/compose/1.25.3/contrib/completion/bash/docker-compose -o /usr/local/etc/bash_completion.d/docker-compose
+sudo curl -L https://raw.githubusercontent.com/docker/compose/$(docker-compose -v|awk -F ',| ' '{print $3}')/contrib/completion/bash/docker-compose -o /usr/local/etc/bash_completion.d/docker-compose
 
 tee >> ~/.bash_profile <<EOF
 if [ -f \$(brew --prefix)/etc/bash_completion ]; then
@@ -129,9 +141,107 @@ EOF
 ```bash
 sed '/^plugins=*/s,), docker-compose&,g' ~/.zshrc
 
-curl -L https://raw.githubusercontent.com/docker/compose/1.25.3/contrib/completion/zsh/_docker-compose > ${ZSH_CUSTOM:=~/.oh-my-zsh/custom}/plugins/zsh-docker-compose/_docker-compose
+curl -L https://raw.githubusercontent.com/docker/compose/$(docker-compose -v|awk -F ',| ' '{print $3}')/contrib/completion/zsh/_docker-compose > ${ZSH_CUSTOM:=~/.oh-my-zsh/custom}/plugins/zsh-docker-compose/_docker-compose
 
 echo 'fpath=(${ZSH_CUSTOM:=~/.oh-my-zsh/custom}/plugins/zsh-docker-compose $fpath)' >> ~/.zshrc
 echo 'autoload -Uz compinit && compinit -i' >> ~/.zshrc
 exec $SHELL -l
 ```
+
+## ** 离线安装 **
+
+```bash
+version=19.03.13
+curl -O https://download.docker.com/linux/static/stable/x86_64/docker-$version.tgz
+
+mkdir -p /usr/local/docker-$version
+tar xvf docker-$version.tgz --strip-components 1 -C /usr/local/docker-$version/
+ln -sf /usr/local/docker-$version/* /usr/bin/
+
+cat > /usr/lib/systemd/system/docker.service <<EOF
+[Unit]
+Description=Docker Application Container Engine
+Documentation=https://docs.docker.com
+After=network-online.target firewalld.service 
+Wants=network-online.target
+
+[Service]
+Type=notify
+# the default is not to use systemd for cgroups because the delegate issues still
+# exists and systemd currently does not support the cgroup feature set required
+# for containers run by docker
+ExecStart=/usr/bin/dockerd -H unix://var/run/docker.sock
+ExecReload=/bin/kill -s HUP \$MAINPID
+TimeoutSec=0
+RestartSec=2
+Restart=always
+
+# Note that StartLimit* options were moved from "Service" to "Unit" in systemd 229.
+# Both the old, and new location are accepted by systemd 229 and up, so using the old location
+# to make them work for either version of systemd.
+StartLimitBurst=3
+
+# Note that StartLimitInterval was renamed to StartLimitIntervalSec in systemd 230.
+# Both the old, and new name are accepted by systemd 230 and up, so using the old name to make
+# this option work for either version of systemd.
+StartLimitInterval=60s
+
+# Having non-zero Limit*s causes performance problems due to accounting overhead
+# in the kernel. We recommend using cgroups to do container-local accounting.
+LimitNOFILE=infinity
+LimitNPROC=infinity
+LimitCORE=infinity
+
+# Comment TasksMax if your systemd version does not support it.
+# Only systemd 226 and above support this option.
+TasksMax=infinity
+
+# set delegate yes so that systemd does not reset the cgroups of docker containers
+Delegate=yes
+
+# kill only the docker process, not all processes in the cgroup
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target
+EOF
+ln -sf /usr/lib/systemd/system/docker.service /etc/systemd/system/multi-user.target.wants/docker.service
+
+cat > /etc/docker/daemon.json <<EOF
+{
+  "registry-mirrors": [
+      "https://u4kqosl2.mirror.aliyuncs.com",
+      "https://dockerhub.azk8s.cn"
+    ],
+  "exec-opts": ["native.cgroupdriver=systemd"],
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "100m"
+  }
+}
+EOF
+
+systemctl daemon-reload && systemctl enable docker && systemctl restart docker
+
+sed -i '/net.ipv4.ip_forward/d' /etc/sysctl.conf
+sed -i '/net.ipv4.tcp_tw_reuse/d' /etc/sysctl.conf
+sed -i '/net.bridge.bridge-nf-call-iptables/d' /etc/sysctl.conf
+sed -i '/net.bridge.bridge-nf-call-ip6tables/d' /etc/sysctl.conf
+echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf
+echo "net.ipv4.tcp_tw_reuse = 1" >> /etc/sysctl.conf
+echo "net.bridge.bridge-nf-call-iptables = 1" >> /etc/sysctl.conf
+echo "net.bridge.bridge-nf-call-ip6tables = 1" >> /etc/sysctl.conf
+sysctl -p
+
+# docker-compose
+# curl -L https://github.com/docker/compose/releases/download/1.17.1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+curl -L https://dl.bintray.com/docker-compose/master/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+
+# docker-compose completion
+curl -L https://raw.githubusercontent.com/docker/compose/$(docker-compose -v|awk -F ',| ' '{print $3}')/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose
+chmod a+x /etc/bash_completion.d/docker-compose
+source /etc/bash_completion.d/docker-compose
+```
+
+<!-- tabs:end -->
