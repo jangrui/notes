@@ -59,7 +59,8 @@ sudo yum makecache fast
 - 更新系统
 
 ```bash
-sudo yum update -y
+sudo yum update -y --exclude=kernel-headers
+sudo echo "exclude=kernel-headers" >> /etc/yum.conf
 ```
 
 - 安装命令补全
@@ -76,10 +77,10 @@ sudo yum install -y screen
 screen -S kernel
 sudo sh -c '
 rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
-rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-4.el7.elrepo.noarch.rpm
+yum install https://www.elrepo.org/elrepo-release-7.el7.elrepo.noarch.rpm
 yum makecache fast
 if [ `rpm -qa|grep ^kernel-headers|wc -l` -ge 1 ];then
-    yum remove -y kernel-headers
+    rpm -e --nodeps kernel.*headers
 fi
 yum --enablerepo elrepo-kernel install -y kernel-ml kernel-ml-devel kernel-ml-headers
 yum group remove -y "Development Tools"
@@ -225,37 +226,39 @@ if [ `id -u` -ne 0 ];then
 fi
 
 # 添加用户
-read -p "Please input your username": username
-if [ -z "$username" ];then
-	echo "不添加用户"
-elif [ `grep "$username" /etc/passwd|wc -l` -eq 0 ];then
-    useradd "$username"
-    read -p "Please input your passwd": passwd
-    echo "$passwd" | passwd "$username" --stdin
-else
-    echo "$username is Already"
-fi
+addUser() {
+    read -p "Please input your username": username
+    if [ -z "$username" ];then
+        echo "不添加用户"
+    elif [ `grep "$username" /etc/passwd|wc -l` -eq 0 ];then
+        useradd "$username"
+        read -p "Please input your passwd": passwd
+        echo "$passwd" | passwd "$username" --stdin
+    else
+        echo "$username is Already"
+    fi
 
-# 只允许 wheel 组用户切换 root
-if [ `grep -E "^auth.*pam_wheel.so" /etc/pam.d/su|wc -l` -eq 0 ];then
-    echo "auth required pam_wheel.so use_uid" >> /etc/pam.d/su
-fi
+    # 只允许 wheel 组用户切换 root
+    if [ `grep -E "^auth.*pam_wheel.so" /etc/pam.d/su|wc -l` -eq 0 ];then
+        echo "auth required pam_wheel.so use_uid" >> /etc/pam.d/su
+    fi
 
-if [ `grep "SU_WHEEL_ONLY yes" /etc/login.defs|wc -l` -eq 0 ];then
-    echo "SU_WHEEL_ONLY yes" >> /etc/login.defs
-fi
-usermod -aG wheel "$username"
+    if [ `grep "SU_WHEEL_ONLY yes" /etc/login.defs|wc -l` -eq 0 ];then
+        echo "SU_WHEEL_ONLY yes" >> /etc/login.defs
+    fi
+    usermod -aG wheel "$username"
 
-# 普通用户无密码验证
-if [ `grep -E "^%wheel.*NOPASSWD" /etc/sudoers|wc -l` -eq 0 ];then
-    echo "%wheel ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
-fi
+    # 普通用户无密码验证
+    if [ `grep -E "^%wheel.*NOPASSWD" /etc/sudoers|wc -l` -eq 0 ];then
+        echo "%wheel ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+    fi
 
-# 普通用户提示找不到命令
-if [ `grep "!env_reset" /etc/sudoers|wc -l` -eq 0 ];then
-    sed -i 's,env_reset,!&,' /etc/sudoers
-    echo "alias sudo='env PATH=$PATH'" >> /home/$username/.bashrc
-fi
+    # 普通用户提示找不到命令
+    if [ `grep "!env_reset" /etc/sudoers|wc -l` -eq 0 ];then
+        sed -i 's,env_reset,!&,' /etc/sudoers
+        echo "alias sudo='env PATH=$PATH'" >> /home/$username/.bashrc
+    fi
+}
 
 # 关闭防火墙
 systemctl stop firewalld
@@ -298,10 +301,10 @@ rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
 yum install -y http://www.elrepo.org/elrepo-release-$centos_version.el$centos_version.elrepo.noarch.rpm
 
 yum makecache fast
-if [ `rpm -qa|grep ^kernel-headers|wc -l` -ge 1 ];then
-    yum remove -y kernel-headers
+if [ `rpm -qa|grep ^kernel.*headers|wc -l` -ge 1 ];then
+    yum remove -y kernel.*headers
 fi
-yum --enablerepo elrepo-kernel install -y kernel-lt kernel-lt-devel kernel-lt-headers
+yum --enablerepo elrepo-kernel install -y kernel-ml kernel-ml-devel kernel-ml-headers
 yum group remove -y "Development Tools"
 yum group install -y "Development Tools"
 grub2-set-default 0
@@ -337,24 +340,26 @@ EOF
 systemctl restart systemd-journald
 
 # 创建 swap 文件
-swapoff -a
-sed -i "/swap/ s|^\(.*\)$|#\1|g" /etc/fstab
-mem=$(free -m|sed '1d'|awk '/Mem/{print $2}')
-swap=`expr $mem / 2`
-if [ $mem -le 2048 ];then
-    dd if=/dev/zero of=/tmp/swap bs=${swap}M count=4
-elif [ $mem -gt 2048 && $mem -le 8192 ];then
-    dd if=/dev/zero of=/tmp/swap bs=${swap}M count=2
-else
-    dd if=/dev/zero of=/tmp/swap bs=4G count=4
-fi
-chown 0:0 /tmp/swap
-chmod 0600 /tmp/swap
-# 格式化 swap 文件
-mkswap /tmp/swap
-# 开机自动挂载
-echo "/tmp/swap swap swap defaults 0 0" >> /etc/fstab
-swapon -a
+swap(){
+    swapoff -a
+    sed -i "/swap/ s|^\(.*\)$|#\1|g" /etc/fstab
+    mem=$(free -m|sed '1d'|awk '/Mem/{print $2}')
+    swap=`expr $mem / 2`
+    if [ $mem -le 2048 ];then
+        dd if=/dev/zero of=/tmp/swap bs=${swap}M count=4
+    elif [ $mem -gt 2048 && $mem -le 8192 ];then
+        dd if=/dev/zero of=/tmp/swap bs=${swap}M count=2
+    else
+        dd if=/dev/zero of=/tmp/swap bs=4G count=4
+    fi
+    chown 0:0 /tmp/swap
+    chmod 0600 /tmp/swap
+    # 格式化 swap 文件
+    mkswap /tmp/swap
+    # 开机自动挂载
+    echo "/tmp/swap swap swap defaults 0 0" >> /etc/fstab
+    swapon -a
+}
 
 # 调整 sysctl.conf
 shmmax=$(awk -v m=$mem 'BEGIN{printf("%.f\n",m*1024*1024*0.9)}')

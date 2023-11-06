@@ -16,11 +16,18 @@
 
 ```bash
 mount -o remount,rw /sysroot/
+
+# 切换 root 目录
 chroot /sysroot
 
 echo redhat | passwd --stdin root
+
+# 更新 selinux 信息
 touch /.autorelabel
+
 sync
+
+# 退出 chroot
 exit
 
 reboot

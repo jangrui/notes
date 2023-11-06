@@ -59,7 +59,7 @@ node1容器中删除MySQL的数据
 # 删除数据
 rm -rf /var/lib/mysql/*
 # 清空事务
-innobackupex --user=root --password=abc123456 --apply-back /data/backup/full/2018-04-15_05-09-07/
+innobackupex --user=root --password=abc123456 --apply-log /data/backup/full/2018-04-15_05-09-07/
 # 还原数据
 innobackupex --user=root --password=abc123456 --copy-back  /data/backup/full/2018-04-15_05-09-07/
 ```
